@@ -1,6 +1,6 @@
 ---
 name: "Documento"
-title: "[Docs] <Título>"
+title: "[DOCS] <Título>"
 about: "Modelo para solicitar documentação do projeto"
 labels: "documentation"
 assignees: murlokfs
