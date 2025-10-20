@@ -1,6 +1,6 @@
 ---
 name: "Bug Report"
-title: "[BUG NAME] <BREVE DESCRIÇÃO>"
+title: "[BUG] <Título do BUG>"
 about: "Modelo para relatar um bug no projeto"
 labels: ["bug"]
 assignees: murlokfs

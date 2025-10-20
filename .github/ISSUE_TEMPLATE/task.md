@@ -1,6 +1,6 @@
 ---
 name: "Task"
-title: "[FEATURE NAME] <BREVE DESCRIÇÃO>"
+title: "[FEATURE] <Título>"
 about: "Modelo para criação de tarefas no projeto"
 labels: "enhancement"
 assignees: murlokfs
