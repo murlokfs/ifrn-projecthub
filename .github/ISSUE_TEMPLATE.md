@@ -26,10 +26,6 @@ Use esta checklist para acompanhar o progresso:
 
 ## 🧩 Detalhes / Especificações
 Explique detalhes técnicos, fluxos, endpoints, modelos de dados, ou mockups:
-- Requisitos funcionais:
-  - Exemplo: Usuário deve conseguir criar um projeto com título, descrição e membros.
-- Requisitos não-funcionais:
-  - Exemplo: Resposta < 500ms, compatível com mobile.
 
 ## 🐞 Para bugs (se aplicável)
 - Passos para reproduzir:
@@ -47,18 +43,8 @@ Anexe imagens, links para Figma, ou descreva comportamentos de interface.
 - PRs/Issues relacionadas:
 - Design (Figma/Zeplin):
 
-## ⏱️ Estimativa
-Sugestão de tamanho/estimativa (ex: XS / S / M / L / XL ou pontos de história)
-
-## 🏷️ Labels sugeridas
-Sugestões: bug, enhancement, documentation, design, backend, frontend, help wanted
-
 ## 👥 Responsáveis / Assignees
 Sugira quem poderia trabalhar nesta issue.
 
 ## 🧠 Notas técnicas / Considerações
 Qualquer observação técnica, decisões de arquitetura, dependências ou riscos.
-
----
-
-Obrigado por preencher! Quanto mais completo, mais rápida e acertada será a implementação. 🚀
