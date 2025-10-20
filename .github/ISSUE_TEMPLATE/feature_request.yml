@@ -1,0 +1,47 @@
+name: "✨ Feature: Solicitação de nova funcionalidade"
+description: "Use este formulário para propor novas funcionalidades ou melhorias. Explique o problema e a solução proposta."
+title: "✨ Feature: "
+labels:
+  - enhancement
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: "## 🧭 Resumo\nDescreva a funcionalidade e o motivo."
+  - type: input
+    id: summary
+    attributes:
+      label: "Resumo rápido"
+      description: "Uma linha descrevendo a feature."
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: "Motivação / Problema"
+      description: "Por que precisamos desta funcionalidade?"
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposta de solução"
+      description: "Como você imagina que isso deve funcionar?"
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: "Impacto esperado"
+      options:
+        - label: "Melhoria na UX"
+        - label: "Aumento de performance"
+        - label: "Nova integração"
+        - label: "Outro"
+  - type: input
+    id: related
+    attributes:
+      label: "Issues/PRs relacionadas (opcional)"
+      placeholder: "#123, #456"
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Critérios de aceitação"
+      description: "Liste critérios verificáveis."
+      required: true
