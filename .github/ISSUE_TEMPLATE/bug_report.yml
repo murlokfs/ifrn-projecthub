@@ -1,0 +1,50 @@
+name: "🐞 Bug: Relatar bug"
+description: "Use este formulário para relatar bugs encontrados no IFRN ProjectHub. Inclua passos para reproduzir e contexto."
+title: "🐞 Bug: "
+labels:
+  - bug
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: "## 🧭 Resumo\nDescreva brevemente o problema."
+  - type: input
+    id: summary
+    attributes:
+      label: "Resumo rápido"
+      description: "Uma linha descrevendo o bug."
+      placeholder: "Ex: Erro ao salvar projeto"
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: "Passos para reproduzir"
+      description: "Liste os passos para reproduzir o problema, em ordem."
+      placeholder: "1. ...\n2. ...\n3. ..."
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Resultado esperado"
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Resultado atual"
+  - type: input
+    id: env
+    attributes:
+      label: "Ambiente"
+      description: "Ex: Browser, versão, SO, backend version"
+      placeholder: "Ex: Chrome 120 / Node 18"
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "Incluí logs relevantes"
+        - label: "Verifiquei se já existe uma issue similar"
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Observações adicionais"
