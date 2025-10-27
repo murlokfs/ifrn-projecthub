@@ -1,0 +1,39 @@
+<div class="status_container">    
+    <div class="card" style="border-left: 7px solid #50CE67;">
+        <h3>Projetos aprovados</h3>
+        <h2 style="color: #50CE67;">12</h2>
+    </div>
+    
+    <div class="card" style="border-left: 7px solid #FFC423;">
+        <h3>Projetos pendentes</h3>
+        <h2 style="color: #FFC423;">12</h2>
+    </div>
+    
+    <div class="card" style="border-left: 7px solid #F5474A;">
+        <h3>Projetos reprovados</h3>
+        <h2 style="color: #F5474A;">12</h2>
+    </div>
+</div>
+
+<style>
+    .status_container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        padding: 8px 20px;
+        width: fit-content;
+        min-width: 290px;
+        position: relative;
+    }
+
+    .card h3 {
+        font-weight: 400;
+    }
+</style>
