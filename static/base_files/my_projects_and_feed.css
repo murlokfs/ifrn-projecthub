@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins';
+}
+
+body {
+    display: flex;
+    justify-content: right;
+}
+
+main {
+    background-color: rgb(240, 238, 238);
+    padding: 30px;
+    display: flex;
+    width: 80vw;
+    justify-content: right;
+    min-height: 100vh;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0;
+    gap: 30px;
+}
+
+.container_projects {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 25px;
+}
+
+.project_in_my_projects {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y:auto;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.project_image {
+    width: 50px;
+    height: 50px;
+    background-color: #ECF9EE;
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #50CE67;
+}
+
+.name_project {
+    font-size: 16px;
+    font-weight: 500;
+    flex-grow: 1;
+} 
+
+.name_project .date {
+    font-size: 12px;
+    color: #AAA;
+}
+
+.status_project {
+    font-size: 14px;
+    color: #FFF;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 35%;
+    min-height: 27px;
+    border-radius: 10px;
+    background-color: #50CE67;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.content .description {
+    font-size: 14px;
+    color: #6F6F74;
+}
+
+.content .description b {
+    color: #50CE67;
+}
+
+.tags_container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: #ECF9EE;
+    border-radius: 8px;
+    width: fit-content;
+    padding: 4px 8px;
+    height: 24px;
+    color: #50CE67;
+}
+
+.collaborators_and_docs {
+    display: flex;
+    flex-direction: column;
+    color: #6D6D78;
+}
+
+.collaborator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.collaborator img {
+    width: 25px;
+    height: 25px;
+}
+
+.links {
+    border-top: 1px solid #97979D;
+    border-bottom: 1px solid #97979D;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.link {
+    display: flex;
+    gap: 5px;
+    font-size: 13px;
+    align-items: center;
+}
+
+.link a {
+    text-decoration: none;
+    color: #50CE67;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}
+
+.interaction_btns {
+    display: flex;
+    gap: 20px;
+}
+
+.likes, .comments {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: 15px;
+    color: #6D6D78;
+}
+
+.see_details {
+    width: 70%;
+    /* height: 35px; */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #50CE67;
+    border-radius: 12px;
+}
+
+.see_details h4 {
+    
+    font-weight: 700;
+}
+
+.action_btns {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.edit_project, .remove_project {
+    width: 35px;
+    height: 35px;
+    background-color: #F5F5F5;
+    border: 1px solid #E3E3E8;
+    /* padding: 1px; */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.edit_project img, .remove_project img {
+    width: 25px;
+    height: 25px;
+}
+
+.search_project {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.input_container {
+    background-color: #F4F4F6;
+    width: 54%;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.input_container img {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.search_project input {
+    border: none;
+    padding: 10px;
+    background-color: transparent;
+    width: 90%;
+    color: #6D6D78;
+}
+
+.filter_btns {
+    display: flex;
+    gap: 20px;
+}
+
+.filter_btns button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #F4F4F6;
+}
+
+#all {
+    background-color: #50CE67;
+    color: white;
+    font-weight: 700;
+}
