@@ -20,7 +20,7 @@ body {
     padding: 20px 20px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     border-radius: 8px 8px 0 0;
     margin-bottom: 20px;
 }
@@ -42,7 +42,7 @@ body {
 .textos-perfil {
     display: flex; 
     flex-direction: column;
-    width: 700px;
+    max-width: 700px;
 }
 
 .links-sociais {
@@ -52,6 +52,12 @@ body {
     font-size: 0.9em;
 }
 
+.link-github{
+    text-decoration: none;
+    color: white;
+}
+
+
 .botao-editar {
     background-color: white;
     color: #000000;
@@ -60,7 +66,6 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-    align-self: center;
 }
 
 .nome-usuario {
@@ -91,14 +96,70 @@ body {
 .card-estatistica {
     width: 170px;
     height: 165px;
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 10px;
+    background-color: #ffffff; 
+    border-radius: 20px; 
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.40); 
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; /* Adicionado para centralizar o conteúdo verticalmente */
+}
+
+.descricao-card-estatistica{
+    margin-top: 10px;
+}
+
+.icon-grenn{
+    color: #50CE67;
+    background-color: rgba(80, 206, 103, 0.27);
+    font-size: 40px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-blue{
+    color: #3098E8;
+    background-color: rgba(56, 158, 236, 0.27);
+    font-size: 40px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-red{
+    color: #E23C3C;
+    background-color: rgba(206, 80, 80, 0.27);
+    font-size: 40px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-black{
+    color: #FFFFFF;
+    background-color: rgba(10, 10, 10, 0.85);
+    font-size: 40px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .numero {
@@ -106,6 +167,7 @@ body {
     font-weight: bold;
     color: #333;
     margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .descricao {
@@ -126,6 +188,45 @@ body {
     margin-bottom: 2px;
 }
 
+/* 1. Layout dos Filtros */
+.filtros {
+    display: flex; /* Para colocar os seletores lado a lado */
+    gap: 15px; /* Espaço entre eles */
+}
+
+
+/* 1. Estilo do Select (Corrigido e Refinado) */
+.seletor {
+    /* 🚨 CHAVE PARA CORRIGIR O BUG: Oculta a seta e o controle nativo */
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    background-color: transparent; 
+
+    height: 42px;
+    width: 180px;
+    border-radius: 20px;
+    border: none;
+    
+    background-color: #f5f5f5; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+    
+    padding: 0 15px;
+    padding-right: 30px; 
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    outline: none;
+    
+    /* 🚨 CHAVE: A seta customizada por SVG */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px;
+}
+
+
 .titulo-Grupo {
     display: flex;
     flex-direction: column;
@@ -133,11 +234,12 @@ body {
 
 .titulo-Grupo h2 {
     margin-bottom: 0;
+    font-size: 24px;
 }
 
 .titulo-Grupo .subtitulo {
-    margin-top: 0;
-    font-size: 0.9em;
+    margin-top: 5px;
+    font-size: 14px;
     color: #777;
 }
 
@@ -146,13 +248,40 @@ body {
     gap: 10px;
 }
 
-.barra-pesquisa input {
+.barra-pesquisa {
+    display: flex;
+    align-items: center;
+    
     width: 100%;
-    padding: 10px;
-    border: 1px solid #000000;
-    border-radius: 4px;
+    max-width: 1180px;
+    height: 50px;
     margin-bottom: 20px;
+    
+    background-color: #F4F4F6;
+    border-radius: 25px; 
+    border: none;
+    box-shadow: 0 1px 3px rgba(10, 10, 10, 0.55);
+    padding: 0 20px;
 }
+
+.barra-pesquisa input[type="text"] {
+    flex-grow: 1;
+    
+    height: 100%; 
+    padding: 10px 0;
+    
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    outline: none;
+}
+
+.lupa-icon {
+    color: #999;
+    font-size: 18px;
+    margin-right: 10px; 
+}
+
 
 .card-projeto {
     width: 1180px;
@@ -175,10 +304,12 @@ body {
 .info-projeto h3{
     margin: 0;
     margin-bottom: 5px;
+    font-size: 23px;
 }
 
 .info-projeto p {
     margin: 0;
+    font-size: 14px;
     color: #6D6D78;
     margin-bottom: 5px;
 }
@@ -196,9 +327,9 @@ body {
     font-weight: bold;
 }
 
-.tag-django { background-color: #092e20; color: white; }
-.tag-html { background-color: #e44d26; color: white; }
-.tag-js { background-color: #f7df1e; color: black; }
+.tag-django { background-color: #E4FFE8; color: #50CE67; }
+.tag-html { background-color: #E4FFE8; color: #50CE67; }
+.tag-js { background-color: #E4FFE8; color: #50CE67; }
 
 .metadata {
     display: flex; 
@@ -207,13 +338,24 @@ body {
     color: #777;
 }
 
+.curtidas-metadata{
+    font-size: 14px;
+}
+.comentarios-metadata{
+    font-size: 14px;
+}
+
+.data-metadata{
+    font-size: 14px;
+}
+
 .botao-detalhes {
     background-color: #2ecc71;
     color: white;
     align-self: flex-start;
     border: none;
     padding: 8px 15px;
-    border-radius: 40px;
+    border-radius: 12px;
     cursor: pointer;
     white-space: nowrap; 
 }
