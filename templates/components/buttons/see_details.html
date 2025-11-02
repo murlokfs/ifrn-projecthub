@@ -1,4 +1,4 @@
-<button class="see_details">
+<button class="see_details {% if min_width %}with_min_width{% endif %}">
     <h4>Ver detalhes</h4>
 </button>
 
@@ -13,6 +13,10 @@
         border-radius: 12px;
         border: none;
         cursor: pointer;
+    }
+
+    .see_details.with_min_width {
+        width: 130px !important;
     }
 
     .see_details h4 {
