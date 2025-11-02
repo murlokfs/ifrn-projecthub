@@ -7,7 +7,7 @@
 {% endblock title %}
 
 {% block imports %}
-    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}"> -->
 {% endblock imports %}
 
 {% block content %}
@@ -29,84 +29,33 @@
     <div class="container_projects">
 
         {% for _ in contador_list %}
-            <div class="project_in_my_projects">
-                <div class="header">
-                    <div class="project_image">PH</div>
-                    <div class="name_project">
-                    <div class="name">
-                        ProjectHub
-                    </div>
-                    <div class="date">
-                        01/01/2025
-                    </div>
-                    </div>
-                    <div class="status_project">Aprovado</div>
-                </div>
+            <div class="project_card" id="project_in_my_projects">
+                {% include 'components/cards/project_parts/header.html' %}
 
                 <div class="content">
                     <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
                     <div class="tags_container">
-                    <div class="tag">ADS</div>
-                    <div class="tag">Python</div>
-                    <div class="tag">JS</div>
+                        <div class="tag">ADS</div>
+                        <div class="tag">Python</div>
+                        <div class="tag">JS</div>
                     </div>
-                    <div class="collaborators_and_docs">
-                    <div class="students_container collaborator">
-                        <div class="icon">
-                        <img src="{% static 'img/student.svg' %}" alt="">
-                        </div>
-                        <div class="students_names">Eduardo, Ayrton, Murilo, Nathan</div>
-                    </div>
-
-                    <div class="teacher_container collaborator">
-                        <div class="icon">
-                        <img src="{% static 'img/graduation-cap.svg' %}" alt="">
-                        </div>
-                        <div class="teacher_name">Irlan Moreira</div>
-                    </div>
-
-                    </div>
-                    <div class="links">
-                    <div class="link github">
-                        <div class="icon">
-                        <img src="{% static 'img/github-logo.svg' %}" alt="">
-                        </div>
-                        <div class="link_redirection"><a href="">Ver repositório</a></div>
-                    </div>
-                    <div class="link youtube">
-                        <div class="icon">
-                        <img src="{% static 'img/youtube-logo.svg' %}" alt="">
-                        </div>
-                        <div class="link_redirection"><a href="">Assistir vídeo</a></div>
-                    </div>
-                    </div>
-                    <div class="interaction_btns">
-                    <div class="likes">
-                        <div class="icon">
-                        <img src="{% static 'img/heart.svg' %}" alt="">
-                        </div>
-                        <div class="count">20</div>
-                    </div>
-                    <div class="comments">
-                        <div class="icon">
-                        <img src="{% static 'img/comment.svg' %}" alt="">
-                        </div>
-                        <div class="count">13</div>
-                    </div>
-                    </div>
+                    {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
+                    
+                    {% include 'components/cards/project_parts/links.html' %}
+                    
+                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    
                     <div class="action_btns">
-                    <div class="see_details">
-                        <h4>Ver detalhes</h4>
-                    </div>
-                    <div class="edit_project">
-                        <img src="{% static 'img/edit.svg' %}" alt="">
-                    </div>
-                    <div class="remove_project">
-                        <img src="{% static 'img/trash.svg' %}" alt="">
-                    </div>
+                        {% include 'components/buttons/see_details.html' %}
+                        <button class="edit_project">
+                            <img src="{% static 'img/edit.svg' %}" alt="">
+                        </button>
+                        <button class="remove_project">
+                            <img src="{% static 'img/trash.svg' %}" alt="">
+                        </button>
                     </div>
                 </div>
-                </div>
+            </div>
         {% endfor %}
     </div>
 
