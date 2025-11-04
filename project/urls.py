@@ -4,4 +4,5 @@ from project import views
 urlpatterns = [
     path('', views.feed, name='index'),
     path('projects/', views.my_projects, name='my_projects'),
+    path('popup/', views.popup, name='popup'),
 ]

@@ -25,3 +25,6 @@ def my_projects(request):
     }
 
     return render(request, 'project/my_projects.html', context)
+
+def popup(request):
+    return render(request, 'components/modals/types_projects/types_projects.html')
