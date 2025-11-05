@@ -1,20 +1,20 @@
-
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f7;
-    margin: 0;
-    padding: 20px;
+    background-color: white;
+    margin: auto;
 }
 
-.perfil-container {
-    margin: 0 auto;
-    max-width: 1280px;
+/* 1. Profile container */
+.profile-container {
+    width: 95vw;
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
 }
 
-.perfil-cabecalho {
+/* 2. Header */
+.profile-header {
     background-color: #04DC94;
     color: white;
     padding: 20px 20px;
@@ -25,13 +25,13 @@ body {
     margin-bottom: 20px;
 }
 
-.info-principal {
+.main-info {
     display: flex;
     gap: 20px;
     max-width: 750px;
 }
 
-.foto-perfil {
+.profile-photo {
     width: 125px;
     height: 125px;
     border-radius: 50%;
@@ -39,26 +39,26 @@ body {
     object-fit: cover;
     align-self: center;
 }
-.textos-perfil {
-    display: flex; 
+
+.profile-texts {
+    display: flex;
     flex-direction: column;
-    max-width: 700px;
+    max-width: 750px;
 }
 
-.links-sociais {
+.social-links {
     display: flex;
     gap: 15px;
     margin-top: 5px;
     font-size: 0.9em;
 }
 
-.link-github{
+.github-link {
     text-decoration: none;
     color: white;
 }
 
-
-.botao-editar {
+.edit-button {
     background-color: white;
     color: #000000;
     border: none;
@@ -68,7 +68,7 @@ body {
     font-weight: bold;
 }
 
-.nome-usuario {
+.user-name {
     margin: 0;
     font-size: 34px;
 }
@@ -79,13 +79,13 @@ body {
     font-size: 18px;
 }
 
-.bio-perfil {
+.profile-bio {
     margin: 5px 0;
     font-size: 16px;
 }
 
-/* 2. Seção de Estatísticas*/
-.estatisticas {
+/* 3. Statistics section */
+.statistics {
     padding: 0 40px;
     margin-top: 0px;
     display: flex;
@@ -93,24 +93,24 @@ body {
     justify-content: space-between;
 }
 
-.card-estatistica {
+.stat-card {
     width: 170px;
     height: 165px;
-    background-color: #ffffff; 
-    border-radius: 20px; 
+    background-color: white;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.40); 
+    box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.40);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Adicionado para centralizar o conteúdo verticalmente */
+    justify-content: center;
 }
 
-.descricao-card-estatistica{
+.stat-description {
     margin-top: 10px;
 }
 
-.icon-grenn{
+.icon-green {
     color: #50CE67;
     background-color: rgba(80, 206, 103, 0.27);
     font-size: 40px;
@@ -123,7 +123,7 @@ body {
     justify-content: center;
 }
 
-.icon-blue{
+.icon-blue {
     color: #3098E8;
     background-color: rgba(56, 158, 236, 0.27);
     font-size: 40px;
@@ -136,7 +136,7 @@ body {
     justify-content: center;
 }
 
-.icon-red{
+.icon-red {
     color: #E23C3C;
     background-color: rgba(206, 80, 80, 0.27);
     font-size: 40px;
@@ -149,7 +149,7 @@ body {
     justify-content: center;
 }
 
-.icon-black{
+.icon-black {
     color: #FFFFFF;
     background-color: rgba(10, 10, 10, 0.85);
     font-size: 40px;
@@ -162,7 +162,7 @@ body {
     justify-content: center;
 }
 
-.numero {
+.number {
     font-size: 32px;
     font-weight: bold;
     color: #333;
@@ -170,144 +170,122 @@ body {
     margin-top: 10px;
 }
 
-.descricao {
+.description {
     font-size: 17px;
     color: #777;
 }
 
-/* 3. Seção de Projetos Publicados */
-
-.projetos-publicados {
+/* 4. Published Projects */
+.published-projects {
     padding: 20px 40px;
 }
 
-.cabecalho-projetos {
+.projects-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2px;
 }
 
-/* 1. Layout dos Filtros */
-.filtros {
-    display: flex; /* Para colocar os seletores lado a lado */
-    gap: 15px; /* Espaço entre eles */
+.filters {
+    display: flex;
+    gap: 15px;
 }
 
-
-/* 1. Estilo do Select (Corrigido e Refinado) */
-.seletor {
-    /* 🚨 CHAVE PARA CORRIGIR O BUG: Oculta a seta e o controle nativo */
-    appearance: none; 
+/* Select dropdown style */
+.selector {
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
-    
-    background-color: transparent; 
-
+    background-color: transparent;
     height: 42px;
     width: 180px;
     border-radius: 20px;
     border: none;
-    
-    background-color: #f5f5f5; 
+    background-color: #f5f5f5;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
-    
     padding: 0 15px;
-    padding-right: 30px; 
+    padding-right: 30px;
     font-size: 14px;
     color: #666;
     cursor: pointer;
     outline: none;
-    
-    /* 🚨 CHAVE: A seta customizada por SVG */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23999999' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
     background-size: 10px;
 }
 
-
-.titulo-Grupo {
+.title-group {
     display: flex;
     flex-direction: column;
 }
 
-.titulo-Grupo h2 {
+.title-group h2 {
     margin-bottom: 0;
     font-size: 24px;
 }
 
-.titulo-Grupo .subtitulo {
+.title-group .subtitle {
     margin-top: 5px;
+    margin-bottom: 5px;
     font-size: 14px;
     color: #777;
 }
 
-.filtros {
-    display: flex; 
-    gap: 10px;
-}
-
-.barra-pesquisa {
+.search-bar {
     display: flex;
     align-items: center;
-    
-    width: 100%;
-    max-width: 1160px;
+    max-width: 100%;
     height: 50px;
     margin-bottom: 20px;
-    
     background-color: #F4F4F6;
-    border-radius: 25px; 
+    border-radius: 25px;
     border: none;
     box-shadow: 0 1px 3px rgba(10, 10, 10, 0.55);
     padding: 0 20px;
 }
 
-.barra-pesquisa input[type="text"] {
+.search-bar input[type="text"] {
     flex-grow: 1;
-    
-    height: 100%; 
+    height: 100%;
     padding: 10px 0;
-    
     border: none;
     background-color: transparent;
     font-size: 16px;
     outline: none;
 }
 
-.lupa-icon {
+.search-icon {
     color: #999;
     font-size: 18px;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
-
-.card-projeto {
-    max-width: 1180px;
+.project-card {
+    max-width: 100%;
     background-color: white;
-    border: 1px solid #000000;
+    border: 1px solid #E3E3E8;
     padding: 20px;
     border-radius: 6px;
     margin-bottom: 15px;
-    
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.info-projeto {
-    display: flex; 
+.project-info {
+    display: flex;
     flex-direction: column;
 }
 
-.info-projeto h3{
+.project-info h3 {
     margin: 0;
     margin-bottom: 5px;
     font-size: 23px;
 }
 
-.info-projeto p {
+.project-info p {
     margin: 0;
     font-size: 14px;
     color: #6D6D78;
@@ -332,24 +310,19 @@ body {
 .tag-js { background-color: #E4FFE8; color: #50CE67; }
 
 .metadata {
-    display: flex; 
+    display: flex;
     gap: 20px;
     font-size: 0.8em;
     color: #777;
 }
 
-.curtidas-metadata{
-    font-size: 14px;
-}
-.comentarios-metadata{
-    font-size: 14px;
-}
-
-.data-metadata{
+.likes-meta,
+.comments-meta,
+.date-meta {
     font-size: 14px;
 }
 
-.botao-detalhes {
+.details-button {
     background-color: #2ecc71;
     color: white;
     align-self: flex-start;
@@ -357,5 +330,5 @@ body {
     padding: 8px 15px;
     border-radius: 12px;
     cursor: pointer;
-    white-space: nowrap; 
+    white-space: nowrap;
 }
