@@ -1,0 +1,60 @@
+{% load static %}
+
+<div class="modal_sucess">
+    <div class="icon_container">
+        {% include 'components/icons/check.html' %}
+    </div>
+    <div class="title">Seu projeto foi publicado com sucesso!</div>
+    <div class="description">Seu projeto está publicado e pronto para ser acompanhado. Como é pessoal, só é possível visualizá-lo acessando seu perfil.</div>
+
+    <div class="btns">
+        {% include 'components/buttons/goto_profile.html' %}
+        {% include 'components/buttons/close.html' %}
+    </div>
+</div>
+
+<style>
+    .modal_sucess {
+        width: 330px;
+        height: 340px;
+        background-color: #fff;
+        border-radius: 24px;
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .icon_container {
+        width: 55px;
+        height: 55px;
+        background-color: rgba(118, 236, 139, 0.541);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .title {
+        font-weight: 600;
+        font-size: 20px;
+        color: #17171C;
+        text-align: center;
+        width: 80%;
+    }
+
+    .description {
+        font-weight: 400;
+        font-size: 14px;
+        color: #6D6D78;
+        width: 90%;
+    }
+
+    .btns {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+</style>
