@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="links {% if not borders %}no-borders{% endif %}">
+<div class="links {% if column %}column{% endif %}">
     <div class="link github">
         <div class="icon">
             <img src="{% static 'img/github-logo.svg' %}" alt="">
@@ -19,15 +19,12 @@
 <style>
 
     .links {
-        border-top: 1px solid #97979D;
-        border-bottom: 1px solid #97979D;
         display: flex;
         justify-content: space-between;
-        /* padding: 10px 0; */
     }
 
-    .links.no-borders {
-        border: none;
+    .links.column {
+        flex-direction: column;
     }
 
     .link {

@@ -7,7 +7,7 @@
 {% endblock title %}
 
 {% block imports %}
-    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}"> -->
 {% endblock imports %}
 
 {% block content %}
@@ -29,7 +29,7 @@
     <div class="container_projects">
 
         {% for _ in contador_list %}
-            <div class="project_in_my_projects">
+            <div class="project_card" id="project_in_my_projects">
                 {% include 'components/cards/project_parts/header.html' %}
 
                 <div class="content">
@@ -39,6 +39,7 @@
                         <div class="tag">Python</div>
                         <div class="tag">JS</div>
                     </div>
+                  
                     {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
                     
                     {% include 'components/cards/project_parts/links.html' with borders=False %}
