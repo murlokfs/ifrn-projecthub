@@ -14,32 +14,7 @@
     <div class="container_projects">
 
         {% for _ in contador_list %}
-            <div class="project_card" id="project_in_feed">
-                {% include 'components/cards/project_parts/header.html' %}
-
-                <div class="content">
-                    <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
-                    <div class="tags_container">
-                        <div class="tag">ADS</div>
-                        <div class="tag">Python</div>
-                        <div class="tag">JS</div>
-                    </div>
-
-                    <div class="colaborators_and_links">
-
-                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
-                        
-                        {% include 'components/cards/project_parts/links.html' with column=True %}
-                    </div>
-                    
-                    <div class="line"></div>
-
-                    <div class="footer">
-                        {% include 'components/cards/project_parts/interaction_btns.html' %}
-                        {% include 'components/buttons/see_details.html' with min_width=True %}
-                    </div>
-                </div>
-            </div>
+            {% include 'components/cards/project/project.html' with max_width=True column=True %}
         {% endfor %}
     </div>
 {% endblock content %}
