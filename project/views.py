@@ -26,3 +26,5 @@ def my_projects(request):
 
     return render(request, 'project/my_projects.html', context)
 
+def popup(request):
+    return render(request, 'components/modals/awaiting_approval.html')
