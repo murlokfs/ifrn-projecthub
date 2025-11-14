@@ -4,7 +4,6 @@ from .views import DetalhesProjetosView
 
 urlpatterns = [
 
-    path('', views.my_projects, name='index'),
     path('detalhes-projetos/', DetalhesProjetosView.as_view(), name='detalhes_projetos'),
  
     path('', views.feed, name='index'),
