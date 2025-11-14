@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
+
 
 def my_projects(request):
     num_iterations = 4
@@ -11,3 +13,5 @@ def my_projects(request):
 
     return render(request, 'project/my_projects.html', context)
 
+class DetalhesProjetosView(TemplateView):
+    template_name = 'project/detalhes_projetos.html'
