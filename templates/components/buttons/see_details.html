@@ -1,0 +1,26 @@
+
+<button class="see_details {% if min_width %}with_min_width{% endif %}">
+    <h4>Ver detalhes</h4>
+</button>
+
+<style>
+    .see_details {
+        width: 70%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #50CE67;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .see_details.with_min_width {
+        width: 130px !important;
+    }
+
+    .see_details h4 {
+        font-weight: 700;
+    }
+</style>
