@@ -25,3 +25,4 @@ def my_projects(request):
     }
 
     return render(request, 'project/my_projects.html', context)
+

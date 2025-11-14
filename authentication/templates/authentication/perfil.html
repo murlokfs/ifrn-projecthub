@@ -1,0 +1,22 @@
+{% load static %}
+{% include 'components/base_files/my_projects_and_feed.html' %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+
+<body>
+    <div class="perfil-container">
+        {% include 'components/profile_parts/perfil_header.html' %}
+        {% include 'components/profile_parts/estatisticas-perfil.html' %}
+        {% include 'components/profile_parts/projetos_publicados-perfil.html' %}
+    </div>
+</body>
+
+</html>
