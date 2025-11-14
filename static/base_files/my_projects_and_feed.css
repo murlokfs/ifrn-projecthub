@@ -87,3 +87,31 @@ main {
     color: white;
     font-weight: 700;
 }
+
+@media screen and (max-width: 324px) {
+    body {
+        justify-content: left;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .container_projects {
+        width: 100%;
+        justify-content: center;
+
+    }
+
+    main {
+        justify-content: left;
+        padding: 0;
+        width: 100vw;
+    }
+
+    .search_project {
+        width: 100%;
+    }
+
+    .filter_btns button {
+        padding: 5px;
+    }
+}
