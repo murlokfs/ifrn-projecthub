@@ -9,6 +9,7 @@ def feed(request):
         "contador": num_iterations,
         "contador_list": contador_list,
         "show_status": show_status,
+        "active_page": "feed",
     }
 
     return render(request, 'project/feed.html', context)
@@ -22,6 +23,7 @@ def my_projects(request):
         "contador": num_iterations,
         "contador_list": contador_list,
         "show_status": show_status,
+        "active_page": "my_projects",
     }
 
     return render(request, 'project/my_projects.html', context)
