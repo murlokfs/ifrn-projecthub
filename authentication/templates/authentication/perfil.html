@@ -1,5 +1,7 @@
+{% extends 'components/base_files/my_projects_and_feed.html' %}
 {% load static %}
-{% include 'components/base_files/my_projects_and_feed.html' %}
+
+{% include 'components/base_files/sidebar.html' %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -7,16 +9,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil</title>
-    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 
-<body>
-    <div class="perfil-container">
-        {% include 'components/profile_parts/perfil_header.html' %}
-        {% include 'components/profile_parts/estatisticas-perfil.html' %}
-        {% include 'components/profile_parts/projetos_publicados-perfil.html' %}
-    </div>
-</body>
+{% block title %}
+Perfil
+{% endblock title %}
 
-</html>
+{% block imports %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+{% endblock imports %}
+
+{% block content %}
+
+<div class="perfil-container">
+    
+        <header class="profile-header">
+            <div class="main-info">
+                <img src="{% static 'img/gatoDeBotas.jpg' %}" alt="Profile picture"
+                    class="profile-photo">
+                <div class="profile-texts">
+                    <h1 class="user-name">Nathan Manicoba</h1>
+                    <p class="username">@nathan</p>
+                    <p class="profile-bio">Full-stack developer and UI/UX designer passionate about creating beautiful
+                        and functional experiences. Building the future one pixel at a time.</p>
+                    <div class="social-links">
+                        <span class="icon-stat"><i class="ph ph-map-pin-simple-area"></i></span>
+                        <span class="location">Pau dos Ferros, RN</span>
+                        <span class="icon-stat"><i class="ph ph-github-logo"></i></span>
+                        <a href="#" class="github-link">nathan1227.github</a>
+                        <span class="icon-stat"><i class="ph ph-graduation-cap"></i></span>
+                        <span class="enrollment">2024109404093</span>
+                    </div>
+                </div>
+            </div>
+            <button class="edit-button">Edit profile</button>
+        </header>
+    
+
+    
+
+    <section class="statistics">
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-folder-open icon-green"></i></span>
+                <span class="number">12</span>
+                <span class="stat-description">Total projects</span>
+            </div>
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-eye icon-blue"></i></span>
+                <span class="number">8</span>
+                <span class="stat-description">Public</span>
+            </div>
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-lock icon-red"></i></span>
+                <span class="number">4</span>
+                <span class="stat-description">Private</span>
+            </div>
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-users icon-black"></i></span>
+                <span class="number">125</span>
+                <span class="stat-description">Followers</span>
+            </div>
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-chat-circle icon-blue"></i></span>
+                <span class="number">86</span>
+                <span class="stat-description">Comments</span>
+            </div>
+            <div class="stat-card">
+                <span class="icon-stat"><i class="ph ph-heart icon-red"></i></span>
+                <span class="number">236</span>
+                <span class="stat-description">Total likes</span>
+            </div>
+        </section>
+    
+    
+    <section class="published-projects">
+            <div class="projects-header">
+                <div class="title-group">
+                    <h2>Published projects</h2>
+                    <p class="subtitle">Your registered projects</p>
+                </div>
+
+                <div class="filters">
+                    <select class="selector">
+                        <option>All</option>
+                    </select>
+                    <select class="selector">
+                        <option>Most recent</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search projects by title, description, or tags...">
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Academic Management System</h3>
+                    <p>Complete system for managing academic activities, grades, and student attendance.</p>
+                    {% include 'components/cards/project_parts/tag.html' %}
+                    <div class="metadata">
+                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
+                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
+                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
+                    </div>
+                </div>
+                {% include 'components/buttons/see_details.html' %}
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Academic Management System</h3>
+                    <p>Complete system for managing academic activities, grades, and student attendance.</p>
+                    {% include 'components/cards/project_parts/tag.html' %}
+                    <div class="metadata">
+                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
+                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
+                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
+                    </div>
+                </div>
+                {% include 'components/buttons/see_details.html' %}
+            </div>
+        </section>
+
+
+</div>
+
+{% endblock content %}
