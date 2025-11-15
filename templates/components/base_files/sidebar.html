@@ -51,7 +51,7 @@
 
 
 			<div id="user">
-				<a id="user_btn" href="{% url 'perfil' %}">
+				<a id="user_btn" class="{% if active_page == 'perfil' %}active{% endif %}" href="{% url 'perfil' %}">
 					<img src="{% static 'img/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">

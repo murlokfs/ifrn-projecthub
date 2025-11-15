@@ -8,20 +8,28 @@
 
 body {
     display: flex;
-    justify-content: right;
+    align-items: stretch;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: column; /* header encima, main abaixo */
+    width: calc(100% -  /* substitua pelo width do seu sidebar, ex: */ 72px);
+    /* ou use flex: 1; se o sidebar tiver width fixa */
+    flex: 1;
+    min-height: 100vh;
 }
 
 main {
     background-color: rgb(240, 238, 238);
-    padding: 30px;
+    /* Remove padding esquerdo para eliminar espaço extra ao lado do sidebar */
+    padding: 30px 0 30px 0;
     display: flex;
-    width: 80vw;
-    /* justify-content: center; */
-    min-height: 100vh;
+    width: 100%;          /* antes estava 80vw — agora o wrapper controla */
+    min-height: calc(100vh - 60px); /* opcional: leva em conta header */
     flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
     gap: 30px;
+    align-items: center;
 }
 
 .container_projects {
@@ -71,7 +79,7 @@ main {
     gap: 20px;
 }
 
-.header {
+.header_feed_project {
     display: flex;
     align-items: center;
 }

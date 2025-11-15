@@ -368,5 +368,3 @@ body.dark-mode #user {
 	0% { width:0; height:0; opacity:1; } 
 	100% { width:100px; height:100px; opacity:0; } }
 
-body { display:flex; }
-main { flex:1; }
