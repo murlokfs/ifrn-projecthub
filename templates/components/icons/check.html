@@ -1,0 +1,31 @@
+{% load static %}
+
+<div class="check_circle {% if distance %}distance{% endif %}">
+    <img src="{% static 'img/check.svg' %}" alt="">
+</div>
+
+<style>
+    .check_circle {
+        width: 24px;
+        height: 24px;
+        padding: 5px ;
+        border-radius: 50%;
+        background-color: #50CE67;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .distance {
+        position: absolute;
+        margin-left: 215px;
+        margin-top: -5px;
+        display: none;
+
+    }
+
+    .check_circle img {
+        width: 90%;
+        height: 90%;
+    }
+</style>

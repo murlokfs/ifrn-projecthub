@@ -19,12 +19,12 @@ main {
     background-color: rgb(240, 238, 238);
     padding: 30px;
     display: flex;
-    width: 80vw;
+    width: 100vw;
     /* justify-content: center; */
     min-height: 100vh;
     flex-direction: column;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: right;
     gap: 30px;
 }
 
@@ -32,7 +32,7 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    /* max-width: 1092px; */
+    max-width: 1092px;
     gap: 35px;
 }
 
@@ -157,8 +157,8 @@ main {
 }
 
 .edit_project, .remove_project {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     background-color: #F5F5F5;
     border: 1px solid #E3E3E8;
     /* padding: 1px; */

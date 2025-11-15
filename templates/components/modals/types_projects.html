@@ -1,0 +1,138 @@
+{% load static %}
+
+<div class="modal">
+    <div class="header_modal">
+        <div class="title">Selecione o Tipo de Projeto</div>
+        <div class="show_choices">Escolha o estilo de projeto que você deseja criar. Esta seleção ajudará a personalizar as opções disponíveis.</div>
+    </div>
+
+    <div class="types_container">   
+        <div class="type integrative_project">
+            <div class="icon"><img src="{% static 'img/book-open-text.svg' %}" alt=""></div>
+            {% include 'components/icons/check.html' with distance=True %}
+            <div class="name">Projeto Integrador</div>
+            <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
+        </div>
+        <div class="type tcc">
+            <div class="icon"><img src="{% static 'img/graduation-cap(1).svg' %}" alt=""></div>
+            {% include 'components/icons/check.html' with distance=True %}
+            <div class="name">Trabalho de Conclusão de Curso (TCC)</div>
+            <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
+        </div>
+        <div class="type scientific">
+            <div class="icon"><img src="{% static 'img/flask-fill.svg' %}" alt=""></div>
+            {% include 'components/icons/check.html' with distance=True %}
+            <div class="name">Projeto de pesquisa</div>
+            <div class="description">Projeto voltado à investigação científica, geralmente vinculado a linhas de pesquisa e produção acadêmica.</div>
+        </div>
+    </div>
+
+    <div class="btns">
+        {% include 'components/buttons/cancel.html' %}
+        {% include 'components/buttons/continue.html' %}
+    </div>
+</div>
+
+<style>
+    .modal {
+        background-color: #ffffff;
+        width: 70%;
+        border-radius: 20px;
+        height: 70vh;
+        padding: 30px;
+        display: none;
+        position: fixed;
+        justify-content: center;
+    }
+
+    .types_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 80%;
+    }
+
+    .type {
+        background-color: white;
+        width: 25%;
+        height: 65%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid #E3E3E8;
+        border-radius: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        cursor: pointer;
+    }
+
+    .type .icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .type .icon img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .btns {
+        display: flex;
+        justify-content: flex-end;
+        gap: 30px;
+    }
+
+    .btns button {
+        cursor: pointer;
+    }
+
+    .title {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .show_choices {
+        font-style: italic;
+    }
+
+    .type .name {
+        font-weight: bold;
+        font-size: 18px;
+        color: #17171C;
+    }
+
+    .type .description {
+        font-size: 14px;
+        color: #464444;
+    }
+
+    .active {
+        border: 2px solid #50CE67;
+    }
+
+    
+</style>
+
+<script>
+    const types = document.querySelectorAll('.type');
+
+    types.forEach(type => {
+    const checkCircle = type.querySelector('.check_circle');
+
+    type.addEventListener('click', () => {
+        const isActive = type.classList.contains('active');
+
+        types.forEach(t => {
+        t.classList.remove('active');
+        t.querySelector('.check_circle').style.display = 'none';
+        });
+
+        if (!isActive) {
+        type.classList.add('active');
+        checkCircle.style.display = 'flex';
+        }
+    });
+    });
+
+</script>
