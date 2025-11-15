@@ -38,7 +38,7 @@ main {
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     padding: 20px;
-    min-width: 300px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -74,6 +74,7 @@ main {
 .header {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .project_image {
@@ -107,6 +108,7 @@ main {
     align-items: center;
     justify-content: center;
     min-width: 35%;
+    padding: 5px;
     min-height: 27px;
     border-radius: 10px;
     background-color: #50CE67;
@@ -219,4 +221,67 @@ main {
     background-color: #50CE67;
     color: white;
     font-weight: 700;
+}
+
+
+/* RESPONSIVIDADE MOBILE */
+@media screen and (max-width: 425px) {
+    main {
+        width: 100%;
+        padding: 20px;
+        align-items: center;
+    }
+
+    .search_project {
+        width: 100%;
+        flex-wrap: wrap;
+        padding: 20px 0;
+        height: auto;
+
+    }
+
+    .input_container {
+        width: 90%;
+    }
+
+    .filter_btns {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 90%;
+    }
+
+    .filter_btns button {
+        padding: 8px 16px;
+    }
+
+    .container_projects {
+        width: 100%;
+        
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+    }
+
+    .project_card, #project_in_feed, #project_in_my_projects {
+        width: 90%;
+    }
+
+    .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .project_image {
+        margin-right: 0;
+    }
+
+    .colaborators_and_links {
+        flex-direction: column;
+    }
+
+    .collaborators_and_docs, .links {
+        width: 100%;
+    }
 }
