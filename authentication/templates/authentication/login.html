@@ -1,0 +1,44 @@
+{% extends 'components/base_files/base_auth.html' %}
+{% load static %}
+
+{% block title %}
+Login - ProjectHub
+{% endblock title %}
+
+{% block content %}
+<div class="auth-form">
+    <h2>Seja bem-vindo de volta ao<br>ProjectHub!</h2>
+    
+    <div class="social-auth">
+        <button class="google-btn">
+            <img src="{% static 'img/google_logo.png' %}" alt="Google Icon">
+            Login com o Google
+        </button>
+        <button class="suap-btn">
+            <img src="{% static 'img/ifrn_logo.png' %}" alt="Suap Icon">
+            Login com o Suap
+        </button>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-group">
+            <label for="username">Email</label>
+            <input type="email" id="username" name="username" placeholder="joao_da_silva@ifrn.edu.br" required>
+        </div>
+        <div class="input-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" placeholder="**************" required>
+        </div>
+        <div class="form-options">
+            <input type="checkbox" id="remember">
+            <label for="remember">Lembrar senha</label>
+        </div>
+        <button type="submit" class="auth-btn">Entrar</button>
+    </form>
+
+    <p class="redirect-link">
+        Ainda sem conta? <a href="{% url 'signup' %}">Clique aqui!</a>
+    </p>
+</div>
+{% endblock %}
