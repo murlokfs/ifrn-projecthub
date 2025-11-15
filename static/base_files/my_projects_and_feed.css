@@ -36,7 +36,7 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 1092px;
+    max-width: 1092px;
     gap: 35px;
 }
 
@@ -133,22 +133,6 @@ main {
 .content .description b {
     color: #50CE67;
 }
-
-.tags_container {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    background-color: #ECF9EE;
-    border-radius: 8px;
-    width: fit-content;
-    padding: 4px 8px;
-    height: 24px;
-    color: #50CE67;
-}
-
 .action_btns {
     display: flex;
     gap: 10px;
@@ -156,8 +140,8 @@ main {
 }
 
 .edit_project, .remove_project {
-    width: 35px;
-    height: 35px;
+    width: 40px;
+    height: 40px;
     background-color: #F5F5F5;
     border: 1px solid #E3E3E8;
     /* padding: 1px; */
