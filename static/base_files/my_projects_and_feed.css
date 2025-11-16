@@ -17,9 +17,8 @@ body {
 
 .app-content {
     display: flex;
-    flex-direction: column; /* header encima, main abaixo */
-    width: calc(100% -  /* substitua pelo width do seu sidebar, ex: */ 72px);
-    /* ou use flex: 1; se o sidebar tiver width fixa */
+    flex-direction: column;
+    width: calc(100% -  72px);
     flex: 1;
     min-height: 100vh;
 }
