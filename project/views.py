@@ -33,5 +33,12 @@ def my_projects(request):
 class DetalhesProjetosView(TemplateView):
     template_name = 'project/detalhes_projetos.html'
 
+class ComentariosAlunosView(TemplateView):
+    template_name = 'project/comentarios_alunos.html'
+    
+
+class ComentariosProfessoresView(TemplateView):
+    template_name = 'project/comentarios_professores.html'
+    
 def popup(request):
     return render(request, 'components/modals/awaiting_approval.html')

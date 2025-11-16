@@ -1,6 +1,20 @@
 {% load static %}
 <nav class="tabs-nav">
-    <a href="#" class="tab-link" id="active">Informações Gerais</a>
-    <a href="#" class="tab-link">Comentários de usuários</a>
-    <a href="#" class="tab-link">Avaliações de Professores</a>
+
+   <a href="{% url 'detalhes_projetos' %}"
+      class="tab-link {% if request.resolver_match.url_name == 'detalhes_projetos' %}active{% endif %}">
+      Informações Gerais
+   </a>
+
+   <a href="{% url 'comentarios_alunos' %}"
+      class="tab-link {% if request.resolver_match.url_name == 'comentarios_alunos' %}active{% endif %}">
+      Comentários de usuários
+   </a>
+
+   <a href="{% url 'comentarios_professores' %}"
+      class="tab-link {% if request.resolver_match.url_name == 'comentarios_professores' %}active{% endif %}">
+      Avaliações de Professores
+   </a>
+
+
 </nav>

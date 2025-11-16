@@ -18,7 +18,7 @@ body {
 .page-wrapper {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 24px
 }
 
 /* --- 3. Bloco Superior (Cabeçalho + Abas) --- */
@@ -26,14 +26,13 @@ body {
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 24px;
     max-width: 100%;
 }
 
 .page-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 24px;
     border-bottom: 1px solid #e5e7eb;
     gap: 20px;
@@ -42,6 +41,12 @@ body {
 .header-left {
     display: flex;
     flex-direction: column;
+    gap: 16px;
+}
+
+.header-right{
+    display: flex;
+    justify-content: center;
     gap: 16px;
 }
 
@@ -84,31 +89,52 @@ body {
     gap: 8px;
 }
 
-.alert-icon {
-    width: 32px;
+/* --- Estilo do Botão Denunciar --- */
+
+.btn-denunciar {
+    /* Layout com Flexbox */
+    width: 100%;
     height: 32px;
-    background-color: #E23636;
-    color: #ffffff;
-    border-radius: 50%;
-    font-weight: bold;
-    font-size: 20px;
-    flex-shrink: 0;
-    /* Centralizando o '!' com Flexbox */
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 8px; 
+
+    /* Cores */
+    background-color: #EC6262; 
+    color: #ffffff;
+
+    /* Forma e Tamanho */
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px; 
+
+    /* Texto */
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500; 
+
+    /* Extras */
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+
+.btn-denunciar .ph {
+    font-size: 16px;
+}
+
+/* Efeito ao passar o mouse */
+.btn-denunciar:hover {
+    background-color: #d96a6a;
 }
 
 /* --- 4. Estilo das Abas --- */
 .tabs-nav {
     display: flex;
     gap: 8px;
-    padding: 16px 24px;
-    margin-left: 15px;
-    margin-right: 15px;
     flex-wrap: wrap;
     border-radius: 12px; 
-    padding: 8px
+    padding: 24px
 }
 
 .tab-link {
@@ -122,6 +148,11 @@ body {
 }
 
 #active {
+    background-color: #22c55e;
+    color: #ffffff;
+}
+
+.tab-link.active {
     background-color: #22c55e;
     color: #ffffff;
 }
@@ -206,8 +237,7 @@ body {
     border-radius: 16px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    margin-bottom: 20px;
+    overflow: hidden;   
 }
 
 
@@ -227,7 +257,7 @@ body {
 }
 .card-accent .card-body {
     padding: 24px;
-    height: 255px;
+    min-height: 255px;
 }
 .card-accent .card-body-video{
     padding: 24px;
@@ -343,4 +373,130 @@ body {
     font-weight: 400;
     font-size: 12px;
     margin-top: 2px;
+}
+
+
+
+/*---------------------------------------------*/
+
+
+/* --- Card de Formulário --- */
+.new-feedback-card h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #000000;
+}
+.new-feedback-card p {
+    font-size: 14px;
+    color: #000000;
+    margin-top: -10px;
+}
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    resize: vertical;
+}
+
+.btn-submit {
+    background-color: #50CE67;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #16a34a;
+}
+
+
+/* --- Card de Lista de Comentários --- */
+.discussion-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.discussion-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #000000;
+}
+.discussion-header .ph {
+    font-size: 21px;
+    color: #1C1B1F;
+}
+.discussion-header span {
+    font-size: 14px;
+    color: #6D6D78;
+    font-weight: 500;
+}
+
+.discussion-thread {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-item {
+    padding-top: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 16px;
+}
+.post-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+/* A classe .avatar é global, então não precisamos re-estilizá-la aqui */
+
+.post-author-details {
+    display: flex;
+    flex-direction: column;
+}
+.post-author-details strong {
+    font-size: 16px;
+    font-weight: 600;
+    color: #17171C;
+}
+.post-author-details small {
+    font-size: 14px;
+    color: #6D6D78;
+}
+
+.post-body {
+    font-size: 16px;
+    color: #6D6D78;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 48px; 
 }
