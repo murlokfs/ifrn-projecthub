@@ -19,8 +19,9 @@
     .status_container {
         display: flex;
         flex-wrap: wrap;
+        max-width: 1200px;
         justify-content: space-between;
-        width: 1092px;
+        gap: 30px;
     }
 
     .card {
@@ -28,9 +29,7 @@
         border-radius: 16px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
         padding: 8px 20px;
-        width: fit-content;
-        min-width: 26%;
-        position: relative;
+        min-width: 30%;
     }
 
     .card h3 {
@@ -46,6 +45,29 @@
 
         .card {
             width: 100%;
+        }
+    }
+    
+    @media screen and (min-width: 501px) and (max-width: 800px) {
+        .card {
+            width: 100%;
+        }
+
+    }
+
+    @media screen and (min-width: 801px) and (max-width: 1199px) {
+        .status_container {
+            width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        .status_container {
+            width: 1092px;
+        }
+
+        .card {
+            width: 30%;
         }
     }
 </style>
