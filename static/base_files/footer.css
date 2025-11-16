@@ -1,0 +1,101 @@
+/* --- Estilização do Footer --- */
+.site-footer {
+    background-color: #f8f9fa; 
+    border-top: 1px solid #e5e7eb; 
+    color: #495057; 
+    font-family: 'Inter', sans-serif;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 32px;
+    padding-bottom: 10px;
+
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between; 
+    gap: 32px; 
+    flex-wrap: wrap;
+
+    max-width: 1400px;
+    margin: 0 auto 24px auto;
+}
+
+.footer-column {
+    flex: 1; 
+    min-width: 200px; 
+}
+
+.footer-column h5 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212529; 
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.footer-column p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 8px 0;
+}
+
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #495057; 
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #000;
+}
+
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+}
+
+.contact-item i {
+    font-size: 18px;
+}
+
+
+.social-icons {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.social-icons a {
+    font-size: 22px;
+    color: #495057;
+}
+.social-icons a:hover {
+    color: #000;
+}
+
+.footer-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+
+.footer-bottom {
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280; 
+    margin-top: 24px;
+}

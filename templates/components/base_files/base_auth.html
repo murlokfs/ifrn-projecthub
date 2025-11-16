@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ProjectHub{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <img src="{% static 'img/brain.png' %}" alt="ProjectHub Logo">
+                <h1>ProjectHub</h1>
+            </div>
+            <div class="illustration">
+                <img src="{% static 'img/login_illustration.svg' %}" alt="Illustration">
+            </div>
+            <h2>Ambiente colaborativo para ensino, pesquisa e inovação</h2>
+            <p>Dê o próximo passo no seu projeto, o mundo precisa conhecê-lo.</p>
+        </div>
+        <div class="right-panel">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

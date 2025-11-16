@@ -1,0 +1,43 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectHub - Plataforma</title>
+    <link rel="stylesheet" href="{% static 'css/detalhes_projetos.css' %} ">
+    <link rel="stylesheet" href="{% static 'base_files/footer.css' %}?v=20251113_2">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+
+    <div class="top-container">
+    {% include 'components/details/header.html' %}
+    {% include 'components/details/tabs.html' %}
+</div>
+
+<div class="page-wrapper">
+
+    {% include 'components/details/sobre.html' %}
+
+    <main class="content-columns">
+
+        {% include 'components/details/video.html' %}
+
+        <div class="column-left">
+            {% include 'components/details/github.html' %}
+            {% include 'components/details/members.html' %}
+        </div>
+
+        <div class="column-right">
+            {% include 'components/details/documents.html' %}
+            {% include 'components/details/teacher.html' %}
+        </div>
+
+    </main>
+</div>
+    {% include 'components/base_files/footer.html' %}
+
+</body>
+</html>
