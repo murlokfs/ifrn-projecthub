@@ -19,7 +19,8 @@
     .status_container {
         display: flex;
         flex-wrap: wrap;
-        max-width: 1200px;
+        max-width: 1100px;
+        width: 100%;
         justify-content: space-between;
         gap: 30px;
     }
@@ -53,6 +54,9 @@
             width: 100%;
         }
 
+        .status_container {
+            width: 100%;
+        }
     }
 
     @media screen and (min-width: 801px) and (max-width: 1199px) {
@@ -64,6 +68,7 @@
     @media screen and (min-width: 1200px) {
         .status_container {
             width: 1092px;
+            max-width: 100%;
         }
 
         .card {
