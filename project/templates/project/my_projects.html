@@ -36,9 +36,14 @@
                     <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
                     {% include 'components/cards/project_parts/tag.html' %}
                   
-                    {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
-                    
-                    {% include 'components/cards/project_parts/links.html' with borders=False %}
+                    <div class="colaborators_and_links">
+
+                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
+                        
+                        {% include 'components/cards/project_parts/links.html' with column=True %}
+                    </div>
+
+                    <div class="line"></div>
                     
                     {% include 'components/cards/project_parts/interaction_btns.html' %}
                     
