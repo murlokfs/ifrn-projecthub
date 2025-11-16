@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
+
 
 def feed(request):
     num_iterations = 6
@@ -28,5 +30,15 @@ def my_projects(request):
 
     return render(request, 'project/my_projects.html', context)
 
+class DetalhesProjetosView(TemplateView):
+    template_name = 'project/detalhes_projetos.html'
+
+class ComentariosAlunosView(TemplateView):
+    template_name = 'project/comentarios_alunos.html'
+    
+
+class ComentariosProfessoresView(TemplateView):
+    template_name = 'project/comentarios_professores.html'
+    
 def popup(request):
     return render(request, 'components/modals/awaiting_approval.html')
