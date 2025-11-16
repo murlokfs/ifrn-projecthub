@@ -349,3 +349,10 @@ body.dark-mode #user {
 
 body { display:flex; }
 main { flex:1; }
+
+
+@media screen and (max-width: 600px) {
+	#sidebar {
+		display: none;
+	}
+}
