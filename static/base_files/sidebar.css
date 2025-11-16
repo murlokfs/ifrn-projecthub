@@ -15,6 +15,7 @@
 	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.12), 0px 4px 12px 0px rgba(0,0,0,0.10);
 	padding: 0 4px;
 	/* min-width: 72px; */	
+    z-index: 1000; /* garante clique no botão mesmo sem header */
 }
 
 body.dark-mode #sidebar { 
@@ -310,6 +311,7 @@ body.dark-mode #user {
 	height:24px; 
 	border:none; 
 	cursor:pointer; 
+    z-index:1001;
 }
 
 #open_btn_icon { 

@@ -1,6 +1,4 @@
 {% extends 'components/base_files/my_projects_and_feed.html' %}
-<<<<<<< HEAD
-
 {% load static %}
 
 {% block title %}Perfil{% endblock title %}
@@ -10,36 +8,7 @@
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 {% endblock imports %}
 
-{% block header %}{% comment %}Remover header nesta página{% endcomment %}{% endblock header %}
-
-{% block content %}
-<div class="perfil-container">
-    {% include 'components/profile_parts/perfil_header.html' %}
-    {% include 'components/profile_parts/estatisticas-perfil.html' %}
-    {% include 'components/profile_parts/projetos_publicados-perfil.html' %}
-</div>
-{% endblock content %}
-=======
-{% load static %}
-
-{% include 'components/base_files/sidebar.html' %}
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
-</head>
-
-{% block title %}
-Perfil
-{% endblock title %}
-
-{% block imports %}
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}">
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-{% endblock imports %}
+{% block header %}{% comment %}Sem cabeçalho nesta página{% endcomment %}{% endblock header %}
 
 {% block content %}
 
@@ -155,8 +124,5 @@ Perfil
             </div>
         </section>
 
-
 </div>
-
 {% endblock content %}
->>>>>>> d54927b5e63e20c944d667317e48abd7cf39bf94
