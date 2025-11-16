@@ -1,5 +1,9 @@
 {% load static %}
 
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'base_files/sidebar.css' %}?v=20251113_2">
+
 <nav id="sidebar" class="{% if sidebar_open %}open-sidebar{% endif %}">
 	<div id="sidebar_content">
 		<div id="title_sidebar">
@@ -75,3 +79,5 @@
 		</div>
 	</div>
 </nav>
+
+<script src="{% static 'base_files/sidebar.js' %}"></script>
