@@ -1,0 +1,66 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent; /* ou a cor que quiser */
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; /* limite para conteúdo centralizado */
+    margin: 0 auto; /* centraliza dentro do header */
+}
+
+.header-content h1 {
+    font-size: 28px;
+    color: #17171c; /* cor do texto */
+    margin: 0;
+}
+
+/* Search input estilo pill */
+#search_container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f5f5f7; /* fundo claro suave */
+    border: 1px solid #e0e0e2;
+    border-radius: 28px;
+    padding: 6px 14px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+#search_container i {
+    color: #7d7d84;
+    font-size: 14px; /* ícone discreto */
+}
+
+#search_input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: #2a2a30;
+    padding: 4px 0;
+    font-family: inherit;
+}
+
+#search_input::placeholder {
+    color: #9a9aa0;
+}
+
+/* Foco acessível sem quebrar o visual */
+#search_container:focus-within {
+    border-color: #c5c5c9;
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.08);
+}

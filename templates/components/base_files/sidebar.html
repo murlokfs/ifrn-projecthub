@@ -53,9 +53,7 @@
 			</div>
 		</div> -->
 
-
-			<div id="user">
-				<a id="user_btn" href="{% url 'perfil' %}">
+				<a id="user_btn" class="{% if active_page == 'perfil' %}active{% endif %}" href="{% url 'perfil' %}">
 					<img src="{% static 'img/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">
@@ -72,8 +70,7 @@
 
 		<div id="logout">
 			<form method="post" action="#" id="logout_form">
-				<!-- {# Se usar auth: action="{% url 'logout' %}" e csrf_token #}
-				{% csrf_token %} -->
+				<!-- {% csrf_token %} -->
 				<button id="logout_btn" type="submit">
 					<i class="fa-solid fa-arrow-right-from-bracket"></i>
 					<span class="item_description" id="logout_text">Logout</span>
@@ -83,4 +80,4 @@
 	</div>
 </nav>
 
-<script src="{% static 'base_files/sidebar.js' %}"></script>
+{# Script já incluído no template base; #}

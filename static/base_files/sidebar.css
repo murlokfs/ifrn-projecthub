@@ -16,6 +16,7 @@
 	padding: 0 4px;
 	/* min-width: 72px; */
 	/* min-width: 72px; */	
+    z-index: 1000; /* garante clique no botão mesmo sem header */
 }
 
 body.dark-mode #sidebar { 
@@ -311,6 +312,7 @@ body.dark-mode #user {
 	height:24px; 
 	border:none; 
 	cursor:pointer; 
+    z-index:1001;
 }
 
 #open_btn_icon { 
@@ -368,10 +370,6 @@ body.dark-mode #user {
 @keyframes ripple { 
 	0% { width:0; height:0; opacity:1; } 
 	100% { width:100px; height:100px; opacity:0; } }
-
-body { display:flex; }
-main { flex:1; }
-
 
 @media screen and (max-width: 600px) {
 	#sidebar {
