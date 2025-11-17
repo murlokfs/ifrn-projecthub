@@ -12,6 +12,15 @@
 
 body {
     display: flex;
+    align-items: stretch;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% -  72px);
+    flex: 1;
+    min-height: 100vh;
 }
 
 main {
@@ -30,8 +39,7 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    max-width: 1100px;
-    justify-content: space-between;
+    width: 1092px;
     gap: 35px;
 }
 
@@ -83,8 +91,7 @@ main {
     gap: 20px;
 }
 
-
-.header {
+.header_feed_project {
     display: flex;
     align-items: center;
     width: 100%;
@@ -166,8 +173,8 @@ main {
 }
 
 .edit_project, .remove_project {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     background-color: #F5F5F5;
     border: 1px solid #E3E3E8;
     /* padding: 1px; */

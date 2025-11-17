@@ -1,0 +1,22 @@
+<header class="header">
+    <div class="header-content">
+        {% comment %}Título dinâmico baseado em active_page passado pelo context{% endcomment %}
+        {% if page_title %}
+            <h1>{{ page_title }}</h1>
+        {% else %}
+            {% if active_page == 'feed' %}
+                <h1>Feed</h1>
+            {% elif active_page == 'my_projects' %}
+                <h1>Meus projetos</h1>
+            {% else %}
+                <h1>ProjectHub</h1>
+            {% endif %}
+        {% endif %}
+        <div id="search_container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search_input" placeholder="Busque por projetos, perfis ou tags...">
+        </div>
+
+        {% include 'components/buttons/create_project.html' %}
+    </div>
+</header>

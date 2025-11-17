@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'base_files/sidebar.css' %}?v=20251113_2">
 
@@ -38,7 +39,7 @@
 	</div>
 
 	<div id="sidebar_end">
-		<div class="theme-container">
+		<!-- <div class="theme-container">
 			<p class="title-theme"> Tema </p>
 			<div class="toggle-wrapper">
 				<div class="toggle-switch" id="themeToggle" role="button" aria-pressed="false" aria-label="Alternar tema">
@@ -50,26 +51,28 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
+
 
 		<div id="user">
-			<img src="{% static 'img/profile/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
-			<p id="user_infos">
-				<span class="item_description">
-					<!-- {% firstof user.get_full_name user.username %} -->
-					 Ayrton Senna
-				</span>
-				<span class="item_description">
-					<!-- @{{ user.username }} -->
-					 @ayrtonsenna
-				</span>
-			</p>
-		</div>
+				<a id="user_btn" class="{% if active_page == 'perfil' %}active{% endif %}" href="{% url 'perfil' %}">
+					<img src="{% static 'img/profile/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
+					<p id="user_infos">
+						<span class="item_description">
+							<!-- {% firstof user.get_full_name user.username %} -->
+							Ayrton Senna
+						</span>
+						<span class="item_description">
+							<!-- @{{ user.username }} -->
+							@ayrtonsenna
+						</span>
+					</p>
+				</a>
+			</div>
 
 		<div id="logout">
 			<form method="post" action="#" id="logout_form">
-				<!-- {# Se usar auth: action="{% url 'logout' %}" e csrf_token #}
-				{% csrf_token %} -->
+				<!-- {% csrf_token %} -->
 				<button id="logout_btn" type="submit">
 					<i class="fa-solid fa-arrow-right-from-bracket"></i>
 					<span class="item_description" id="logout_text">Logout</span>
@@ -79,4 +82,4 @@
 	</div>
 </nav>
 
-<script src="{% static 'base_files/sidebar.js' %}"></script>
+{# Script já incluído no template base; #}
