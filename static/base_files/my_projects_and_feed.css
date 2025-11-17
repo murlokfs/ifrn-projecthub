@@ -27,8 +27,7 @@ main {
     background-color: rgb(240, 238, 238);
     padding: 30px;
     display: flex;
-    width: 80vw;
-    /* justify-content: center; */
+    width: 100vw;
     min-height: 100vh;
     flex-direction: column;
     flex-wrap: wrap;
@@ -252,7 +251,6 @@ main {
 /* RESPONSIVIDADE MOBILE */
 @media screen and (max-width: 500px) {
     main {
-        width: 100%;
         padding: 20px;
         align-items: center;
     }
@@ -352,10 +350,8 @@ main {
     }
 }
 
-@media screen and (min-width: 801px) and (max-width: 1200px) {
-    main {
-        width: 80%;
-    }
+@media screen and (min-width: 801px) and (max-width: 1300px) {
+    
     
     .search_project {
         width: 100%;
