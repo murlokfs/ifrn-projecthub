@@ -24,11 +24,22 @@
     margin: 0 auto; /* centraliza dentro do header */
 }
 
-.header-content h1 {
-    font-size: 28px;
+#title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#logo {
+    height: 32px; /* tamanho do logo */
+    width: auto;
+}
+
+#title h1{
+    font-size: 24px;
     color: #17171c; /* cor do texto */
     margin: 0;
-}
+}    
 
 /* Search input estilo pill */
 #search_container {
@@ -68,4 +79,10 @@
 #search_container:focus-within {
     border-color: #c5c5c9;
     box-shadow: 0 0 0 3px rgba(0,113,227,0.08);
+}
+
+#buttons_container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }

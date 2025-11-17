@@ -1,0 +1,21 @@
+{% load static %}
+
+<!-- Ao fazer o include deste arquivo, {% include 'components/base_files/header_createproject.html' %}, adicionar o CSS: {% static 'base_files/header_createproject.css' %} no template pai -->
+
+<header class="header">
+    <div class="header-content">
+        <div id="title">
+            <img id="logo" src="{% static 'img/brain.png' %}" alt="ProjectHub Logo">
+            <h1>ProjectHub</h1>
+        </div>
+        <div id="search_container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search_input" placeholder="Busque por projetos, perfis ou tags...">
+        </div>
+        
+        <div id="buttons_container">
+            {% include 'components/buttons/cancel.html' %}
+            {% include 'components/buttons/publish.html' %}
+        </div>
+    </div>
+</header>
