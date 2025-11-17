@@ -1,138 +1,253 @@
 {% load static %}
 
-<div class="modal">
-    <div class="header_modal">
-        <div class="title">Selecione o Tipo de Projeto</div>
-        <div class="show_choices">Escolha o estilo de projeto que você deseja criar. Esta seleção ajudará a personalizar as opções disponíveis.</div>
-    </div>
+<div class="modal-backdrop ">
 
-    <div class="types_container">   
-        <div class="type integrative_project">
-            <div class="icon"><img src="{% static 'img/book-open-text.svg' %}" alt=""></div>
-            {% include 'components/icons/check.html' with distance=True %}
-            <div class="name">Projeto Integrador</div>
-            <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
+    <div class="modal">
+        <div class="header_modal">
+            <div class="title">Selecione o Tipo de Projeto</div>
+            <div class="show_choices">Escolha o estilo de projeto que você deseja criar. Esta seleção ajudará a personalizar as opções disponíveis.</div>
         </div>
-        <div class="type tcc">
-            <div class="icon"><img src="{% static 'img/graduation-cap(1).svg' %}" alt=""></div>
-            {% include 'components/icons/check.html' with distance=True %}
-            <div class="name">Trabalho de Conclusão de Curso (TCC)</div>
-            <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
-        </div>
-        <div class="type scientific">
-            <div class="icon"><img src="{% static 'img/flask-fill.svg' %}" alt=""></div>
-            {% include 'components/icons/check.html' with distance=True %}
-            <div class="name">Projeto de pesquisa</div>
-            <div class="description">Projeto voltado à investigação científica, geralmente vinculado a linhas de pesquisa e produção acadêmica.</div>
-        </div>
-    </div>
 
-    <div class="btns">
-        {% include 'components/buttons/cancel.html' %}
-        {% include 'components/buttons/continue.html' %}
+        <div class="types_container">   
+            <div class="type integrative_project">
+                <div class="icon"><img src="{% static 'img/types_of_projects/book-open-text.svg' %}" alt=""></div>
+                {% include 'components/icons/check.html' with distance=True %}
+                <div class="name">Projeto Integrador</div>
+                <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
+            </div>
+            <div class="type tcc">
+                <div class="icon"><img src="{% static 'img/types_of_projects/graduation-cap(1).svg' %}" alt=""></div>
+                {% include 'components/icons/check.html' with distance=True %}
+                <div class="name">Trabalho de Conclusão de Curso (TCC)</div>
+                <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
+            </div>
+            <div class="type scientific">
+                <div class="icon"><img src="{% static 'img/types_of_projects/flask-fill.svg' %}" alt=""></div>
+                {% include 'components/icons/check.html' with distance=True %}
+                <div class="name">Projeto de pesquisa</div>
+                <div class="description">Projeto voltado à investigação científica, geralmente vinculado a linhas de pesquisa e produção acadêmica.</div>
+            </div>
+        </div>
+
+        <div class="btns">
+            {% include 'components/buttons/cancel.html' %}
+            {% include 'components/buttons/continue.html' %}
+        </div>
     </div>
 </div>
 
 <style>
+
+.modal-backdrop {
+    position: fixed;
+    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center; 
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+    padding: 20px 0; 
+}
+
+.modal-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal {
+    background-color: white;
+    width: 75%;
+    max-width: 1100px;
+    border-radius: 20px;
+    padding: 30px;
+    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 80px);
+}
+
+.header_modal {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.header_modal .title {
+    font-weight: bold;
+    font-size: 24px;
+    color: #17171C;
+}
+
+.header_modal .show_choices {
+    font-size: 14px;
+    color: #464444;
+    font-style: italic;
+}
+
+.types_container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.type {
+    background-color: white;
+    width: calc((100% - 48px) / 3);
+    min-height: 280px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #E3E3E8;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.type .icon {
+    width: 50px;
+    height: 50px;
+}
+
+.type .icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.type .name {
+    font-weight: bold;
+    font-size: 18px;
+    color: #17171C;
+}
+
+.type .description {
+    font-size: 14px;
+    color: #464444;
+}
+
+.active {
+    border: 2px solid #50CE67;
+}
+
+.btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+.btns button {
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 700px) {
+
+    .modal-backdrop {
+        align-items: flex-start;
+        padding: 24px 8px;
+    }
+
     .modal {
-        background-color: #ffffff;
-        width: 70%;
-        border-radius: 20px;
-        height: 70vh;
-        padding: 30px;
-        display: none;
-        position: fixed;
-        justify-content: center;
+        width: 94%;
+        max-width: none;
+        padding: 18px;
+        border-radius: 16px;
+        max-height: calc(100vh - 48px);
+        min-height: 170vh;
     }
 
     .types_container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 80%;
+        flex-direction: column;
+        gap: 18px;
     }
 
     .type {
-        background-color: white;
-        width: 25%;
-        height: 65%;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border: 2px solid #E3E3E8;
-        border-radius: 30px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 20px;
-        cursor: pointer;
-    }
-
-    .type .icon {
-        width: 50px;
-        height: 50px;
-    }
-
-    .type .icon img {
         width: 100%;
-        height: 100%;
+    }
+}
+
+@media screen and (min-width: 701px) and (max-width: 1100px) {
+
+    .modal-backdrop {
+        align-items: flex-start;
+        padding: 24px;
     }
 
-    .btns {
-        display: flex;
-        justify-content: flex-end;
-        gap: 30px;
+    .types_container {
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
-    .btns button {
-        cursor: pointer;
+    .modal {
+        width: 94%;
+        padding: 18px;
+        max-height: calc(140vh - 48px);
+        min-height: 120vh;
     }
 
-    .title {
-        font-weight: bold;
-        font-size: 24px;
+    .type {
+        width: 45%;
     }
+}
 
-    .show_choices {
-        font-style: italic;
-    }
-
-    .type .name {
-        font-weight: bold;
-        font-size: 18px;
-        color: #17171C;
-    }
-
-    .type .description {
-        font-size: 14px;
-        color: #464444;
-    }
-
-    .active {
-        border: 2px solid #50CE67;
-    }
-
-    
 </style>
 
 <script>
     const types = document.querySelectorAll('.type');
+const modalBackdrop = document.querySelector('.modal-backdrop');
+const body = document.querySelector('body');
+const cancel = document.querySelector('.cancel'); // botão cancelar
 
-    types.forEach(type => {
+function openModal() {
+    modalBackdrop.classList.add('visible');
+}
+
+function closeModal() {
+    modalBackdrop.classList.remove('visible');
+}
+
+// Fechar ao clicar no botão cancelar
+cancel.addEventListener('click', closeModal);
+
+// Fechar ao clicar fora da modal (no backdrop)
+modalBackdrop.addEventListener('click', (e) => {
+    if (e.target === modalBackdrop) {
+        closeModal();
+    }
+});
+
+// Abre a modal ao carregar
+openModal();
+
+// Seleção dos cards
+types.forEach(type => {
     const checkCircle = type.querySelector('.check_circle');
 
     type.addEventListener('click', () => {
         const isActive = type.classList.contains('active');
 
+        // Remove ativo de todos
         types.forEach(t => {
-        t.classList.remove('active');
-        t.querySelector('.check_circle').style.display = 'none';
+            t.classList.remove('active');
+            const tCheckCircle = t.querySelector('.check_circle');
+            if (tCheckCircle) tCheckCircle.style.display = 'none';
         });
 
+        // Ativa somente o clicado
         if (!isActive) {
-        type.classList.add('active');
-        checkCircle.style.display = 'flex';
+            type.classList.add('active');
+            if (checkCircle) checkCircle.style.display = 'flex';
         }
     });
-    });
+});
 
 </script>
