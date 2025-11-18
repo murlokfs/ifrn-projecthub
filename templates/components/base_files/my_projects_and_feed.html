@@ -11,18 +11,12 @@
     {% block imports %}{% endblock imports %}
     <title>{% block title %}{% endblock title %}</title>
 </head>
-    <body>
-        {% include 'components/base_files/sidebar.html' with active_page=active_page %}
-        
-        <div class="app-content">
-            {% block header %}
-                {% include 'components/base_files/header.html' %}
-            {% endblock header %}
-            <main>
-                {% block content %}{% endblock content %}
-            </main>
-        </div>
-        <script src="{% static 'base_files/sidebar.js' %}"></script>
-        {% block extra_js %}{% endblock extra_js %}
-    </body>
+<body>
+    {% include 'components/base_files/sidebar.html' with active_page=active_page %}
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    <script src="{% static 'base_files/sidebar.js' %}"></script>
+    {% block extra_js %}{% endblock extra_js %}
+</body>
 </html>

@@ -16,7 +16,7 @@
 	padding: 0 4px;
 	/* min-width: 72px; */
 	/* min-width: 72px; */	
-    z-index: 1000; /* garante clique no botão mesmo sem header */
+	/* min-width: 72px; */
 }
 
 body.dark-mode #sidebar { 
