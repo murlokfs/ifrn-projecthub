@@ -1,15 +1,5 @@
-<button class="continue">Continuar</button>
+{% extends 'components/buttons/button_base.html' %}
 
-<style>
-    .continue {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 7px 20px;
-        background-color: #50CE67;
-        border: none;
-        border-radius: 12px;
-        color: #fff;
-        font-weight: 600;
-    }
-</style>
+{% block class_name %}green{% endblock class_name %}
+
+{% block button_name %}Continue{% endblock button_name %}

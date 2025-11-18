@@ -35,7 +35,6 @@ class DetalhesProjetosView(TemplateView):
 
 class ComentariosAlunosView(TemplateView):
     template_name = 'project/comentarios_alunos.html'
-    
 
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/comentarios_professores.html'

@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="container {% if distance %}distance{% endif %}">
+    <img src="{% static 'img/clock.svg' %}" alt="">
+</div>
+
+<style>
+    .container {
+        width: 24px;
+        height: 24px;
+        padding: 5px ;
+        border-radius: 50%;
+        /* background-color: #7ebff79d; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>

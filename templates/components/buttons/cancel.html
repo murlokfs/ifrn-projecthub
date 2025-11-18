@@ -1,15 +1,5 @@
-<button class="cancel">Cancelar</button>
+{% extends 'components/buttons/button_base.html' %}
 
-<style>
-    .cancel {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 7px 15px;
-        background-color: #F5474A;
-        border: none;
-        border-radius: 12px;
-        color: #fff;
-        font-weight: 600;
-    }
-</style>
+{% block class_name %}cancel{% endblock class_name %}
+
+{% block button_name %}Cancelar{% endblock button_name %}

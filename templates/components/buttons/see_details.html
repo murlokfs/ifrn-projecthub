@@ -1,28 +1,5 @@
+{% extends 'components/buttons/button_base.html' %}
 
-<button class="see_details {% if min_width %}with_min_width{% endif %}">
-    <h4>Ver detalhes</h4>
-</button>
+{% block class_name %}green see_details{% endblock class_name %}
 
-<style>
-    .see_details {
-        max-width: 70%;
-        height: 40px;
-        padding: 5px 20px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #50CE67;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .see_details.with_min_width {
-        width: 130px !important;
-    }
-
-    .see_details h4 {
-        font-weight: 700;
-    }
-</style>
+{% block button_name %}Ver detalhes{% endblock button_name %}

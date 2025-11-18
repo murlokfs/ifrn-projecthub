@@ -1,31 +1,5 @@
-<button class="create_project">
-    <h4> Criar projeto</h4>
-</button>
+{% extends 'components/buttons/button_base.html' %}
 
-<style>
-    .create_project {
-        width: 110px;
-        height: 34px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #50CE67;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-    }
+{% block class_name %}green create_project{% endblock class_name %}
 
-    .create_project h4 {
-        font-weight: 600;
-    }
-</style>
-
-<script>
-    const modal_backdrop = document.querySelector('.modal-backdrop')
-    const btn = document.querySelector('.create_project')
-
-    // if (btn) {
-    //     modal_backdrop.style.display == ''
-    // }
-</script>
+{% block button_name %}Criar Projeto{% endblock button_name %}

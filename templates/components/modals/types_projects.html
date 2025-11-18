@@ -203,51 +203,45 @@
 
 <script>
     const types = document.querySelectorAll('.type');
-const modalBackdrop = document.querySelector('.modal-backdrop');
-const body = document.querySelector('body');
-const cancel = document.querySelector('.cancel'); // botão cancelar
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    const body = document.querySelector('body');
+    const cancel = document.querySelector('.cancel'); // botão cancelar
 
-function openModal() {
-    modalBackdrop.classList.add('visible');
-}
-
-function closeModal() {
-    modalBackdrop.classList.remove('visible');
-}
-
-// Fechar ao clicar no botão cancelar
-cancel.addEventListener('click', closeModal);
-
-// Fechar ao clicar fora da modal (no backdrop)
-modalBackdrop.addEventListener('click', (e) => {
-    if (e.target === modalBackdrop) {
-        closeModal();
+    function openModal() {
+        modalBackdrop.classList.add('visible');
     }
-});
 
-// Abre a modal ao carregar
-openModal();
+    function closeModal() {
+        modalBackdrop.classList.remove('visible');
+    }
 
-// Seleção dos cards
-types.forEach(type => {
-    const checkCircle = type.querySelector('.check_circle');
+    cancel.addEventListener('click', closeModal);
 
-    type.addEventListener('click', () => {
-        const isActive = type.classList.contains('active');
-
-        // Remove ativo de todos
-        types.forEach(t => {
-            t.classList.remove('active');
-            const tCheckCircle = t.querySelector('.check_circle');
-            if (tCheckCircle) tCheckCircle.style.display = 'none';
-        });
-
-        // Ativa somente o clicado
-        if (!isActive) {
-            type.classList.add('active');
-            if (checkCircle) checkCircle.style.display = 'flex';
+    modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) {
+            closeModal();
         }
     });
-});
+
+    types.forEach(type => {
+        const checkCircle = type.querySelector('.check_circle');
+
+        type.addEventListener('click', () => {
+            const isActive = type.classList.contains('active');
+
+            // Remove ativo de todos
+            types.forEach(t => {
+                t.classList.remove('active');
+                const tCheckCircle = t.querySelector('.check_circle');
+                if (tCheckCircle) tCheckCircle.style.display = 'none';
+            });
+
+            // Ativa somente o clicado
+            if (!isActive) {
+                type.classList.add('active');
+                if (checkCircle) checkCircle.style.display = 'flex';
+            }
+        });
+    });
 
 </script>
