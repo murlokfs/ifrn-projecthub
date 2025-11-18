@@ -231,5 +231,52 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+
+    // --- 8. RICH TEXT EDITOR (Quill) ---
+    
+    // Configuração da barra de ferramentas igual da foto
+    var toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // botões de formatação
+        ['blockquote', 'code-block'],
+
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // listas
+        [{ 'script': 'sub'}, { 'script': 'super' }],      // sobrescrito
+        [{ 'indent': '-1'}, { 'indent': '+1' }],          // indentação
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],        // cabeçalhos
+
+        [{ 'color': [] }, { 'background': [] }],          // cor da fonte
+        [{ 'align': [] }],                                // alinhamento
+        ['clean']                                         // remover formatação
+    ];
+
+    var quill = new Quill('#editor-container', {
+        modules: {
+            toolbar: toolbarOptions
+        },
+        theme: 'snow',
+        placeholder: 'Escreva a descrição detalhada do projeto...'
+    });
+
+    // Conectar Editor com o Card Preview e Input Escondido
+    const inputDescricaoHidden = document.getElementById('inputDescricaoHidden');
+    const cardDesc = document.getElementById('cardDesc');
+
+    quill.on('text-change', function() {
+        // 1. Atualiza o input escondido (para enviar ao Backend Django)
+        inputDescricaoHidden.value = quill.root.innerHTML;
+
+        // 2. Atualiza o Card Preview
+        // Usamos .getText() para o preview ficar limpo, sem tags HTML quebrando o card
+        // Se quiser mostrar formatação no card, use quill.root.innerHTML
+        var textoPuro = quill.getText().trim();
+        
+        if (textoPuro.length > 0) {
+            // Limita o tamanho do texto no card para não estourar
+            cardDesc.innerText = textoPuro.substring(0, 150) + (textoPuro.length > 150 ? "..." : "");
+        } else {
+            cardDesc.innerText = "Nenhuma descrição adicionada ainda...";
+        }
+    });
+
 });
 

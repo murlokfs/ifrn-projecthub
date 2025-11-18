@@ -1,11 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 * { margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins';
     }
 
 
     body {
         background-color: #F4F4F6; 
+    }
+
+    .span-tags{
+        font-size: 14px;
     }
 
     /* --- HEADER CONTAINER --- */
@@ -177,8 +183,14 @@
     color: #6b7280;
 }
 
-.card-stats i {
-    font-size: 18px;
+.span-tags{
+    font-size: 14px;
+}
+
+.card-stats img {
+    width: 22px;
+    height: 20px;
+    font-size: 15px;
     vertical-align: middle; /* Alinha melhor com o texto */
 }
 
@@ -194,6 +206,7 @@
     width: 100%;
     max-width: 1300px;
     gap: 40px;
+    margin: 0 auto; /* Centraliza horizontalmente */
 }
 
 .form-container {
@@ -545,7 +558,7 @@ input:checked + .slider:before {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .meta-row {
@@ -606,14 +619,36 @@ input:checked + .slider:before {
 }
 
 .btn-details {
-    background-color: #f3f4f6; /* Cinza claro (igual imagem) */
-    color: #1f2937;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
+    max-width: 70%;
+        height: 40px;
+        padding: 5px 20px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #50CE67;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+}
+
+.btn-details.with_min_width{
+    width: 130px !important;
+}
+
+/* Ajuste visual do Editor Quill para combinar com o design */
+.ql-toolbar.ql-snow {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-color: #e5e7eb;
+    background-color: #f9fafb; /* Mesma cor de fundo dos seus inputs */
+}
+
+.ql-container.ql-snow {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: #e5e7eb;
     font-size: 14px;
-    cursor: default; /* Não clicável no preview */
 }
 
 /* Ajuste Responsivo */
@@ -636,40 +671,3 @@ input:checked + .slider:before {
         padding: 20px 10px;
     }
 }
-
-/* --- RESPONSIVIDADE --- */
-        
-/* Telas de Tablet e menores (abaixo de 900px) */
-    @media (max-width: 900px) {
-        .header-container {
-            flex-wrap: wrap; /* Permite quebra de linha */
-            padding: 15px;
-        }
-            
-        /* Joga a barra de pesquisa para uma nova linha (ordem visual) */
-        .search-wrapper {
-            order: 3; 
-            min-width: 100%; /* Ocupa a linha inteira */
-            margin-top: 10px;
-        }
-            
-        .brand-link { order: 1; }
-        .actions-wrapper { order: 2; }
-        }
-
-        /* Telas de Celular (abaixo de 600px) */
-    @media (max-width: 600px) {
-        .brand-name { display: none; } /* Esconde o nome "Project Hub" para economizar espaço */
-            
-        .actions-wrapper {
-            gap: 8px;
-        }
-
-        .btn {
-            padding: 8px 12px;
-            font-size: 12px;
-        }
-            
-            /* Opcional: Se quiser esconder botões menos importantes no celular */
-            /* .btn-cancel { display: none; } */
-        }
