@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,19 +12,26 @@
 
 body {
     display: flex;
-    justify-content: right;
+    align-items: stretch;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% -  72px);
+    flex: 1;
+    min-height: 100vh;
 }
 
 main {
     background-color: rgb(240, 238, 238);
     padding: 30px;
     display: flex;
-    width: 100vw;
-    /* justify-content: center; */
+    width: 100%;
     min-height: 100vh;
     flex-direction: column;
     flex-wrap: wrap;
-    align-items: right;
+    align-items: center;
     gap: 30px;
 }
 
@@ -28,8 +39,9 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    max-width: 1092px;
+    max-width: 1100px;
     gap: 35px;
+    justify-content: space-between;
 }
 
 
@@ -38,7 +50,7 @@ main {
     border-radius: 16px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
     padding: 20px;
-    min-width: 300px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -49,7 +61,17 @@ main {
 }
 
 #project_in_my_projects {
-    width: 300px;
+    width: 330px;
+}
+
+#project_in_my_projects .colaborators_and_links {
+    flex-direction: column;
+}
+
+#project_in_my_projects .colaborators_and_links .links,
+#project_in_my_projects .colaborators_and_links .collaborators_and_docs {
+    width: 100%;
+
 }
 
 .line {
@@ -71,9 +93,10 @@ main {
     gap: 20px;
 }
 
-.header {
+.header_feed_project {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .project_image {
@@ -107,6 +130,7 @@ main {
     align-items: center;
     justify-content: center;
     min-width: 35%;
+    padding: 5px;
     min-height: 27px;
     border-radius: 10px;
     background-color: #50CE67;
@@ -125,6 +149,25 @@ main {
 .content .description b {
     color: #50CE67;
 }
+
+.tags_container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: #ECF9EE;
+    border-radius: 8px;
+    width: fit-content;
+    padding: 4px 8px;
+    height: 24px;
+    color: #50CE67;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .action_btns {
     display: flex;
     gap: 10px;
@@ -132,8 +175,8 @@ main {
 }
 
 .edit_project, .remove_project {
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     background-color: #F5F5F5;
     border: 1px solid #E3E3E8;
     /* padding: 1px; */
@@ -150,8 +193,9 @@ main {
 }
 
 .search_project {
-    width: 1092px;
-    height: 60px;
+    max-width: 1100px;
+    width: 100%;
+    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,3 +248,127 @@ main {
     color: white;
     font-weight: 700;
 }
+
+@media screen and (max-width: 800px) {
+    main {
+        padding: 20px;
+        align-items: center;
+    }
+
+    .search_project {
+        width: 100%;
+        flex-wrap: wrap;
+
+    }
+
+    .input_container {
+        width: 90%;
+    }
+
+    .filter_btns {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 90%;
+    }
+
+    .filter_btns button {
+        padding: 8px 16px;
+    }
+
+    .container_projects {
+        width: 100%;
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+    }
+
+    .project_card, #project_in_feed, #project_in_my_projects {
+        width: 100%;
+    }
+
+    .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .project_image {
+        margin-right: 0;
+    }
+
+    .colaborators_and_links {
+        flex-direction: column;
+    }
+
+    .collaborators_and_docs, .links {
+        width: 100%;
+    }
+}
+/* 
+@media screen and (min-width: 501px) and (max-width: 600px) {
+    .search_project {
+        width: 100%;
+        flex-direction: column;
+        display: none;
+    }
+
+    .input_container, .input_container input, .filter_btns {
+        width: 100%;
+    }
+
+    .project_card, #project_in_my_projects {
+        width: 100%;
+    }
+} */
+
+@media screen and (min-width: 601px) and (max-width: 770px) {
+    .container_projects {
+        width: 100%;
+
+    }
+
+    .project_card, #project_in_my_projects {
+        width: 100%;
+        min-width: 300px;
+    }
+
+    .search_project {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (min-width: 701px) and (max-width: 800px) {
+    .project_card, #project_in_my_projects {
+        width: 100%;
+    }
+
+    .search_project {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (min-width: 801px) and (max-width: 1300px) {
+    
+    
+    .search_project {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .input_container {
+        width: 80%;
+    }
+
+    .container_projects, .input_container {
+        width: 100%;
+
+    }
+
+    .project_card, #project_in_my_projects {
+        width: 45%;
+    }
+}
+

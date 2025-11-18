@@ -36,19 +36,24 @@
                     <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
                     {% include 'components/cards/project_parts/tag.html' %}
                   
-                    {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
-                    
-                    {% include 'components/cards/project_parts/links.html' with borders=False %}
+                    <div class="colaborators_and_links">
+
+                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
+                        
+                        {% include 'components/cards/project_parts/links.html' with column=True %}
+                    </div>
+
+                    <div class="line"></div>
                     
                     {% include 'components/cards/project_parts/interaction_btns.html' %}
                     
                     <div class="action_btns">
                         {% include 'components/buttons/see_details.html' %}
                         <button class="edit_project">
-                            <img src="{% static 'img/edit.svg' %}" alt="">
+                            <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
                         </button>
                         <button class="remove_project">
-                            <img src="{% static 'img/trash.svg' %}" alt="">
+                            <img src="{% static 'img/project_parts/trash.svg' %}" alt="">
                         </button>
                     </div>
                 </div>

@@ -1,24 +1,14 @@
 {% extends 'components/base_files/my_projects_and_feed.html' %}
 {% load static %}
 
-{% include 'components/base_files/sidebar.html' %}
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil</title>
-</head>
-
-{% block title %}
-Perfil
-{% endblock title %}
+{% block title %}Perfil{% endblock title %}
 
 {% block imports %}
 <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 {% endblock imports %}
+
+{% block header %}{% comment %}Sem cabeçalho nesta página{% endcomment %}{% endblock header %}
 
 {% block content %}
 
@@ -26,7 +16,7 @@ Perfil
     
         <header class="profile-header">
             <div class="main-info">
-                <img src="{% static 'img/gatoDeBotas.jpg' %}" alt="Profile picture"
+                <img src="{% static 'img/profile/gatoDeBotas.jpg' %}" alt="Profile picture"
                     class="profile-photo">
                 <div class="profile-texts">
                     <h1 class="user-name">Nathan Manicoba</h1>
@@ -134,7 +124,5 @@ Perfil
             </div>
         </section>
 
-
 </div>
-
 {% endblock content %}

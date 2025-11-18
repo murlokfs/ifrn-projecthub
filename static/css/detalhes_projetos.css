@@ -200,6 +200,16 @@ body {
     border-radius: 6px;
     font-size: 13px;
     font-weight: 500;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: #d4f7da;
+}
+
+.tags-container a {
+    text-decoration: none;
 }
 
 /* Layout das Duas Colunas */
@@ -295,16 +305,33 @@ body {
     padding: 10px;
     border-radius: 6px;
     font-family: 'Inter';
-}
-.github-banner {
-    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.image-github img {
+.github-placeholder {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.github-placeholder a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.github-placeholder img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 8px;
+    display: block;
 }
 
 /* Listas (Integrantes e Professor) */
@@ -322,6 +349,22 @@ body {
     gap: 12px;
     font-weight: 500;
 }
+
+.user-list li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.user-list li a:hover {
+    background-color: rgba(80, 206, 103, 0.13);
+}
+
 .user-list li small {
     color: #6b7280;
     font-weight: 400;
@@ -477,8 +520,6 @@ body {
     margin-bottom: 12px;
 }
 
-/* A classe .avatar é global, então não precisamos re-estilizá-la aqui */
-
 .post-author-details {
     display: flex;
     flex-direction: column;
@@ -487,16 +528,81 @@ body {
     font-size: 16px;
     font-weight: 600;
     color: #17171C;
+    transition: color 0.2s ease-in-out;
+}
+.post-author-details a {
+    text-decoration: none;
+    color: inherit;
+}
+.post-author-details a:hover strong {
+    color: #50CE67;
 }
 .post-author-details small {
     font-size: 14px;
     color: #6D6D78;
+    font-weight: 400;
 }
 
+.post-author > a {
+    text-decoration: none;
+}
 .post-body {
     font-size: 16px;
     color: #6D6D78;
     line-height: 1.6;
     margin: 0;
     padding-left: 48px; 
+}
+/* --- 8. Media Queries para Responsividade --- */
+
+/* Telas Médias (Tablets) */
+@media (max-width: 992px) {
+    .content-columns {
+        flex-direction: column;
+    }
+
+    .column-left,
+    .column-right {
+        max-width: 100%;
+        flex: 1;
+    }
+}
+
+/* Telas Pequenas (Celulares) */
+@media (max-width: 768px) {
+    .page-wrapper {
+        padding: 16px;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .header-right {
+        width: max-content;
+        flex-direction: column;
+    }
+
+    .project-title h1 {
+        font-size: 20px;
+    }
+
+    .tabs-nav {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .tabs-nav a{
+        width: 100%;
+    }
+
+    .tab-link {
+        flex-grow: 0;
+    }
+
+    .card-accent .card-body {
+        min-height: auto;
+    }
 }
