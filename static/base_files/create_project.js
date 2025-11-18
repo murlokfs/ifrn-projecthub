@@ -5,7 +5,7 @@ document.addEventListener('click', (e) => {
   if (!btn) return;
 
   // Tenta abrir modal diretamente
-  const modalBackdrop = document.querySelector('.modal-backdrop');
+  const modalBackdrop = document.querySelector('#types-projects-modal');
   if (modalBackdrop) {
     modalBackdrop.classList.add('visible');
     return;

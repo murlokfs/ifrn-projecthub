@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="modal-backdrop">
+<div class="modal-backdrop" id="types-projects-modal">
 
     <div class="modal">
         <div class="header_modal">
@@ -202,10 +202,10 @@
 </style>
 
 <script>
-    const types = document.querySelectorAll('.type');
-    const modalBackdrop = document.querySelector('.modal-backdrop');
+    const modalBackdrop = document.querySelector('#types-projects-modal');
+    const types = modalBackdrop.querySelectorAll('.type');
     const body = document.querySelector('body');
-    const cancel = document.querySelector('.cancel'); // botão cancelar
+    const cancel = modalBackdrop.querySelector('.cancel'); // botão cancelar
 
     function openModal() {
         modalBackdrop.classList.add('visible');
@@ -215,7 +215,9 @@
         modalBackdrop.classList.remove('visible');
     }
 
-    cancel.addEventListener('click', closeModal);
+    if (cancel) {
+        cancel.addEventListener('click', closeModal);
+    }
 
     modalBackdrop.addEventListener('click', (e) => {
         if (e.target === modalBackdrop) {
