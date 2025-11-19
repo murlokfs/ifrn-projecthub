@@ -1,5 +1,5 @@
 {% extends 'components/buttons/button_base.html' %}
 
 {% block class_name %}green{% endblock class_name %}
-
 {% block button_name %}Continue{% endblock button_name %}
+{% block onclick %}window.location.href='{% url "cadastro_projeto" %}'{% endblock onclick %}
