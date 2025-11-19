@@ -70,13 +70,10 @@
 			</div>
 
 		<div id="logout">
-			<form method="post" action="#" id="logout_form">
-				<!-- {% csrf_token %} -->
-				<button id="logout_btn" type="submit">
-					<i class="fa-solid fa-arrow-right-from-bracket"></i>
-					<span class="item_description" id="logout_text">Logout</span>
-				</button>
-			</form>
+			<a id="logout_btn" href="{% url 'login' %}">
+				<i class="fa-solid fa-arrow-right-from-bracket"></i>
+				<span class="item_description" id="logout_text">Logout</span>
+			</a>
 		</div>
 	</div>
 </nav>
