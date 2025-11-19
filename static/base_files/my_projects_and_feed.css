@@ -161,18 +161,36 @@ main {
     align-items: center;
     justify-content: center;
     color: #50CE67;
+    font-weight: 700;
 }
 
 .name_project {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     flex-grow: 1;
+    color: #17171c;
 } 
 
 .name_project .date {
     font-size: 12px;
     color: #AAA;
 }
+
+/*
+.status_project {
+    font-size: 14px;
+    color: #50CE67;
+    border: 1px solid #50CE67;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 35%;
+    padding: 4px;
+    min-height: 27px;
+    border-radius: 50px;
+    background: transparent;
+} */
 
 .content {
     display: flex;
@@ -246,6 +264,8 @@ main {
     border-radius: 8px;
     background-color: #fff;
     font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    
 }
 
 .input_container {
@@ -254,6 +274,7 @@ main {
     display: flex;
     align-items: center;
     border-radius: 12px;
+    border: 1px solid #E3E3E8;
 }
 
 .input_container img {
@@ -269,6 +290,13 @@ main {
     background-color: transparent;
     width: 90%;
     color: #6D6D78;
+    outline: none;
+}
+
+.search_project input:focus,
+.search_project input:active {
+    outline: none;
+    box-shadow: none;
 }
 
 .filter_btns {
@@ -282,6 +310,9 @@ main {
     border-radius: 12px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
+    color: #17171C;
+    border: 1px solid #E3E3E8;
     background-color: #F4F4F6;
 }
 
