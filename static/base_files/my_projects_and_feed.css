@@ -287,12 +287,6 @@ main {
         width: 100%;
     }
 
-    .header {
-        flex-direction: column;
-        text-align: center;
-        gap: 12px;
-    }
-
     .project_image {
         margin-right: 0;
     }

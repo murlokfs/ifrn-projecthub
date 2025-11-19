@@ -132,12 +132,12 @@
 
 @container header (max-width: 620px) {
     .header-content h1 {
-        font-size: 24px;
+        font-size: 22px;
     }
 
     #search_container {
         padding: 6px 12px;
-        max-width: 280px;
+        max-width: 245px;
     }
 
     #search_container i {
@@ -175,7 +175,7 @@
 
 @container header (min-width: 621px) and (max-width: 678px) {
     .header-content h1 {
-        font-size: 26px;
+        font-size: 24px;
     }
 
     #search_container {
@@ -187,7 +187,7 @@
 
 @media screen and (max-width: 680px) {
     .header-content h1 {
-        font-size: 26px;
+        font-size: 22px;
     }
 
     #search_container {
@@ -214,8 +214,9 @@
     }
 
     .create_project {
-        padding: 7px 14px;
-        font-size: 13px;
+        padding: 7px 12px;
+        font-size: 12px;
+
     }
 
 }
@@ -231,11 +232,11 @@
 
     #search_container {
         padding: 6px 12px;
-        max-width: 280px;
+        max-width: 270px;
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 602px) {
     #text_button {
         display: none;
     }
@@ -276,7 +277,7 @@
     }
 }
 
-@media screen and (max-width: 470px) {
+@media screen and (max-width: 500px) {
     .header {
         height: 60px;
         padding: 0 20px;
@@ -287,7 +288,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        position: relative; /* permite centralizar o título */
+        position: relative;
     }
 
     .header-content h1 {
@@ -297,7 +298,7 @@
         margin: 0;
         font-size: 24px;
         line-height: 1;
-        pointer-events: none; /* evita bloquear cliques nos ícones */
+        pointer-events: none; 
         white-space: nowrap;
     }
 
@@ -309,7 +310,7 @@
         overflow: hidden;
         transition: width .18s ease, padding .18s ease, box-shadow .15s ease, border-color .15s ease;
         cursor: pointer;
-        margin-left: auto; /* garante agrupamento à direita com o botão criar */
+        margin-left: auto; 
         justify-content: center;
         gap: 0;
         border-radius: 50%;

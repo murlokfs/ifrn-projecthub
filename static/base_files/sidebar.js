@@ -56,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// Se redimensionar para desktop, limpa estados móveis
 	window.addEventListener('resize', () => {
 		if (window.innerWidth > 695 && sidebar.classList.contains('mobile-open')) {
 			sidebar.classList.remove('mobile-open');
