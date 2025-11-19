@@ -22,8 +22,8 @@
     gap: 20px;
     padding: 0 24px;
     width: 100%;
-    max-width: 1300px; /* limite para conteúdo centralizado */
-    margin: 0 auto; /* centraliza dentro do header */
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
 #title {
@@ -33,22 +33,21 @@
 }
 
 #logo {
-    height: 32px; /* tamanho do logo */
+    height: 32px;
     width: auto;
 }
 
 #title h1{
     font-size: 24px;
-    color: #17171c; /* cor do texto */
+    color: #17171c;
     margin: 0;
 }    
 
-/* Search input estilo pill */
 #search_container {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #f5f5f7; /* fundo claro suave */
+    background: #f5f5f7;
     border: 1px solid #e0e0e2;
     border-radius: 28px;
     padding: 6px 14px;
@@ -59,7 +58,7 @@
 
 #search_container i {
     color: #7d7d84;
-    font-size: 14px; /* ícone discreto */
+    font-size: 14px; 
 }
 
 #search_input {
@@ -77,7 +76,6 @@
     color: #9a9aa0;
 }
 
-/* Foco acessível sem quebrar o visual */
 #search_container:focus-within {
     border-color: #c5c5c9;
     box-shadow: 0 0 0 3px rgba(0,113,227,0.08);
