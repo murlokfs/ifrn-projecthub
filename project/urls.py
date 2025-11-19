@@ -1,9 +1,6 @@
 from django.urls import path
 from project import views
-from .views import DetalhesProjetosView
-from .views import ComentariosAlunosView
-from .views import ComentariosProfessoresView
-from .views import CadastroProjetoView
+from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView
 
 urlpatterns = [
 
@@ -13,5 +10,4 @@ urlpatterns = [
     path('comentarios-professores/', ComentariosProfessoresView.as_view(), name='comentarios_professores'),
     path('', views.feed, name='index'),
     path('projects/', views.my_projects, name='my_projects'),
-    path('popup/', views.popup, name='popup'),
 ]

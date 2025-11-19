@@ -14,143 +14,6 @@
         font-size: 14px;
     }
 
-    /* --- HEADER CONTAINER --- */
-    .header-container {
-        background-color: #ffffff;
-        padding: 15px 30px;
-        border-bottom: 1px solid #e5e7eb;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        
-        /* Flexbox para alinhar */
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        
-        /* Fixar no topo */
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        width: 100%;
-    }
-
-    /* --- 1. LOGO (Lado Esquerdo) --- */
-    .brand-link {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        text-decoration: none; 
-        color: inherit;
-    }
-
-    .brand-logo-img {
-        height: 35px;
-        width: auto;
-        object-fit: contain;
-    }
-
-    .brand-name {
-        font-size: 20px;
-        font-weight: 800;
-        color: #111827;
-        letter-spacing: -0.5px;
-        white-space: nowrap; 
-    }
-
-        /* --- 2. BUSCA (Centro) --- */
-    .search-wrapper {
-        flex: 1; 
-        max-width: 600px;
-        position: relative;
-    }
-
-    .search-wrapper input {
-        width: 100%;
-        padding: 12px 15px 12px 45px; /* 45px na esquerda para o ícone */
-        border-radius: 8px;
-        border: 1px solid transparent;
-        background-color: #f3f4f6;
-        font-size: 14px;
-        outline: none;
-        color: #374151;
-        transition: 0.2s;
-    }
-
-    .search-wrapper input:focus {
-        background-color: #fff;
-        border-color: #e5e7eb;
-        box-shadow: 0 0 0 3px rgba(209, 213, 219, 0.2);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        color: #9ca3af;
-        pointer-events: none;
-    }
-
-        /* --- 3. AÇÕES (Lado Direito) --- */
-    .actions-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .btn {
-        padding: 9px 18px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        border: none;
-        cursor: pointer;
-        white-space: nowrap; /* Texto não quebra */
-        transition: 0.2s;
-    }
-
-    /* Cores exatas da imagem */
-    .btn-cancel {
-        background-color: #ff5b5b;
-        color: white;
-    }
-
-    .btn-cancel:hover {
-        background-color: #ee4b4b;
-    }
-
-    .btn-draft {
-        background-color: #f3f4f6;
-        color: #374151;
-        }
-
-    .btn-draft:hover {
-        background-color: #e5e7eb; 
-    }
-
-    .btn-publish {
-        background-color: #4ade80;
-        color: white;
-    }
-        
-    .btn-publish:hover { 
-        background-color: #3cd070;
-    }
-
-    .profile-img {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #fff;
-        box-shadow: 0 0 0 1px #e5e7eb;
-        cursor: pointer;
-    }
-
-/*--------------------------------HEADER---------------------------------------------------*/
-
 /*-----------------------------ÍCONES-----------------------------------------------*/
 .search-icon {
     position: absolute;
@@ -651,23 +514,165 @@ input:checked + .slider:before {
     font-size: 14px;
 }
 
-/* Ajuste Responsivo */
-@media (max-width: 900px) {
-    .preview-container {
-        max-width: 100%; /* Ocupa largura total no mobile */
-        position: static;
+/* ========================
+    MOBILE MUITO PEQUENO (≤480px)
+========================= */
+@media (max-width: 480px) {
+
+    .main-container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 20px;
     }
-}
 
+    .form-container {
+        padding: 20px;
+    }
 
-/* --- RESPONSIVIDADE DO FORM --- */
-@media (max-width: 600px) {
     .form-row {
         flex-direction: column;
-        gap: 0;
+        gap: 10px;
     }
-    
-    .main-container {
-        padding: 20px 10px;
+
+    .input-with-button {
+        flex-direction: column;
+    }
+
+    .btn-add {
+        width: 100%;
+        height: 40px;
+    }
+
+    .preview-container {
+        position: static;
+        min-width: 100%;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .btn-details {
+        width: 100%;
     }
 }
+
+
+/* ========================
+    MOBILE COMUM (≤640px)
+========================= */
+@media (max-width: 640px) {
+
+    .main-container {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .preview-container {
+        width: 100%;
+        position: static;
+        top: auto;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .form-input,
+    .btn-select-files {
+        font-size: 14px;
+    }
+}
+
+
+/* ========================
+    TABLET (≤768px)
+========================= */
+@media (max-width: 768px) {
+
+    .main-container {
+        flex-direction: column;
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .preview-container {
+        min-width: 100%;
+        position: static;
+    }
+
+    .card {
+        margin-top: 10px;
+    }
+
+    .btn-details {
+        width: 100%;
+    }
+}
+
+
+/* ========================
+    NOTEBOOK PEQUENO (≤1024px)
+========================= */
+@media (max-width: 1024px) {
+
+    .main-container {
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .form-container {
+        max-width: 100%;
+    }
+
+    .preview-container {
+        position: static;
+        width: 100%;
+    }
+
+    .card {
+        width: 100%;
+    }
+}
+
+
+/* ========================
+    DESKTOP PADRÃO (≤1280px)
+========================= */
+@media (max-width: 1280px) {
+
+    .main-container {
+        max-width: 1100px;
+        gap: 30px;
+    }
+
+    .form-container {
+        max-width: 780px;
+    }
+
+    .preview-container {
+        min-width: 320px;
+    }
+}
+
+
+
+
