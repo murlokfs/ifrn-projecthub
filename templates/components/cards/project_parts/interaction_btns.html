@@ -73,11 +73,11 @@
 
                 if (!state.liked) {
                     state.count++;
-                    heartImg.src = "{% static 'img/heart-fill.svg' %}";
+                    heartImg.src = "{% static 'img/project_parts/heart-fill.svg' %}";
                     state.liked = true;
                 } else {
                     state.count--;
-                    heartImg.src = "{% static 'img/heart.svg' %}";
+                    heartImg.src = "{% static 'img/project_parts/heart.svg' %}";
                     state.liked = false;
                 }
                 
