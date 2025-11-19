@@ -259,11 +259,12 @@ document.addEventListener("DOMContentLoaded", () => {
         var toolbarOptions = [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'align': [] }],
-            ['clean']
+            [{ 'list': 'ordered'}],
+            // [{ 'list': 'bullet' }],
+            // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            // [{ 'color': [] }, { 'background': [] }],
+            // [{ 'align': [] }],
+            // ['clean']
         ];
 
         var quill = new Quill('#editor-container', {
