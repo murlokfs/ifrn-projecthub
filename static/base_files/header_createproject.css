@@ -86,3 +86,133 @@
     align-items: center;
     gap: 12px;
 }
+
+
+@media (max-width: 640px) {
+    #title h1 {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        padding: 0 24px;
+    }
+
+    #search_container {
+        max-width: 240px;
+    }
+
+    #title h1 {
+        font-size: 20px;
+    }
+
+    /* diminuir botões do header */
+    
+}
+
+@media screen and (max-width: 520px) {
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        position: relative;
+    }
+
+    /* .header-content h1 {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        font-size: 24px;
+        line-height: 1;
+        pointer-events: none;
+        white-space: nowrap;
+    } */
+
+    #title h1 {
+        display: inline-flex;
+        font-size: 18px;
+    }
+
+    /* Estado colapsado: ícone em círculo */
+    #search_container {
+        flex: 0 0 auto;
+        max-width: none;
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+        transition: width .18s ease, padding .18s ease, box-shadow .15s ease, border-color .15s ease;
+        cursor: pointer;
+        margin-left: auto;
+        margin-right: 12px;
+        justify-content: center;
+        gap: 0;
+        border-radius: 50%;
+    }
+
+    #search_container i {
+        font-size: 16px;
+        line-height: 1;
+        display: block;
+    }
+
+    #search_input {
+        width: 0;
+        opacity: 0;
+        pointer-events: none;
+        padding: 0;
+        font-size: 12px;
+        transition: width .18s ease, opacity .12s ease;
+    }
+
+    .header.search-open #title h1 {
+        display: none;
+    }
+
+    .header.search-open #search_container {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        padding: 4px 10px;
+        margin-left: 8px;
+        margin-right: 8px;
+        cursor: text;
+        gap: 8px;
+        border-radius: 28px;
+    }
+
+    .header.search-open #search_input {
+        width: 100%;
+        opacity: 1;
+        pointer-events: auto;
+        padding: 4px 0;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    #title h1 {
+        display: none;
+    }
+
+    #search_container {
+        flex: 1 1 auto;
+        width: auto;
+        min-width: 0;
+        padding: 4px 10px;
+        margin-left: 8px;
+        margin-right: 8px;
+        cursor: text;
+        gap: 8px;
+        border-radius: 28px;
+        overflow: visible;
+    }
+
+    #search_input {
+        width: 100%;
+        opacity: 1;
+        pointer-events: auto;
+        padding: 4px 0;
+    }
+}

@@ -1,21 +1,3 @@
-<button class="publish">
-    <h4> Publicar </h4>
-</button>
-
-<style>
-    .publish {
-        padding: 7px 20px;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #50CE67;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-    }
-
-    .publish h4 {
-        font-weight: 600;
-    }
-</style>
+{% extends 'components/buttons/button_base.html' %}
+{% block class_name %}publish{% endblock class_name %}
+{% block button_name %}Publicar{% endblock button_name %}
