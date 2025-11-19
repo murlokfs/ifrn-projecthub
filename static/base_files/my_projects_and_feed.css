@@ -170,6 +170,9 @@ main {
 
 .action_btns {
     display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
     gap: 10px;
     width: 100%;
 }

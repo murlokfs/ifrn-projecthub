@@ -28,6 +28,36 @@
 
     <div class="container_projects">
 
+            <div class="project_card" id="project_in_my_projects">
+                {% include 'components/cards/project_parts/header.html' %}
+
+                <div class="content">
+                    <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
+                    {% include 'components/cards/project_parts/tag.html' %}
+                  
+                    <div class="colaborators_and_links">
+
+                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
+                        
+                        {% include 'components/cards/project_parts/links.html' with column=True %}
+                    </div>
+
+                    <div class="line"></div>
+                    
+                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    
+                    <div class="action_btns">
+                        {% include 'components/buttons/see_details.html' %}
+                        <button class="edit_project">
+                            <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
+                        </button>
+                        <!-- <button class="remove_project">
+                            <img src="{% static 'img/project_parts/trash.svg' %}" alt="">
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+
         {% for _ in contador_list %}
             <div class="project_card" id="project_in_my_projects">
                 {% include 'components/cards/project_parts/header.html' %}
@@ -52,9 +82,9 @@
                         <button class="edit_project">
                             <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
                         </button>
-                        <button class="remove_project">
+                        <!-- <button class="remove_project">
                             <img src="{% static 'img/project_parts/trash.svg' %}" alt="">
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             </div>
