@@ -1,10 +1,9 @@
 // static/components/base_files/create_project.js
 document.addEventListener('click', (e) => {
-  // Delegation: funciona mesmo que o botão seja inserido dinamicamente
+  
   const btn = e.target.closest('.create_project');
   if (!btn) return;
 
-  // Tenta abrir modal diretamente
   const modalBackdrop = document.querySelector('#types-projects-modal');
   if (modalBackdrop) {
     modalBackdrop.classList.add('visible');

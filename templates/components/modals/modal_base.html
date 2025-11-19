@@ -31,10 +31,9 @@
         visibility: hidden;
         transition: opacity 0.3s ease;
         overflow-y: auto; 
-        -webkit-overflow-scrolling: touch;
         padding: 20px 0; 
     }
-
+    
     .modal-backdrop.visible {
         opacity: 1;
         visibility: visible;
@@ -43,10 +42,10 @@
 
     .modal_status {
         max-width: 500px;
-        /* min-height: 20%; */
+        min-height: 350px;
         max-height: 800px;
         background-color: #fff;
-        border-radius: 24px;
+        border-radius: 16px;
         display: flex;
         justify-content: space-evenly;
         flex-direction: column;
@@ -90,6 +89,13 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 15px;
+    }
+
+    @media screen and (min-width: 300px) {
+        .modal_status {
+            width: 90%;
+            
+        }
     }
 </style>

@@ -1,19 +1,5 @@
-<a href="" class="goto_profile">Ir para o Meu Perfil</a>
+{% extends 'components/buttons/button_base.html' %}
 
-<style>
-    .goto_profile {
-        width: 90%;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #50CE67;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-        padding: 5px 0;
-        font-weight: 600;
-        font-size: 14px;
-    }
-</style>
+{% block class_name %}green goto_profile{% endblock class_name %}
+
+{% block button_name %}Ir para o Meu Perfil{% endblock button_name %}
