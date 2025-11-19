@@ -14,9 +14,8 @@
 	transition: all .5s;
 	box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.12), 0px 4px 12px 0px rgba(0,0,0,0.10);
 	padding: 0 4px;
-	/* min-width: 72px; */
-	/* min-width: 72px; */	
-	/* min-width: 72px; */
+	/* Garantir que a sidebar fique acima do header no desktop */
+	z-index: 1000;
 }
 
 body.dark-mode #sidebar { 

@@ -1,7 +1,3 @@
-// Comportamento do campo de busca no header (mobile ≤ 470px)
-// - Expande ao clicar (classe .search-open no .header)
-// - Foca o input
-// - Fecha por ESC, clique fora e ao sair de ≤470px
 
 document.addEventListener('DOMContentLoaded', () => {
   const header = document.querySelector('.header');
@@ -10,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!header || !searchContainer || !searchInput) return;
 
-  const mq = window.matchMedia('(max-width: 470px)');
+  const mq = window.matchMedia('(max-width: 500px)');
 
   function isMobileSearchMode() {
     return mq.matches;
