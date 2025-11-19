@@ -1,9 +1,6 @@
 from django.urls import path
 from project import views
-from .views import DetalhesProjetosView
-from .views import ComentariosAlunosView
-from .views import ComentariosProfessoresView
-from .views import CadastroProjetoView
+from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView
 
 urlpatterns = [
 

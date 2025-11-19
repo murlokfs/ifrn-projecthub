@@ -42,5 +42,3 @@ class CadastroProjetoView(TemplateView):
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/comentarios_professores.html'
     
-def popup(request):
-    return render(request, 'components/modals/awaiting_approval.html')
