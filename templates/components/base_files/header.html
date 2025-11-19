@@ -1,5 +1,8 @@
 <header class="header">
     <div class="header-content">
+        <button class="menu-toggle" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" type="button">
+            <i class="fa-solid fa-bars"></i>
+        </button>
         {% comment %}Título dinâmico baseado em active_page passado pelo context{% endcomment %}
         {% if page_title %}
             <h1>{{ page_title }}</h1>
