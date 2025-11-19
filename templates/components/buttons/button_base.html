@@ -1,4 +1,9 @@
-<button class="base_container {% block class_name %}{% endblock class_name %}">{% block button_name %}{% endblock button_name %}</button>
+<button 
+    class="base_container {% block class_name %}{% endblock class_name %}"
+    onclick="{% block onclick %}{% endblock onclick %}"
+>
+    {% block button_name %}{% endblock button_name %}
+</button>
 
 <style>
     .base_container {
