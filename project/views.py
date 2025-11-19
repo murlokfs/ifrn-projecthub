@@ -36,8 +36,11 @@ class DetalhesProjetosView(TemplateView):
 class ComentariosAlunosView(TemplateView):
     template_name = 'project/comentarios_alunos.html'
     
-class CadastroProjetoView(TemplateView):
-    template_name = 'project/cadastro_projeto.html'
+class CadastroProjetoInstitucionalView(TemplateView):
+    template_name = 'project/cadastro_projeto_institucional.html'
+
+class CadastroProjetoPessoalView(TemplateView):
+    template_name = 'project/cadastro_projeto_pessoal.html'
 
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/comentarios_professores.html'
