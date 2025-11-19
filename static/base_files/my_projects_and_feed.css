@@ -15,6 +15,58 @@ body {
     align-items: stretch;
 }
 
+.status_project {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 35%;
+    padding: 5px 10px;
+    min-height: 27px;
+    border-radius: 10px;
+}
+
+/* APROVADO (VERDE) */
+.status_approved {
+    background-color: #50CE67;
+}
+
+/* PENDENTE (AMARELO) */
+.status_pending {
+    background-color: #EAB308; /* amarelo */
+}
+
+/* REPROVADO (VERMELHO) */
+.status_rejected {
+    background-color: #EF4444;
+    position: relative;
+}
+
+/* Ícone "!" para reprovado */
+.status_rejected_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* espaço entre ícone e a caixa */
+}
+
+.status_rejected {
+    background-color: #ef4444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.rejected_icon {
+    font-size: 20px;
+    color: #ef4444; /* ou #F5474A – como preferir */
+}
+
+
+
 .app-content {
     display: flex;
     flex-direction: column;
@@ -122,19 +174,6 @@ main {
     color: #AAA;
 }
 
-.status_project {
-    font-size: 14px;
-    color: #FFF;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 35%;
-    padding: 5px;
-    min-height: 27px;
-    border-radius: 10px;
-    background-color: #50CE67;
-}
 .content {
     display: flex;
     flex-direction: column;

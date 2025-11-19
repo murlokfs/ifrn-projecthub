@@ -9,7 +9,5 @@
     </div>
     </div>
 
-    {% if show_status %}
-        <div class="status_project">Aprovado</div>
-    {% endif %}
+    {% include "components/cards/project_parts/status.html" with status=status %}
 </div>
