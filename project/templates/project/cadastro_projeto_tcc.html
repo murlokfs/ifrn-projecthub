@@ -20,7 +20,7 @@
     <div class="main-container">
         
         <div class="form-container">
-            <h1>Cadastrar Projeto Integrador</h1>
+            <h1>Cadastrar Trabalho de Conclusão de Curso (TCC)</h1>
 
             <div class="form-group">
                 <label>Nome do projeto <span class="required">*</span></label>
@@ -33,31 +33,6 @@
                 <div id="editor-container" style="height: 200px; background: #fff;"></div>
     
                 <input type="hidden" name="descricao" id="inputDescricaoHidden">
-            </div>
-
-            <div class="form-row">
-                <div class="form-col">
-                    <label>Visibilidade</label>
-                    <div class="toggle-wrapper">
-                        <label class="switch">
-                            <input type="checkbox">
-                            <span class="slider round"></span>
-                        </label>
-                        <div class="toggle-text">
-                            <strong>Privado</strong>
-                            <span>Apenas membros autorizados</span>
-                        </div>
-                    </div>
-                </div>
-                <!--
-                <div class="form-col">
-                    <label>Tipo de projeto</label>
-                    <select class="form-input">
-                        <option>Institucional</option>
-                        <option>Pessoal</option>
-                    </select>
-                </div>
-                -->
             </div>
 
             <div class="form-group">
@@ -88,6 +63,31 @@
                 <div id="tagsList" class="chips-container"></div>
             </div>
 
+                                    <div class="form-row">
+                <div class="form-col">
+                    <label>Visibilidade</label>
+                    <div class="toggle-wrapper">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="toggle-text">
+                            <strong>Privado</strong>
+                            <span>Apenas membros autorizados</span>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="form-col">
+                    <label>Tipo de projeto</label>
+                    <select class="form-input">
+                        <option>Institucional</option>
+                        <option>Pessoal</option>
+                    </select>
+                </div>
+                -->
+            </div>
+
             <div class="form-group">
                 <label>Documentos do projeto</label>
                 <div class="upload-area" id="uploadAreaBtn">
@@ -98,23 +98,6 @@
                 <div class="helper-text">Tipos permitidos: PDF, DOCX, PPTX, MD, ZIP (máx 50MB)</div>
             </div>
 
-            <div class="form-group">
-                <label>Link do repositório no GitHub</label>
-                <div class="input-icon-wrapper">
-                    <i class="ph ph-github-logo input-icon"></i>
-                    <input type="text" id="inputGithub" class="form-input has-icon" placeholder="Ex: https://github.com/usuario/repositorio">
-                </div>
-                <div class="helper-text">Cole o link completo do repositório do projeto</div>
-            </div>
-
-            <div class="form-group">
-                <label>Link do vídeo no YouTube</label>
-                <div class="input-icon-wrapper">
-                    <i class="ph ph-youtube-logo input-icon"></i>
-                    <input type="text" id="inputYoutube" class="form-input has-icon" placeholder="Ex: https://youtube.com/watch?v=...">
-                </div>
-                <div class="helper-text">Cole o link do vídeo no YouTube para preview automático</div>
-            </div>
         </div>
         <div class="preview-container">
             <div class="preview-label">PREVIEW DO CARTÃO
