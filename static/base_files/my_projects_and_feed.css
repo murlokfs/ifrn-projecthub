@@ -17,31 +17,34 @@ body {
 
 .status_project {
     font-size: 14px;
-    color: #ffffff;
+    /* color: #ffffff; */
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 35%;
-    padding: 5px 10px;
+    padding: 4px 10px;
     min-height: 27px;
-    border-radius: 10px;
+    border-radius: 50px;
 }
 
 /* APROVADO (VERDE) */
 .status_approved {
-    background-color: #50CE67;
+    border: 1px solid #50CE67;
+    color: #50CE67;
 }
 
 /* PENDENTE (AMARELO) */
 .status_pending {
-    background-color: #EAB308; /* amarelo */
+    border: 1px solid #EAB308;
+    color: #EAB308;
 }
 
 /* REPROVADO (VERMELHO) */
 .status_rejected {
-    background-color: #EF4444;
+    border: 1px solid #EF4444; /* vermelho */
     position: relative;
+    color: #EF4444;
 }
 
 /* Ícone "!" para reprovado */
@@ -49,23 +52,22 @@ body {
     display: flex;
     align-items: center;
     gap: 6px; /* espaço entre ícone e a caixa */
+    color: #EF4444;
 }
 
-.status_rejected {
+/* .status_rejected {
     background-color: #ef4444;
     color: white;
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-}
+} */
 
 .rejected_icon {
     font-size: 20px;
-    color: #ef4444; /* ou #F5474A – como preferir */
+    color: #ef4444;
 }
-
-
 
 .app-content {
     display: flex;
