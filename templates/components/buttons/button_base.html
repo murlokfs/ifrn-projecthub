@@ -63,14 +63,14 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
-        .publish::before,
+        .publish_btn::before,
         .cancel::before {
             font-size: 16px;
             line-height: 1;
             color: #fff;
         }
 
-        .publish::before {
+        .publish_btn::before {
             content: "✓";
         }
 
@@ -78,19 +78,19 @@
             content: "✕";
         }
 
-        .publish:hover,
+        .publish_btn:hover,
         .cancel:hover {
             filter: brightness(0.95);
         }
 
-        .publish:active,
+        .publish_btn:active,
         .cancel:active {
             transform: scale(0.97);
         }
     }
 
     @media screen and (max-width: 340px) {
-        .publish,
+        .publish_btn,
         .cancel {
             width: 32px;
             height: 32px;
