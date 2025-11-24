@@ -330,6 +330,13 @@ main {
         text-align: center;
     }
 
+    .project-card {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-content: flex-start;
+        align-items: left;
+    }
+
     .main-info {
         flex-direction: column;
     }
