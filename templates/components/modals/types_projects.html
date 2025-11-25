@@ -1,5 +1,7 @@
 {% load static %}
 
+{% url 'cadastro_projeto' as cadastro_projeto_url %}
+
 <div class="modal-backdrop" id="types-projects-modal">
 
     <div class="modal">
@@ -30,8 +32,9 @@
         </div>
 
         <div class="btns">
-            {% include 'components/buttons/cancel.html' %}
-            {% include 'components/buttons/continue.html' %}
+            {% include 'components/buttons/button_base.html' with btn=True classes="cancel" label="Cancelar" %}
+
+            {% include 'components/buttons/button_base.html' with btn=False url=cadastro_projeto_url classes="green" label="Continuar" %}
         </div>
     </div>
 </div>

@@ -1,5 +1,7 @@
 {% load static %}
 
+{% url 'my_projects' as my_projects_url %}
+
 <div class="modal-backdrop ">
     <div class="modal_status">
         <div class="icon_container {% block status %}{% endblock status %}">

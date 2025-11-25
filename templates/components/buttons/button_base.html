@@ -1,22 +1,29 @@
-<button 
-    class="base_container {% block class_name %}{% endblock class_name %}"
-    onclick="{% block onclick %}{% endblock onclick %}"
->
-    {% block button_name %}{% endblock button_name %}
-</button>
+{% if btn %}
+    <button class="base_container {{ classes }}">
+        {{ label }}
+    </button>
+{% else %}
+    <a href="{{ url }}" class="base_container {{ classes }}">
+        {{ label }}
+    </a>
+{% endif %}
 
 <style>
     .base_container {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding:  15px;
+        padding:  16px;
         border: none;
-        height: 20px;
+        height: 25px;
         border-radius: 10px;
         color: #fff;
         font-weight: 600;
         cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
     }
 
     .cancel {
@@ -27,73 +34,17 @@
         background-color: #50CE67;
     }
 
-    .goto_profile {
+    .goto_my_projects {
         width: 90%;
     }
 
     .publish_btn {
         width: 90%;
-        background-color: #50CE67;
-        padding: 15px 22px;
     }
 
     .close_publish_modal {
         width: 90%;
         color: #4B4B4D;
         background-color: #CACACA;
-    }
-
-    @media screen and (max-width: 768px) {
-        .base_container {
-            padding: 15px 10px;
-        }
-    }
-
-    @media screen and (max-width: 520px) {
-        .publish_btn,
-        .cancel {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-        }
-
-        .publish::before,
-        .cancel::before {
-            font-size: 16px;
-            line-height: 1;
-            color: #fff;
-        }
-
-        .publish::before {
-            content: "✓";
-        }
-
-        .cancel::before {
-            content: "✕";
-        }
-
-        .publish:hover,
-        .cancel:hover {
-            filter: brightness(0.95);
-        }
-
-        .publish:active,
-        .cancel:active {
-            transform: scale(0.97);
-        }
-    }
-
-    @media screen and (max-width: 340px) {
-        .publish,
-        .cancel {
-            width: 32px;
-            height: 32px;
-        }
     }
 </style>
