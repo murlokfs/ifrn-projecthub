@@ -15,6 +15,60 @@ body {
     align-items: stretch;
 }
 
+.status_project {
+    font-size: 14px;
+    /* color: #ffffff; */
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 35%;
+    padding: 4px 10px;
+    min-height: 27px;
+    border-radius: 50px;
+}
+
+/* APROVADO (VERDE) */
+.status_approved {
+    border: 1px solid #50CE67;
+    color: #50CE67;
+}
+
+/* PENDENTE (AMARELO) */
+.status_pending {
+    border: 1px solid #EAB308;
+    color: #EAB308;
+}
+
+/* REPROVADO (VERMELHO) */
+.status_rejected {
+    border: 1px solid #EF4444; /* vermelho */
+    position: relative;
+    color: #EF4444;
+}
+
+/* Ícone "!" para reprovado */
+.status_rejected_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* espaço entre ícone e a caixa */
+    color: #EF4444;
+}
+
+/* .status_rejected {
+    background-color: #ef4444;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+} */
+
+.rejected_icon {
+    font-size: 20px;
+    color: #ef4444;
+}
+
 .app-content {
     display: flex;
     flex-direction: column;
@@ -109,12 +163,14 @@ main {
     align-items: center;
     justify-content: center;
     color: #50CE67;
+    font-weight: 700;
 }
 
 .name_project {
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     flex-grow: 1;
+    color: #17171c;
 } 
 
 .name_project .date {
@@ -122,19 +178,22 @@ main {
     color: #AAA;
 }
 
+/*
 .status_project {
     font-size: 14px;
-    color: #FFF;
-    font-weight: 500;
+    color: #50CE67;
+    border: 1px solid #50CE67;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 35%;
-    padding: 5px;
+    padding: 4px;
     min-height: 27px;
-    border-radius: 10px;
-    background-color: #50CE67;
-}
+    border-radius: 50px;
+    background: transparent;
+} */
+
 .content {
     display: flex;
     flex-direction: column;
@@ -207,6 +266,8 @@ main {
     border-radius: 8px;
     background-color: #fff;
     font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    
 }
 
 .input_container {
@@ -215,6 +276,7 @@ main {
     display: flex;
     align-items: center;
     border-radius: 12px;
+    border: 1px solid #E3E3E8;
 }
 
 .input_container img {
@@ -230,6 +292,13 @@ main {
     background-color: transparent;
     width: 90%;
     color: #6D6D78;
+    outline: none;
+}
+
+.search_project input:focus,
+.search_project input:active {
+    outline: none;
+    box-shadow: none;
 }
 
 .filter_btns {
@@ -243,6 +312,9 @@ main {
     border-radius: 12px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
+    color: #17171C;
+    border: 1px solid #E3E3E8;
     background-color: #F4F4F6;
 }
 

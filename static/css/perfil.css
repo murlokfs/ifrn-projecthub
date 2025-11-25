@@ -82,6 +82,24 @@ main {
     font-size: 14px;
 }
 
+.perfil-container .social-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@media (max-width: 600px) {
+    .perfil-container .social-links {
+        justify-content: center;
+        gap: 10px 12px;
+    }
+
+    .perfil-container .social-item {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 .perfil-container .icon-stat {
     font-size: 18px;
 }
@@ -332,9 +350,7 @@ main {
 
     .project-card {
         flex-direction: column;
-        justify-content: flex-start;
-        align-content: flex-start;
-        align-items: left;
+        align-items: flex-start;
     }
 
     .main-info {
