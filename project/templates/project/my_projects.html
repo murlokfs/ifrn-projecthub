@@ -2,14 +2,11 @@
 
 {% load static %}
 
+{% url 'detalhes_projetos' as project_details_url %}
+
 {% block title %}
     Meus projetos
 {% endblock title %}
-
-{% block imports %}
-    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script> 
-{% endblock imports %}
 
 {% block content %}
     {% include 'components/cards/projects_per_status.html' %}
@@ -28,16 +25,10 @@
     </div>
 
     <div class="container_projects">
-    {% for projeto in projetos %}
-        <div class="project_card" id="project_in_my_projects">
 
-            {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
-
-            <div class="content">
-
-                <div class="description">
-                    O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b>
-                </div>
+        {% for _ in contador_list %}
+            <div class="project_card" id="project_in_my_projects">
+                {% include 'components/cards/project_parts/header.html' %}
 
                 {% include 'components/cards/project_parts/tag.html' %}
 
@@ -46,19 +37,16 @@
                     {% include 'components/cards/project_parts/links.html' with column=True %}
                 </div>
 
-                <div class="line"></div>
-
-                {% include 'components/cards/project_parts/interaction_btns.html' %}
-                
-                <div class="action_btns">
-                    {% include 'components/buttons/see_details.html' %}
-                    <button class="edit_project">
-                        <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
-                    </button>
+                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    
+                    <div class="action_btns">
+                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
+                        <button class="edit_project">
+                            <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
+                        </button>
+                    </div>
                 </div>
-
             </div>
-
         </div>
     {% endfor %}
 </div>

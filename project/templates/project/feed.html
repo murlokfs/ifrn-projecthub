@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% url 'detalhes_projetos' as details_project_url %}
+
 {% block title %}
     Feed
 {% endblock title %}
@@ -31,7 +33,8 @@
 
                     <div class="footer">
                         {% include 'components/cards/project_parts/interaction_btns.html' %}
-                        {% include 'components/buttons/see_details.html' with min_width=True %}
+
+                        {% include 'components/buttons/button_base.html' with btn=False url=details_project_url classes="green" label="Ver detalhes" %}
                     </div>
                 </div>
             </div>
