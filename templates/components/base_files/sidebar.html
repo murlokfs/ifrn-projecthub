@@ -54,7 +54,7 @@
 
 
 		<div id="user">
-				<a id="user_btn" class="{% if active_page == 'perfil' %}active{% endif %}" href="{% url 'perfil' %}">
+				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
 					<img src="{% static 'img/profile/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">
@@ -78,5 +78,5 @@
 	</div>
 </nav>
 
-<script src="{% static 'base_files/sidebar.js' %}"></script>
+<script src="{% static 'base_files/js/sidebar.js' %}"></script>
 {# Script já incluído no template base; #}
