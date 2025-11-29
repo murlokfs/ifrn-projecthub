@@ -26,9 +26,9 @@
 
     <div class="container_projects">
 
-        {% for _ in contador_list %}
+        {% for projeto in projetos %}
             <div class="project_card" id="project_in_my_projects">
-                {% include 'components/cards/project_parts/header.html' %}
+                {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
 
                 {% include 'components/cards/project_parts/tag.html' %}
 
@@ -46,10 +46,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 
     {% include 'components/modals/types_projects.html' %}
 
