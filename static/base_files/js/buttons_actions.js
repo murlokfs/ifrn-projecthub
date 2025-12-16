@@ -4,21 +4,18 @@ document.addEventListener("click", (e) => {
 
     const action = btn.getAttribute("data-action");
 
-    // Se o action começar com "go:", então é para redirecionar
     if (action.startsWith("go:")) {
         const url = action.replace("go:", "").trim();
         window.location.href = url;
         return;
     }
 
-    // Se for "closeModal"
     if (action === "closeModal") {
         const modal = document.querySelector(".modal-backdrop.visible");
         if (modal) modal.classList.remove("visible");
         return;
     }
 
-    // Se for ação de abrir modal
     if (action === "openPublishModal") {
         const evt = new CustomEvent("openPublishModal", { bubbles: true });
         document.dispatchEvent(evt);
