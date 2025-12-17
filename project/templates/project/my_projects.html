@@ -41,8 +41,12 @@
                     
                     <div class="action_btns">
                         {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
+                        
                         <button class="edit_project">
                             <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
+                        </button>
+                        <button class="edit_project">
+                            <img src="{% static 'img/project_parts/notepad.svg' %}" alt="">
                         </button>
                     </div>
                 </div>

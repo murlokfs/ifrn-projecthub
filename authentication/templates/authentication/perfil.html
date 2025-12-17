@@ -12,6 +12,8 @@
 
 {% block content %}
 
+{% url 'cadastro_projeto' as project_details_url %}
+
 <div class="perfil-container">
     
         <header class="profile-header">
@@ -111,7 +113,7 @@
                         <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
                     </div>
                 </div>
-                {% include 'components/buttons/see_details.html' %}
+                {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
             </div>
 
             <div class="project-card">
@@ -125,7 +127,7 @@
                         <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
                     </div>
                 </div>
-                {% include 'components/buttons/see_details.html' %}
+                {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
             </div>
         </section>
 
