@@ -1,10 +1,10 @@
-/* --- 1. Configurações Globais --- */
+/* --- 1. Global Settings --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 body {
     font-family: Poppins, sans-serif;
     margin: 0;
-    background-color: #f3f4f6; /* Fundo cinza claro da página */
+    background-color: #f3f4f6; /* Light gray page background */
     color: #17171C;
 }
 
@@ -16,14 +16,14 @@ body {
     box-sizing: border-box; 
 }
 
-/* --- 2. Layout Principal --- */
+/* --- 2. Main Layout --- */
 .page-wrapper {
     max-width: 100%;
     margin: 0 auto;
     padding: 24px
 }
 
-/* --- 3. Bloco Superior (Cabeçalho + Abas) --- */
+/* --- 3. Top Block (Header + Tabs) --- */
 .top-container {
     background: #ffffff;
     border-radius: 16px;
@@ -91,46 +91,35 @@ body {
     gap: 8px;
 }
 
-/* --- Estilo do Botão Denunciar --- */
+/* --- Report Button --- */
 
-.btn-denunciar {
-    /* Layout com Flexbox */
+.btn-denunciar { /* preserving original class name to avoid template changes */
     width: 100%;
     height: 32px;
     display: flex;
     align-items: center;
     gap: 8px; 
-
-    /* Cores */
     background-color: #EC6262; 
     color: #ffffff;
-
-    /* Forma e Tamanho */
     border: none;
     border-radius: 12px;
     padding: 12px 20px; 
-
-    /* Texto */
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     font-weight: 500; 
-
-    /* Extras */
     cursor: pointer;
     transition: background-color 0.2s;
 }
-
 
 .btn-denunciar .ph {
     font-size: 16px;
 }
 
-/* Efeito ao passar o mouse */
 .btn-denunciar:hover {
     background-color: #d96a6a;
 }
 
-/* --- 4. Estilo das Abas --- */
+/* --- 4. Tabs --- */
 .tabs-nav {
     display: flex;
     gap: 8px;
@@ -164,12 +153,10 @@ body {
     color: #6b7280;
 }
 
-/* --- 5. Layout de Conteúdo (Cards) --- */
-
-/* Card Simples (Sobre) */
+/* --- 5. Content Layout (Cards) --- */
 .card-simple {
     padding: 24px;
-    margin-bottom: 24px; /* Espaço para as colunas abaixo */
+    margin-bottom: 24px; 
 }
 .card-simple h3 {
     margin-top: 0;
@@ -214,16 +201,14 @@ body {
     text-decoration: none;
 }
 
-/* Layout das Duas Colunas */
 .content-columns {
     display: flex;
     gap: 24px;
     flex-wrap: wrap;
-    /* Removemos o 'flex-wrap' para forçar as colunas a ficarem lado a lado */
 }
 
 .content-columns > .card-accent {
-    flex-basis: 100%; /* <-- ISSO FAZ ELE TER 100% DE LARGURA */
+    flex-basis: 100%;
 }
 
 .column-left {
@@ -231,7 +216,7 @@ body {
     flex-direction: column;
     max-width: 50%;
     gap: 24px;
-    flex: 2; /* 2 partes de largura */
+    flex: 2;
 }
 
 .column-right {
@@ -239,11 +224,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    flex: 1; /* 1 parte de largura */
-    min-width: 275px; /* Largura mínima */
+    flex: 1;
+    min-width: 275px;
 }
 
-/* --- 6. Estilos dos Cards --- */
+/* --- 6. Cards --- */
 .card {
     background: #ffffff;
     border-radius: 16px;
@@ -252,14 +237,12 @@ body {
     overflow: hidden;   
 }
 
-
 .card-accent .card-header {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 20px 24px;
     border-bottom: 1px solid #e5e7eb;
-    
 }
 .card-accent .card-header h3 {
     margin: 0;
@@ -275,9 +258,7 @@ body {
     padding: 24px;
 }
 
-/* --- 7. Conteúdo Interno dos Cards --- */
-
-/* Vídeo */
+/* --- 7. Inner Content --- */
 .video-placeholder {
     width: 100%;
     height: 400px;
@@ -293,7 +274,6 @@ body {
     border-radius: 8px;
 }
 
-/* Repositório GitHub */
 .repo-link {
     display: flex;
     align-items: center;
@@ -336,7 +316,6 @@ body {
     display: block;
 }
 
-/* Listas (Integrantes e Professor) */
 .user-list {
     display: flex;
     flex-direction: column;
@@ -384,7 +363,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Documentos */
 .file-list {
     padding-bottom: 10px;
     display: flex;
@@ -420,12 +398,6 @@ body {
     margin-top: 2px;
 }
 
-
-
-/*---------------------------------------------*/
-
-
-/* --- Card de Formulário --- */
 .new-feedback-card h3 {
     margin-top: 0;
     font-size: 24px;
@@ -472,8 +444,6 @@ body {
     background-color: #16a34a;
 }
 
-
-/* --- Card de Lista de Comentários --- */
 .discussion-header {
     display: flex;
     align-items: center;
@@ -555,14 +525,11 @@ body {
     margin: 0;
     padding-left: 48px; 
 }
-/* --- 8. Media Queries para Responsividade --- */
 
-/* Telas Médias (Tablets) */
 @media (max-width: 992px) {
     .content-columns {
         flex-direction: column;
     }
-
     .column-left,
     .column-right {
         max-width: 100%;
@@ -570,40 +537,32 @@ body {
     }
 }
 
-/* Telas Pequenas (Celulares) */
 @media (max-width: 768px) {
     .page-wrapper {
         padding: 16px;
     }
-
     .page-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 16px;
     }
-
     .header-right {
         width: max-content;
         flex-direction: column;
     }
-
     .project-title h1 {
         font-size: 20px;
     }
-
     .tabs-nav {
         padding: 16px;
         gap: 10px;
     }
-
     .tabs-nav a{
         width: 100%;
     }
-
     .tab-link {
         flex-grow: 0;
     }
-
     .card-accent .card-body {
         min-height: auto;
     }

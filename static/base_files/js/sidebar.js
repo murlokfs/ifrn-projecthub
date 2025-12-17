@@ -1,4 +1,3 @@
-// Lógica de abertura/fechamento da sidebar e tema escuro
 document.addEventListener('DOMContentLoaded', () => {
 	const sidebar = document.getElementById('sidebar');
 	const openBtn = document.getElementById('open_btn');
@@ -9,38 +8,29 @@ document.addEventListener('DOMContentLoaded', () => {
 	const sunIcon = document.getElementById('sunIcon');
 
 	if (openBtn) {
-		openBtn.addEventListener('click', () => {
-			sidebar.classList.toggle('open-sidebar');
-		});
+		openBtn.addEventListener('click', () => { sidebar.classList.toggle('open-sidebar'); });
 	}
 
-	// Botão do header abre/fecha a sidebar no mobile
 	if (menuToggle && sidebar) {
 		menuToggle.addEventListener('click', () => {
 			const opened = sidebar.classList.toggle('mobile-open');
 			body.classList.toggle('no-scroll', opened);
-			// Garante que o conteúdo da sidebar venha expandido
 			if (opened) {
 				sidebar.classList.add('open-sidebar');
-				// Move foco para a sidebar ao abrir
 				setTimeout(() => sidebar.focus(), 0);
 			}
-			// Acessibilidade
 			menuToggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
 		});
 
-		// ESC fecha
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
 				sidebar.classList.remove('mobile-open');
 				body.classList.remove('no-scroll');
 				menuToggle.setAttribute('aria-expanded', 'false');
-				// Retorna foco para o botão
 				menuToggle.focus();
 			}
 		});
 
-		// Clique fora fecha
 		document.addEventListener('click', (e) => {
 			if (sidebar.classList.contains('mobile-open')) {
 				const clickInsideSidebar = sidebar.contains(e.target);
@@ -49,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 					sidebar.classList.remove('mobile-open');
 					body.classList.remove('no-scroll');
 					menuToggle.setAttribute('aria-expanded', 'false');
-					// Retorna foco para o botão
 					menuToggle.focus();
 				}
 			}
@@ -74,27 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
 				sunIcon?.classList.remove('active');
 				sunIcon?.classList.add('inactive');
 			}
-		} catch (e) {
-			console.warn('Falha ao acessar localStorage para tema', e);
-		}
+		} catch (e) { console.warn('Falha ao acessar localStorage para tema', e); }
 	}
 
 	themeToggle?.addEventListener('click', () => {
 		body.classList.toggle('dark-mode');
 		themeToggle.classList.add('active');
-
 		moonIcon?.classList.toggle('active');
 		moonIcon?.classList.toggle('inactive');
 		sunIcon?.classList.toggle('active');
 		sunIcon?.classList.toggle('inactive');
-
 		const pressed = body.classList.contains('dark-mode');
 		themeToggle.setAttribute('aria-pressed', pressed ? 'true' : 'false');
-		try {
-			localStorage.setItem('theme', pressed ? 'dark' : 'light');
-		} catch (e) {
-			console.warn('Falha ao salvar tema', e);
-		}
+		try { localStorage.setItem('theme', pressed ? 'dark' : 'light'); } catch (e) { console.warn('Falha ao salvar tema', e); }
 		setTimeout(() => themeToggle.classList.remove('active'), 600);
 	});
 

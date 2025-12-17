@@ -32,14 +32,14 @@ def my_projects(request):
     return render(request, "project/my_projects.html", context)
 
 class DetalhesProjetosView(TemplateView):
-    template_name = 'project/detalhes_projetos.html'
+    template_name = 'project/project_details.html'
 
 class ComentariosAlunosView(TemplateView):
-    template_name = 'project/comentarios_alunos.html'
+    template_name = 'project/student_comments.html'
     
 class CadastroProjetoView(TemplateView):
-    template_name = 'project/cadastro_projeto.html'
+    template_name = 'project/create_project.html'
 
 class ComentariosProfessoresView(TemplateView):
-    template_name = 'project/comentarios_professores.html'
+    template_name = 'project/teacher_comments.html'
     
