@@ -14,7 +14,7 @@
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
-        {% url 'detalhes_projetos' as project_details_url %}
+        {% url 'project_details' as project_details_url %}
         {% include 'components/base_files/sidebar.html' with active_page=active_page %}
         
         <div class="app-content">
