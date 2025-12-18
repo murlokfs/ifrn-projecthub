@@ -1,5 +1,7 @@
 {% load static %}
 
+{% url 'create_project' as create_project_url %}
+
 <div class="modal-backdrop" id="types-projects-modal">
 
     <div class="modal">
@@ -30,8 +32,9 @@
         </div>
 
         <div class="btns">
-            {% include 'components/buttons/cancel.html' %}
-            {% include 'components/buttons/continue.html' %}
+            {% include 'components/buttons/button_base.html' with btn=True classes="cancel" label="Cancelar" %}
+
+            {% include 'components/buttons/button_base.html' with btn=False url=create_project_url classes="green" label="Continuar" %}
         </div>
     </div>
 </div>
@@ -168,7 +171,7 @@
 
     .types_container {
         flex-direction: column;
-        gap: 18px;
+        gap: 20px;
     }
 
     .type {
@@ -184,11 +187,12 @@
     }
 
     .type.scientific {
-        width: 96%;
+        width: 99%;
     }
 
     .types_container {
         flex-wrap: wrap;
+        gap: 32px;
     }
 
     .modal {
