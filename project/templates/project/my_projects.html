@@ -25,8 +25,8 @@
     </div>
 
     <div class="container_projects">
-    {% for project in projects %}
-        <div class="project_card" id="project_in_my_projects">
+        {% for project in projects %}
+        <div class="project_card project_in_my_projects">
 
             {% include 'components/cards/project_parts/header.html' %}
 
@@ -43,19 +43,21 @@
                     {% include 'components/cards/project_parts/links.html' with column=True %}
                 </div>
 
-                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                {% include 'components/cards/project_parts/interaction_btns.html' %}
+                
+                <div class="action_btns">
+                    {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
                     
-                    <div class="action_btns">
-                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
-                        
-                        <button class="edit_project">
-                            <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
-                        </button>
-                        <button class="edit_project">
-                            <img src="{% static 'img/project_parts/notepad.svg' %}" alt="">
-                        </button>
-                    </div>
+                    <button class="edit_project">
+                        <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
+                    </button>
+                    <button class="edit_project">
+                        <img src="{% static 'img/project_parts/notepad.svg' %}" alt="">
+                    </button>
                 </div>
+
+            </div>
+        </div>
         {% endfor %}
     </div>
 

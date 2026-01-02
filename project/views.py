@@ -8,6 +8,11 @@ class Feed(generic.ListView):
     template_name = 'project/feed.html'
     context_object_name = 'projects'
 
+    def get_queryset(self):
+        return Project.objects.filter(
+            status='Aprovado'
+        ).distinct()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['show_status'] = False
@@ -30,21 +35,6 @@ class My_projects(generic.ListView):
         context['show_status'] = True
         context['active_page'] = 'my_projects'
         return context
-
-def my_projects(request):
-
-    projetos = [
-        {"status": "aprovado"},
-        {"status": "pendente"},
-        {"status": "reprovado"},
-        {"status": "aprovado"},
-    ]
-
-    context = {
-        "projetos": projetos,
-        "active_page": "my_projects",
-    }
-    return render(request, "project/my_projects.html", context)
 
 class DetalhesProjetosView(generic.TemplateView):
     template_name = 'project/project_details.html'
