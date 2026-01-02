@@ -1,10 +1,10 @@
-{% if status == "aprovado" %}
+<!-- {% if status == "Aprovado" %}
     <div class="status_project status_approved">Aprovado</div>
 
-{% elif status == "pendente" %}
+{% elif status == "Pendente" %}
     <div class="status_project status_pending">Pendente</div>
 
-{% elif status == "reprovado" %}
+{% elif status == "Reprovado" %}
 <div class="status_rejected_wrapper">
     <i class="ph-fill ph-warning"></i>
 
@@ -12,4 +12,9 @@
         Reprovado
     </div>
 </div>
+{% endif %} -->
+{% if show_status %}
+    <div class="status_project {{ project.status }}">
+        {{ project.status }}
+    </div>
 {% endif %}

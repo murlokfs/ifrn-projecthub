@@ -29,19 +29,19 @@ body {
 }
 
 /* APROVADO (VERDE) */
-.status_approved {
+.Aprovado {
     border: 1px solid #50CE67;
     color: #50CE67;
 }
 
 /* PENDENTE (AMARELO) */
-.status_pending {
+.Pendente {
     border: 1px solid #EAB308;
     color: #EAB308;
 }
 
 /* REPROVADO (VERMELHO) */
-.status_rejected {
+.Reprovado {
     border: 1px solid #EF4444; /* vermelho */
     position: relative;
     color: #EF4444;
@@ -94,8 +94,10 @@ main {
     flex-direction: row;
     flex-wrap: wrap;
     max-width: 1100px;
+    width: 100%;
     gap: 35px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    align-items: left;
 }
 
 

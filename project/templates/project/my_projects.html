@@ -28,15 +28,15 @@
     </div>
 
     <div class="container_projects">
-    {% for projeto in projetos %}
+    {% for project in projects %}
         <div class="project_card" id="project_in_my_projects">
 
-            {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
+            {% include 'components/cards/project_parts/header.html' %}
 
             <div class="content">
 
                 <div class="description">
-                    O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b>
+                    {{ project.description }} <b>VER MAIS</b>
                 </div>
 
                 {% include 'components/cards/project_parts/tag.html' %}

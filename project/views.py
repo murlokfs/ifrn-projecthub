@@ -1,20 +1,35 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views import generic
+from authentication.models import User
+from project.models import Project
 
+class Feed(generic.ListView):
+    model = Project
+    template_name = 'project/feed.html'
+    context_object_name = 'projects'
 
-def feed(request):
-    num_iterations = 6
-    contador_list = range(num_iterations)
-    show_status = False
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_status'] = False
+        context['active_page'] = 'feed'
+        return context
 
-    context = {
-        "contador": num_iterations,
-        "contador_list": contador_list,
-        "show_status": show_status,
-        "active_page": "feed",
-    }
+class My_projects(generic.ListView):
+    model = Project
+    template_name = 'project/my_projects.html'
+    context_object_name = 'projects'
 
-    return render(request, 'project/feed.html', context)
+    def get_queryset(self):
+        user = User.objects.get(id=1)  # temporário
+        return Project.objects.filter(
+            members=user
+        ).distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_status'] = True
+        context['active_page'] = 'my_projects'
+        return context
 
 def my_projects(request):
 
@@ -31,15 +46,15 @@ def my_projects(request):
     }
     return render(request, "project/my_projects.html", context)
 
-class DetalhesProjetosView(TemplateView):
+class DetalhesProjetosView(generic.TemplateView):
     template_name = 'project/project_details.html'
 
-class ComentariosAlunosView(TemplateView):
+class ComentariosAlunosView(generic.TemplateView):
     template_name = 'project/student_comments.html'
     
-class CadastroProjetoView(TemplateView):
+class CadastroProjetoView(generic.TemplateView):
     template_name = 'project/create_project.html'
 
-class ComentariosProfessoresView(TemplateView):
+class ComentariosProfessoresView(generic.TemplateView):
     template_name = 'project/teacher_comments.html'
     

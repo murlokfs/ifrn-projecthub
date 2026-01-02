@@ -12,12 +12,12 @@
 
 {% block content %}
     <div class="container_projects">
-        {% for _ in contador_list %}
+        {% for project in projects %}
             <div class="project_card" id="project_in_feed">
                 {% include 'components/cards/project_parts/header.html' %}
 
                 <div class="content">
-                    <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
+                    <div class="description">{{ project.description }} <b>VER MAIS</b></div>
                     {% include 'components/cards/project_parts/tag.html' %}
 
                     <div class="colaborators_and_links">

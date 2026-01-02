@@ -1,13 +1,13 @@
 <div class="header_feed_project">
     <div class="project_image">PH</div>
     <div class="name_project">
-    <div class="name">
-        ProjectHub
-    </div>
-    <div class="date">
-        01/01/2025
-    </div>
+        <div class="name">
+            {{  project.title }}
+        </div>
+        <div class="date">
+            {{  project.updated_at|date:"d/m/Y" }}
+        </div>
     </div>
 
-    {% include "components/cards/project_parts/status.html" with status=status %}
+    {% include "components/cards/project_parts/status.html" %}
 </div>

@@ -5,14 +5,18 @@
         <div class="icon">
         <img src="{% static 'img/project_parts/student.svg' %}" alt="">
         </div>
-        <div class="students_names">Eduardo, Ayrton, Murilo, Nathan</div>
+        <div class="students_names">
+            {% for member in project.members.all %}
+                {{ member }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
     <div class="teacher_container collaborator">
         <div class="icon">
         <img src="{% static 'img/project_parts/graduation-cap.svg' %}" alt="">
         </div>
-        <div class="teacher_name">Irlan Moreira</div>
+        <div class="teacher_name">{{ project.guiding_teacher }}</div>
     </div>
 </div>
 
