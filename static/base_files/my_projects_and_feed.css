@@ -232,7 +232,7 @@ main {
 .action_btns {
     display: flex;
     align-items: center;
-    flex-direction: row-reverse;
+    /* flex-direction: row-reverse; */
     justify-content: flex-start;
     gap: 10px;
     width: 100%;
@@ -243,7 +243,6 @@ main {
     height: 35px;
     background-color: #F5F5F5;
     border: 1px solid #E3E3E8;
-    /* padding: 1px; */
     border-radius: 8px;
     display: flex;
     align-items: center;

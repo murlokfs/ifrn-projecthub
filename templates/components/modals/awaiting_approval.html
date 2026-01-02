@@ -16,9 +16,11 @@
 {% block description %}
     Seu projeto institucional foi enviado e agora está aguardando a aprovação de um professor.
     Você pode acompanhar o status e o progresso da aprovação na aba 'Meus Projetos'.
+
 {% endblock description %}
 
 {% block btns %}
-    {% include 'components/buttons/goto_profile.html' %}
-    {% include 'components/buttons/close.html' %}
+    {% include 'components/buttons/button_base.html' with btn=False url=my_projects_url classes="green goto_my_projects" label="Ir para o Meus Projetos" %}
+
+    {% include 'components/buttons/button_base.html' with btn=True classes="close_publish_modal" label="Fechar" %}
 {% endblock btns %}

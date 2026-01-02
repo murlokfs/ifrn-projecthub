@@ -1,25 +1,32 @@
-<button 
-    class="base_container {% block class_name %}{% endblock class_name %}"
-    onclick="{% block onclick %}{% endblock onclick %}"
->
-    {% block button_name %}{% endblock button_name %}
-</button>
+{% if btn %}
+    <button class="base_container {{ classes }}" id="{{ id_list }}">
+        {{ label }}
+    </button>
+{% else %}
+    <a href="{{ url }}" id="{{ id_list }}" class="base_container {{ classes }}">
+        {{ label }}
+    </a>
+{% endif %}
 
 <style>
     .base_container {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding:  15px;
+        padding: 18px;
         border: none;
-        height: 20px;
+        height: 25px;
         border-radius: 10px;
         color: #fff;
-        font-weight: 600;
+        font-weight: 500;
         cursor: pointer;
     }
 
-    .cancel {
+    a {
+        text-decoration: none;
+    }
+
+    .cancel, .cancel-btn {
         background-color: #F5474A;
     }
 
@@ -27,14 +34,12 @@
         background-color: #50CE67;
     }
 
-    .goto_profile {
+    .goto_my_projects {
         width: 90%;
     }
 
     .publish_btn {
         width: 90%;
-        background-color: #50CE67;
-        padding: 15px 22px;
     }
 
     .close_publish_modal {
@@ -51,7 +56,8 @@
 
     @media screen and (max-width: 520px) {
         .publish_btn,
-        .cancel {
+        .create_project,
+        #cancel {
             width: 36px;
             height: 36px;
             padding: 0;
@@ -64,7 +70,7 @@
         }
 
         .publish_btn::before,
-        .cancel::before {
+        #cancel::before {
             font-size: 16px;
             line-height: 1;
             color: #fff;
@@ -74,17 +80,17 @@
             content: "✓";
         }
 
-        .cancel::before {
+        #cancel::before {
             content: "✕";
         }
 
         .publish_btn:hover,
-        .cancel:hover {
+        #cancel:hover {
             filter: brightness(0.95);
         }
 
         .publish_btn:active,
-        .cancel:active {
+        #cancel:active {
             transform: scale(0.97);
         }
     }
