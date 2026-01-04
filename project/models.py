@@ -9,14 +9,14 @@ class Tag(models.Model):
 
 class Project(models.Model):
     PROJECT_TYPE_CHOICES = [
-        ('PESQUISA', 'Pesquisa'),
-        ('INTEGRADOR', 'Integrador'),
+        ('Pesquisa', 'PESQUISA'),
+        ('Integrador', 'INTEGRADOR'),
         ('TCC', 'TCC'),
     ]
 
     STATUS_CHOICES = [
-        ('Pendente', 'Pendente'),
         ('Aprovado', 'Aprovado'),
+        ('Pendente', 'Pendente'),
         ('Reprovado', 'Reprovado'),
     ]
 

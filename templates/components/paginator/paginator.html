@@ -1,0 +1,81 @@
+
+{% if is_paginated %}
+<nav class="pagination-container">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}" class="page-link arrow"><</a></li>
+        {% else %}
+            <li class="page-link arrow disabled"><</li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li><span class="page-link active">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li><a href="?page={{ num }}" class="page-link">{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li><a href="?page={{ page_obj.next_page_number }}" class="page-link arrow">></a></li>
+        {% else %}
+            <li class="page-link arrow disabled">></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+
+<style>
+    .pagination-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    gap: 12px;
+    align-items: center;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    text-decoration: none;
+    color: #71717a; /* Cinza */
+    font-weight: 500;
+    border-radius: 50%; /* Círculo para números */
+    transition: all 0.3s ease;
+    background-color: #f4f4f5; /* Fundo cinza clarinho */
+}
+
+/* Estilo para as setas (Quadrados arredondados como na imagem) */
+.page-link.arrow {
+    border-radius: 12px;
+    background-color: transparent;
+    border: 1px solid #f0f0f0;
+    font-size: 18px;
+}
+
+/* Página Ativa (Verde) */
+.page-link.active {
+    background-color: #22c55e; /* Verde da sua marca */
+    color: white;
+}
+
+/* Hover e Estados desativados */
+.page-link:hover:not(.active):not(.disabled) {
+    background-color: #e4e4e7;
+}
+
+.page-link.disabled {
+    color: #d1d5db;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+</style>

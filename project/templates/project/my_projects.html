@@ -33,7 +33,7 @@
             <div class="content">
 
                 <div class="description">
-                    {{ project.description }} <b>VER MAIS</b>
+                    {{ project.description|truncatewords:10 }} 
                 </div>
 
                 {% include 'components/cards/project_parts/tag.html' %}
@@ -60,6 +60,8 @@
         </div>
         {% endfor %}
     </div>
+
+    {% include 'components/paginator/paginator.html' %}
 
     {% include 'components/modals/types_projects.html' %}
 

@@ -120,12 +120,13 @@ main {
     width: 330px;
 }
 
-#project_in_my_projects .colaborators_and_links {
+.project_in_my_projects .colaborators_and_links {
     flex-direction: column;
+    width: 100%;
 }
 
-#project_in_my_projects .colaborators_and_links .links,
-#project_in_my_projects .colaborators_and_links .collaborators_and_docs {
+.project_in_my_projects .colaborators_and_links .links,
+.project_in_my_projects .colaborators_and_links .collaborators_and_docs {
     width: 100%;
 
 }
@@ -140,6 +141,8 @@ main {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    border-top: 2px solid #E3E3E8;
+    padding-top: 15px;
 }
 
 .colaborators_and_links {
@@ -359,7 +362,7 @@ main {
         justify-content: space-between;
     }
 
-    .project_card, #project_in_feed, #project_in_my_projects {
+    .project_card, #project_in_feed, .project_in_my_projects {
         width: 100%;
     }
 
@@ -388,7 +391,7 @@ main {
 
     }
 
-    .project_card, #project_in_my_projects {
+    .project_card, .project_in_my_projects {
         width: 100%;
         min-width: 300px;
     }
@@ -400,7 +403,7 @@ main {
 }
 
 @media screen and (min-width: 701px) and (max-width: 800px) {
-    .project_card, #project_in_my_projects {
+    .project_card, .project_in_my_projects {
         width: 100%;
     }
 
@@ -427,7 +430,7 @@ main {
 
     }
 
-    .project_card, #project_in_my_projects {
+    .project_card, .project_in_my_projects {
         width: 47%;
     }
 }

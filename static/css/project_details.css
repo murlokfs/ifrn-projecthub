@@ -171,35 +171,6 @@ body {
     color: #6D6D78;
 }
 
-.ver-mais {
-    color: #22c55e;
-    font-weight: bold;
-    text-decoration: none;
-}
-.tags-container {
-    display: flex;
-    gap: 8px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-}
-.tag {
-    background-color: #E4FFE8;
-    color: #50CE67;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
-    transition: background-color 0.2s;
-    cursor: pointer;
-}
-
-.tag:hover {
-    background-color: #d4f7da;
-}
-
-.tags-container a {
-    text-decoration: none;
-}
 
 .content-columns {
     display: flex;

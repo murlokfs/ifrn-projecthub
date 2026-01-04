@@ -2,7 +2,8 @@
 <section class="card card-simple">
     <h3>Sobre o Projeto</h3>
     <div class="description">
-        <p><strong>Descrição</strong></p>
+        {{ project.description }}
+        <!-- <p><strong>Descrição</strong></p>
         <p>🎓 Academic Hub – A Plataforma de Projetos Acadêmicos do Futuro</p>
         <p>O Academic Hub é uma plataforma digital inovadora, inspirada na experiência dinâmica da Steam, mas totalmente
             voltada para o universo acadêmico.Nosso objetivo é transformar a forma como alunos, professores e
@@ -11,13 +12,8 @@
         <p>Aqui, cada aluno pode criar um perfil profissional completo, reunindo suas produções acadêmicas em um só
             lugar. É possível publicar Trabalhos de Conclusão de Curso (TCCs), Projetos Integradores, artigos
             científicos e experimentos, enriquecendo cada publicação com descrições detalhadas, imagens, vídeos e links
-            para repositórios como o GitHub... <a href="#" class="ver-mais">VER MAIS</a></p>
+            para repositórios como o GitHub... <a href="#" class="ver-mais">VER MAIS</a></p> -->
     </div>
     <h4>Tags</h4>
-    <div class="tags-container">
-        <a href="#"><span class="tag">ADS</span></a>
-        <a href="#"><span class="tag">Django</span></a>
-        <a href="#"><span class="tag">IA</span></a>
-        <a href="#"><span class="tag">React</span></a>
-    </div>
+    {% include 'components/cards/project_parts/tag.html' %}
 </section>

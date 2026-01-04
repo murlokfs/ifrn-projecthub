@@ -4,12 +4,20 @@
         <a href="{% url 'index' %}" class="back-link">← Voltar</a>
 
         <div class="project-title">
-            <h1>ProjectHub - Plataforma de portfólio</h1>
-            <span class="project-badge">Projeto Integrador</span>
+            <h1>{{ project.title }}</h1>
+            <span class="project-badge">
+                {% if project.type == "Integrador" %}
+                    Projeto {{ project.type }}
+                {% elif project.type == "Pesquisa" %}
+                    Projeto de {{ project.type }}
+                {% else %}
+                    {{ project.type }}
+                {% endif %}
+            </span>
         </div>
 
         <div class="project-meta">
-            <span><i class="ph ph-calendar-blank"></i> Criado em 25/09/2025</span>
+            <span><i class="ph ph-calendar-blank"></i> Atualizado em {{ project.updated_at }}</span>
         </div>
     </div>
 

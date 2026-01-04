@@ -7,10 +7,9 @@
 
     <div class="card-body">
         <ul class="user-list">
-            <li><a href="#"><span class="avatar">AC</span> Ayrton Cavalcante</a></li>
-            <li><a href="#"><span class="avatar">MF</span> Murilo Fontes</a></li>
-            <li><a href="#"><span class="avatar">EO</span> Eduardo Oliveira</a></li>
-            <li><a href="#"><span class="avatar">NM</span> Nathan Moniçoba</a></li>
+            {% for m in project.members.all %}
+                <li><a href="#"><span class="avatar">AC</span> {{ m }}</a></li>
+            {% endfor %}
         </ul>
     </div>
 </section>

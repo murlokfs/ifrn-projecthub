@@ -17,7 +17,7 @@
                 {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
 
                 <div class="content">
-                    <div class="description">{{ project.description }} <b>VER MAIS</b></div>
+                    <div class="description">{{ project.description|truncatewords:10 }} <b>VER MAIS</b></div>
                     {% include 'components/cards/project_parts/tag.html' %}
 
                     <div class="colaborators_and_links">
@@ -30,10 +30,15 @@
                     <div class="footer">
                         {% include 'components/cards/project_parts/interaction_btns.html' %}
 
-                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
+                        <!-- {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %} -->
+
+                        {% include 'components/buttons/see_details.html' %}
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
+
+    {% include 'components/paginator/paginator.html' %}
+    
 {% endblock content %}
