@@ -24,6 +24,12 @@
 					<span class="item_description">Meus Projetos</span>
 				</a>
 			</li>
+			<li class="side_item {% if active_page == 'project_approval' %}active{% endif %}">
+				<a href="{% url 'project_approval' %}">
+					<i class="fa-solid fa-solidLarge fa-vote-yea">‌</i>
+					<span class="item_description">Aprovações</span>
+				</a>
+			</li>
 			<li class="side_item {% if active_page == 'settings' %}active{% endif %}">
 				<a href="#">
 					<i class="fa-solid fa-gear"></i>
