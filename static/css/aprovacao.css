@@ -472,6 +472,10 @@ body {
     animation: shake 0.3s;
 }
 
+.helper-text{
+    font-size: 15px;
+}
+
 @keyframes shake {
     0% { transform: translateX(0); }
     25% { transform: translateX(-5px); }

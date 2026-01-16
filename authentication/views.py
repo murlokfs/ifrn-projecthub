@@ -11,3 +11,6 @@ class LoginView(TemplateView):
 
 class SignupView(TemplateView):
     template_name = 'authentication/signup.html'
+
+class EditProfileView(TemplateView):
+    template_name = 'authentication/edit_profile.html'
