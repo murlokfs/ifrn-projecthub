@@ -25,13 +25,13 @@ jobs:
             
             git pull origin main
 
-            ./venv/bin/activate
+            source ./venv/bin/activate
     
-            pip install -r requirements.txt
+            sudo pip install -r requirements.txt
 
-            python3 manage.py makemigrations
-            python3 manage.py migrate
+            sudo python3 manage.py makemigrations
+            sudo python3 manage.py migrate
 
-            python3 manage.py runserver 0.0.0.0:8000
+            sudo python3 manage.py runserver 0.0.0.0:8000
             
             echo "Deploy finalizado com sucesso no EC2!"
