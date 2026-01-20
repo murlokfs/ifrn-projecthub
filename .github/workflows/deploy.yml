@@ -21,17 +21,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/backend/ifrn-projecthub
+            cd ~/backend/
             
-            git pull origin main
-
-            source venv/bin/activate
-    
-            sudo pip install -r requirements.txt
-
-            sudo python3 manage.py makemigrations
-            sudo python3 manage.py migrate
-
-            sudo python3 manage.py runserver 0.0.0.0:8000
-            
-            echo "Deploy finalizado com sucesso no EC2!"
+            bash deploy.sh
