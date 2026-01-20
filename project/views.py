@@ -1,14 +1,15 @@
-from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 from authentication.models import User
 from project.models import Project
 from django.db.models import Case, When, Value, IntegerField
+from django import forms
 
 class Feed(generic.ListView):
     model = Project
     template_name = 'project/feed.html'
     context_object_name = 'projects'
-    paginate_by = 2
+    paginate_by = 1
 
     def get_queryset(self):
         return Project.objects.filter(
@@ -21,11 +22,11 @@ class Feed(generic.ListView):
         context['active_page'] = 'feed'
         return context
 
-class My_projects(generic.ListView):
+class MyProjects(generic.ListView):
     model = Project
     template_name = 'project/my_projects.html'
     context_object_name = 'projects'
-    paginate_by = 9
+    paginate_by = 3
 
     def get_queryset(self):
         user = User.objects.get(id=1)  # temporário
@@ -61,8 +62,21 @@ class DetailsProject(generic.DetailView):
 class ComentariosAlunosView(generic.TemplateView):
     template_name = 'project/student_comments.html'
     
-class CadastroProjetoView(generic.TemplateView):
+class ProjectCreateView(generic.CreateView):
+    model = Project
+    fields = ['title', 'type', 'status', 'guiding_teacher', 'description', 'is_private', 'members', 'tags']
     template_name = 'project/create_project.html'
+    success_url = reverse_lazy('index')
+    
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # estilizando o form
+        form.fields['title'].widget.attrs.update({'class': 'custom-input', 'placeholder': 'Ex: Nome do Projeto'})
+        form.fields['type'].widget.attrs.update({'class': 'custom-input'})
+        form.fields['guiding_teacher'].widget.attrs.update({'class': 'custom-input'})
+        
+        # O campo description usará o CKEditor automaticamente se for RichTextField no Model
+        return form
 
 class ComentariosProfessoresView(generic.TemplateView):
     template_name = 'project/teacher_comments.html'

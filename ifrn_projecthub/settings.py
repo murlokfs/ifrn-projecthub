@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # CKEditor
+    'ckeditor',
+    'ckeditor_uploader',
+
     # Apps
     'project',
     'authentication',
@@ -123,6 +127,51 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# Pasta onde ficará os arquivos de midia enviados pelos usuários
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# onde guardaremos os arquivos enviados pelos usuários nos campos de Rich Text
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+# Permite que o editor leia a resposta do servidor dentro do iframe
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# settings.py
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        'toolbar': 'Custom',
+        'width': '100%',
+        'uploadContent': True,
+        'filebrowserUploadUrl': '/ckeditor/upload/', 
+        'filebrowserBrowseUrl': '/ckeditor/browse/',
+        
+        # UNIFICADO: Todos os plugins em uma única chave
+        'extraPlugins': ','.join([
+            'font', 
+            'colorbutton', 
+            'colordialog', 
+            'justify', 
+            'uploadimage', # Necessário para o drag-and-drop
+            'uploadwidget', # NECESSÁRIO para resolver o erro de "URL faltando"
+        ]),
+        
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['FontSize', 'TextColor', 'BGColor'], 
+            ['NumberedList', 'BulletedList'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Image', 'Link', 'Unlink'],
+            ['Maximize', 'Source'],
+        ],
+        'removeDialogTabs': 'image:advanced;image:Link',
+        'removePlugins': 'elementspath',
+        'fontSize_sizes': '12/12px;14/14px;16/16px;18/18px;24/24px;36/36px',
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

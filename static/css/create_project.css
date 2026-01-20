@@ -68,6 +68,36 @@
     margin: 0 auto;
 }
 
+.custom-input {
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 12px !important;
+    padding: 10px 15px !important;
+    width: 100%;
+    color: #495057;
+}
+
+.form-title {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+/* Ajuste para o CKEditor ficar arredondado */
+/* Garante que o widget do CKEditor preencha o espaço */
+.django-ckeditor-widget {
+    display: block !important;
+    width: 100% !important;
+}
+
+/* Ajusta as bordas para combinar com o seu design arredondado */
+#cke_id_description {
+    width: 100% !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    border: 1px solid #e9ecef !important;
+}
+
 .form-container {
     background-color: white;
     flex: 2;
