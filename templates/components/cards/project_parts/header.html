@@ -10,7 +10,15 @@
     </div>
 
     {% if show_status %}
-        <div class="status_project {{ project.status }}">
+        <div class="status_project 
+        {% if project.status == 'Aprovado' %}
+            status_approved
+        {% elif project.status == 'Pendente' %}
+            status_pending
+        {% elif project.status == 'Rejeitado' %}
+            status_rejected
+        {% endif %}
+        ">
             {{ project.status }}
         </div>
     {% endif %}
