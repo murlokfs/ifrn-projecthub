@@ -1,0 +1,39 @@
+{% extends 'components/base_files/my_projects_and_feed.html' %}
+
+{% load static %}
+
+{% block title %}
+    Feed
+{% endblock title %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
+{% endblock imports %}
+
+{% block content %}
+    <div class="container_projects">
+        {% for _ in contador_list %}
+            <div class="project_card" id="project_in_feed">
+                {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
+
+                <div class="content">
+                    <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
+                    {% include 'components/cards/project_parts/tag.html' %}
+
+                    <div class="colaborators_and_links">
+
+                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
+                        
+                        {% include 'components/cards/project_parts/links.html' with column=True %}
+                    </div>
+
+                    <div class="footer">
+                        {% include 'components/cards/project_parts/interaction_btns.html' %}
+
+                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

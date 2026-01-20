@@ -1,0 +1,23 @@
+{% load static %}
+
+{% url 'my_projects' as my_projects_url %}
+
+<header class="header">
+    <div class="header-content">
+        <div id="title">
+            <img id="logo" src="{% static 'img/brain.png' %}" alt="ProjectHub Logo">
+            <h1>ProjectHub</h1>
+        </div>
+        <div id="search_container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="search_input" placeholder="Busque por projetos, perfis ou tags...">
+        </div>
+        
+        <div id="buttons_container">
+            {% include 'components/buttons/button_base.html' with btn=False url=my_projects_url classes="cancel" id_list="cancel" label="Cancelar" %}
+
+            {% include 'components/buttons/button_base.html' with btn=True classes="publish_btn green" label="Publicar" %}
+        </div>
+    </div>
+</header>
+<script src="{% static 'base_files/js/header_createproject.js' %}"></script>

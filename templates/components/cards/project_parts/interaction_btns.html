@@ -1,0 +1,89 @@
+{% load static %}
+
+<div class="interaction_btns">
+    <div class="likes">
+        <button class="icon">
+            <img src="{% static 'img/project_parts/heart.svg' %}" alt="">
+        </button>
+        <div class="count">20</div>
+    </div>
+
+    <div class="comments">
+        <div class="icon">
+            <img src="{% static 'img/project_parts/comment.svg' %}" alt="">
+        </div>
+        <div class="count">13</div>
+    </div>
+</div>
+
+
+<style>
+    .interaction_btns {
+        display: flex;
+        gap: 20px;
+        width: 45%;
+    }
+
+    .likes {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        font-size: 15px;
+        color: #6D6D78;
+    }
+
+    .comments {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        font-size: 15px;
+        color: #6D6D78;
+    }
+
+    .icon img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .icon {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        const likeButtons = document.querySelectorAll('.likes .icon');
+        
+        const likeStateMap = new Map();
+
+        likeButtons.forEach(button => {
+            const countElement = button.nextElementSibling;
+            
+            likeStateMap.set(button, {
+                liked: false,
+                count: parseInt(countElement.textContent) || 0
+            });
+            
+            button.addEventListener('click', () => {
+                
+                const state = likeStateMap.get(button);
+                const heartImg = button.querySelector('img');
+
+                if (!state.liked) {
+                    state.count++;
+                    heartImg.src = "{% static 'img/project_parts/heart-fill.svg' %}";
+                    state.liked = true;
+                } else {
+                    state.count--;
+                    heartImg.src = "{% static 'img/project_parts/heart.svg' %}";
+                    state.liked = false;
+                }
+                
+                countElement.textContent = state.count;
+            });
+        });
+    });
+</script>

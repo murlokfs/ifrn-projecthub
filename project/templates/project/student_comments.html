@@ -1,0 +1,25 @@
+{% extends 'components/base_files/base_detail_comments.html' %}
+{% load static %}
+
+{% block title %}Comentários dos Alunos{% endblock %}
+
+{% block form_content %}
+    <h3>Deixe seu comentário</h3>
+    <p>Compartilhe sua opinião sobre este projeto</p>
+    
+    <form action="#" method="post" class="feedback-form">
+        <textarea placeholder="Escreva seu comentário..."></textarea>
+        <button type="submit" class="btn-submit">Publicar Comentário</button>
+    </form>
+{% endblock form_content %}
+
+{% block discussion_content %}
+    <div class="discussion-header">
+        <i class="ph ph-chat-circle-dots"></i>
+        <h3>Comentários dos Usuários</h3>
+        <span>3 Comentários</span>
+    </div>
+    
+    {% include 'components/details/coments/coments_alunos.html' %}
+
+{% endblock discussion_content %}

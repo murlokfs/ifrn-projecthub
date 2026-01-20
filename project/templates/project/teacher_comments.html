@@ -1,0 +1,25 @@
+{% extends 'components/base_files/base_detail_comments.html' %}
+{% load static %}
+
+{% block title %}Avaliações dos Professores{% endblock %}
+
+{% block form_content %}
+    <h3>Avaliar como Professor</h3>
+    <p>Forneça uma avaliação acadêmica do projeto</p>
+    
+    <form action="#" method="post" class="feedback-form">
+        <textarea placeholder="Escreva seu comentário..."></textarea>
+        <button type="submit" class="btn-submit">Publicar Avaliação</button>
+    </form>
+{% endblock form_content %}
+
+{% block discussion_content %}
+    <div class="discussion-header">
+        <i class="ph-fill ph-graduation-cap"></i>
+        <h3>Avaliações dos Professores</h3>
+        <span>3 Avaliações</span>
+    </div>
+    
+    {% include 'components/details/coments/coments_professores.html' %}
+
+{% endblock discussion_content %}

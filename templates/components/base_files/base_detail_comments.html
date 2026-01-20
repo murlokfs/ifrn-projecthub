@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <title>{% block title %}Comentários{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/project_details.css' %} ">
+    <link rel="stylesheet" href="{% static 'base_files/footer.css' %}?v=20251113_2">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    
+    <div class="top-container">
+        {% include 'components/details/header.html' %}
+        {% include 'components/details/tabs.html' %}
+    </div>
+    
+    <div class="page-wrapper">
+
+        <section class="card card-simple new-feedback-card">
+            {% block form_content %}
+            <h3>Deixe seu comentário</h3>
+            <p>Compartilhe sua opinião sobre este projeto</p>
+            
+            <form action="#" method="post" class="feedback-form">
+                <textarea placeholder="Escreva seu comentário..."></textarea>
+                <button type="submit" class="btn-submit">Publicar Comentário</button>
+            </form>
+            {% endblock form_content %}
+        </section>
+
+        <section class="card card-simple discussion-card">
+            {% block discussion_content %}
+            <div class="discussion-header">
+                <i class="ph ph-chat-circle-dots"></i>
+                <h3>Comentários</h3>
+                <span>0 Comentários</span>
+            </div>
+
+            <ul class="discussion-thread">
+                
+            </ul>
+            {% endblock discussion_content %}
+        </section>
+    </div>
+
+    {% include 'components/base_files/footer.html' %}
+
+</body>
+</html>

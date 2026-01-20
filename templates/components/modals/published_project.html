@@ -1,0 +1,23 @@
+{% extends 'components/modals/modal_base.html' %}
+{% load static %}
+
+{% block status %}
+    approved
+{% endblock status %}
+
+{% block icon %}
+    {% include 'components/icons/check.html' %}
+{% endblock icon %}
+
+{% block title %}
+    Seu projeto foi publicado com sucesso!
+{% endblock title %}
+
+{% block description %}
+    Seu projeto está publicado e pronto para ser acompanhado. Como é pessoal, só é possível visualizá-lo acessando seu perfil.
+{% endblock description %}
+
+{% block btns %}
+    {% include 'components/buttons/goto_profile.html' %}
+    {% include 'components/buttons/close.html' %}
+{% endblock btns %}

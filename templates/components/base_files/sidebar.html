@@ -1,0 +1,82 @@
+{% load static %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'base_files/sidebar.css' %}?v=20251113_2">
+
+<nav id="sidebar" class="{% if sidebar_open %}open-sidebar{% endif %}" tabindex="-1">
+	<div id="sidebar_content">
+		<div id="title_sidebar">
+
+			<img src="{% static 'img/brain.png' %}" alt="logo-projecthub" id="logo_sidebar">
+			<p id="title" class="item_description">ProjectHub</p>
+		</div>
+
+		<ul id="side_items">
+			<li class="side_item {% if active_page == 'feed' %}active{% endif %}">
+				<a href="{% url 'index' %}">
+					<i class="fa-solid fa-couch"></i>
+					<span class="item_description">Feed</span>
+				</a>
+			</li>
+			<li class="side_item {% if active_page == 'my_projects' %}active{% endif %}">
+				<a href="{% url 'my_projects' %}">
+					<i class="fa-solid fa-folder-closed"></i>
+					<span class="item_description">Meus Projetos</span>
+				</a>
+			</li>
+			<li class="side_item {% if active_page == 'settings' %}active{% endif %}">
+				<a href="#">
+					<i class="fa-solid fa-gear"></i>
+					<span class="item_description">Configurações</span>
+				</a>
+			</li>
+		</ul>
+
+		<button id="open_btn" type="button">
+			<i id="open_btn_icon" class="fa-solid fa-chevron-right"></i>
+		</button>
+	</div>
+
+	<div id="sidebar_end">
+		<!-- <div class="theme-container">
+			<p class="title-theme"> Tema </p>
+			<div class="toggle-wrapper">
+				<div class="toggle-switch" id="themeToggle" role="button" aria-pressed="false" aria-label="Alternar tema">
+					<div class="moon-icon inactive" id="moonIcon" aria-hidden="true">
+						<i class="fa-solid fa-moon"></i>
+					</div>
+					<div class="sun-icon inactive" id="sunIcon" aria-hidden="true">
+						<i class="fa-solid fa-sun"></i>
+					</div>
+				</div>
+			</div>
+		</div> -->
+
+
+		<div id="user">
+				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
+					<img src="{% static 'img/profile/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
+					<p id="user_infos">
+						<span class="item_description">
+							<!-- {% firstof user.get_full_name user.username %} -->
+							Ayrton Senna
+						</span>
+						<span class="item_description">
+							<!-- @{{ user.username }} -->
+							@ayrtonsenna
+						</span>
+					</p>
+				</a>
+			</div>
+
+		<div id="logout">
+			<a id="logout_btn" href="{% url 'login' %}">
+				<i class="fa-solid fa-arrow-right-from-bracket"></i>
+				<span class="item_description" id="logout_text">Logout</span>
+			</a>
+		</div>
+	</div>
+</nav>
+
+<script src="{% static 'base_files/js/sidebar.js' %}"></script>
+{# Script já incluído no template base; #}

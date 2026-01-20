@@ -1,0 +1,15 @@
+{% if status == "aprovado" %}
+    <div class="status_project status_approved">Aprovado</div>
+
+{% elif status == "pendente" %}
+    <div class="status_project status_pending">Pendente</div>
+
+{% elif status == "reprovado" %}
+<div class="status_rejected_wrapper">
+    <i class="ph-fill ph-warning"></i>
+
+    <div class="status_project status_rejected">
+        Reprovado
+    </div>
+</div>
+{% endif %}

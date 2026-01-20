@@ -1,0 +1,105 @@
+{% if btn %}
+    <button class="base_container {{ classes }}" id="{{ id_list }}">
+        {{ label }}
+    </button>
+{% else %}
+    <a href="{{ url }}" id="{{ id_list }}" class="base_container {{ classes }}">
+        {{ label }}
+    </a>
+{% endif %}
+
+<style>
+    .base_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 18px;
+        border: none;
+        height: 25px;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .cancel, .cancel-btn {
+        background-color: #F5474A;
+    }
+
+    .green {
+        background-color: #50CE67;
+    }
+
+    .goto_my_projects {
+        width: 90%;
+    }
+
+    .publish_btn {
+        width: 90%;
+    }
+
+    .close_publish_modal {
+        width: 90%;
+        color: #4B4B4D;
+        background-color: #CACACA;
+    }
+
+    @media screen and (max-width: 768px) {
+        .base_container {
+            padding: 15px 10px;
+        }
+    }
+
+    @media screen and (max-width: 520px) {
+        .publish_btn,
+        .create_project,
+        #cancel {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .publish_btn::before,
+        #cancel::before {
+            font-size: 16px;
+            line-height: 1;
+            color: #fff;
+        }
+
+        .publish_btn::before {
+            content: "✓";
+        }
+
+        #cancel::before {
+            content: "✕";
+        }
+
+        .publish_btn:hover,
+        #cancel:hover {
+            filter: brightness(0.95);
+        }
+
+        .publish_btn:active,
+        #cancel:active {
+            transform: scale(0.97);
+        }
+    }
+
+    @media screen and (max-width: 340px) {
+        .publish_btn,
+        .cancel {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>

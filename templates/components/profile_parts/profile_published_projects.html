@@ -1,0 +1,54 @@
+{% load static %}
+<div class="profile-container">
+    <section class="published-projects">
+            <div class="projects-header">
+                <div class="title-group">
+                    <h2>Projetos publicados</h2>
+                    <p class="subtitle">Seus projetos cadastrados</p>
+                </div>
+
+                <div class="filters">
+                    <select class="selector">
+                        <option>Todos</option>
+                    </select>
+                    <select class="selector">
+                        <option>Mais recente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Search projects by title, description, or tags...">
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Sistema de Gestão Acadêmica</h3>
+                    <p>Sistema completo para gerenciar atividades acadêmicas, notas e frequência dos alunos.</p>
+                    {% include 'components/cards/project_parts/tag.html' %}
+                    <div class="metadata">
+                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
+                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
+                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
+                    </div>
+                </div>
+                {% include 'components/buttons/see_details.html' %}
+            </div>
+
+            <div class="project-card">
+                <div class="project-info">
+                    <h3>Sistema de Gestão Acadêmica</h3>
+                    <p>Sistema completo para gerenciar atividades acadêmicas, notas e frequência dos alunos.</p>
+                    {% include 'components/cards/project_parts/tag.html' %}
+                    <div class="metadata">
+                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
+                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
+                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
+                    </div>
+                </div>
+                {% include 'components/buttons/see_details.html' %}
+            </div>
+        </section>
+
+    </div

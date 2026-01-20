@@ -1,15 +1,15 @@
 <div class="status_container">    
-    <div class="card" style="border-left: 7px solid #50CE67;">
+    <div class="card" style="border-left: 7px solid #50CE67; color: #6f6f6f;">
         <h3>Projetos aprovados</h3>
         <h2 style="color: #50CE67;">12</h2>
     </div>
     
-    <div class="card" style="border-left: 7px solid #FFC423;">
+    <div class="card" style="border-left: 7px solid #FFC423; color: #6f6f6f;">
         <h3>Projetos pendentes</h3>
         <h2 style="color: #FFC423;">12</h2>
     </div>
     
-    <div class="card" style="border-left: 7px solid #F5474A;">
+    <div class="card" style="border-left: 7px solid #F5474A; color: #6f6f6f;">
         <h3>Projetos reprovados</h3>
         <h2 style="color: #F5474A;">12</h2>
     </div>
@@ -19,8 +19,10 @@
     .status_container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        max-width: 1200px; 
         width: 100%;
+        justify-content: space-between;
+        gap: 30px;
     }
 
     .card {
@@ -28,12 +30,53 @@
         border-radius: 16px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
         padding: 8px 20px;
-        width: fit-content;
-        min-width: 290px;
-        position: relative;
+        min-width: 30%;
     }
 
     .card h3 {
         font-weight: 400;
+    }
+
+    @media screen and (max-width: 500px) {
+        .status_container {
+            flex-wrap: wrap;
+            width: 100%;
+            gap: 30px;
+        }
+
+        .card {
+            width: 100%;
+        }
+    }
+    
+    @media screen and (min-width: 501px) and (max-width: 800px) {
+        .card {
+            width: 100%;
+        }
+
+        .status_container {
+            width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 801px) and (max-width: 1199px) {
+        .status_container {
+            width: 100%;
+        }
+
+        .card {
+            width: 100%;
+        }
+    }
+
+    @media screen and (min-width: 1200px) {
+        .status_container {
+            width: 1100px;
+            max-width: 100%;
+        }
+
+        .card {
+            width: 30%;
+        }
     }
 </style>
