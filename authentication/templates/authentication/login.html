@@ -10,11 +10,11 @@ Login - ProjectHub
     <h2>Seja bem-vindo de volta ao<br>ProjectHub!</h2>
     
     <div class="social-auth">
-        <button class="google-btn">
+        <button type="button" class="google-btn"> 
             <img src="{% static 'img/google_logo.png' %}" alt="Google Icon">
             Login com o Google
         </button>
-        <button class="suap-btn">
+        <button type="button" class="suap-btn" onclick="window.location.href='{% url 'social:begin' 'suap' %}'">
             <img src="{% static 'img/ifrn_logo.png' %}" alt="Suap Icon">
             Login com o Suap
         </button>
