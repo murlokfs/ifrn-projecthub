@@ -10,21 +10,20 @@ Login - ProjectHub
     <h2>Seja bem-vindo de volta ao<br>ProjectHub!</h2>
     
     <div class="social-auth">
-        <button class="google-btn" type="button">
+        <button class="google-btn" type="button" onclick="window.location.href='{% url 'social:begin' 'google-oauth2' %}';">
             <img src="{% static 'img/google_logo.png' %}" alt="Google Icon">
-            Login com o Google
+            <p>Login com o Google</p>
         </button>
-        <a href="{% url 'social:begin' 'suap' %}" class="suap-btn" style="text-decoration: none; display: inline-block;">
+        <button type="button" class="suap-btn" onclick="window.location.href='{% url 'social:begin' 'suap' %}';">
             <img src="{% static 'img/ifrn_logo.png' %}" alt="Suap Icon">
-            Entrar com o SUAP
-        </a>
+            <p>Entrar com o SUAP</p>
+        </button>
     </div>
-
     <form method="post">
         {% csrf_token %}
         <div class="input-group">
             <label for="username">Email</label>
-            <input type="email" id="username" name="username" placeholder="joao_da_silva@ifrn.edu.br" required>
+            <input type="email" id="username" name="username" placeholder="joao_da_silva@gmail.com.br" required>
         </div>
         <div class="input-group">
             <label for="password">Senha</label>
