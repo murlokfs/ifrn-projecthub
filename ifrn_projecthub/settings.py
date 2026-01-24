@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',
 
     # Apps
     'project',
@@ -144,11 +143,6 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-try:
-    from .local_settings import *
-except ImportError:
-    pass
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
