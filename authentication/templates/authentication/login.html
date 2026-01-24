@@ -1,44 +1,331 @@
-{% extends 'components/base_files/base_auth.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Hub - Login</title>
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        function handleSuapLogin() {
+            window.location.href = "{% url 'social:begin' 'suap' %}";
+        }
+    </script>
+    <style>
+        /* Evita FOUC em alguns navegadores com fontes externas */
+        html { visibility: visible; opacity: 1; }
+    </style>
+</head>
+<body>
 
-{% block title %}
-Login - ProjectHub
-{% endblock title %}
+    <header class="header">
+        <div class="container header__container">
+            <div class="header__brand">
+                <div class="logo-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket-icon lucide-rocket"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+                </div>
+                <div class="brand-text">
+                    <h1>Project Hub</h1>
+                    <span>Rede Social Acadêmica</span>
+                </div>
+            </div>
 
-{% block content %}
-<div class="auth-form">
-    <h2>Seja bem-vindo de volta ao<br>ProjectHub!</h2>
-    
-    <div class="social-auth">
-        <button type="button" class="google-btn"> 
-            <img src="{% static 'img/google_logo.png' %}" alt="Google Icon">
-            Login com o Google
-        </button>
-        <button type="button" class="suap-btn" onclick="window.location.href='{% url 'social:begin' 'suap' %}'">
-            <img src="{% static 'img/ifrn_logo.png' %}" alt="Suap Icon">
-            Login com o Suap
-        </button>
-    </div>
-
-    <form method="post">
-        {% csrf_token %}
-        <div class="input-group">
-            <label for="username">Email</label>
-            <input type="email" id="username" name="username" placeholder="joao_da_silva@ifrn.edu.br" required>
+            <div class="header__actions">
+                <nav class="nav">
+                    <a href="#como-funciona" class="nav__link">Como funciona</a>
+                    <a href="#recursos" class="nav__link">Recursos</a>
+                </nav>
+                <button onclick="handleSuapLogin()" class="btn btn--primary btn--sm">
+                    Entrar
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="input-group">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="**************" required>
-        </div>
-        <div class="form-options">
-            <input type="checkbox" id="remember">
-            <label for="remember">Lembrar senha</label>
-        </div>
-        <a href="{% url 'index' %}" class="auth-btn">Entrar</a>
-    </form>
+    </header>
 
-    <p class="redirect-link">
-        Ainda sem conta? <a href="{% url 'signup' %}">Clique aqui!</a>
-    </p>
-</div>
-{% endblock %}
+    <section class="hero">
+        <div class="container hero__grid">
+            <div class="hero__content">
+                <div class="hero__text-group">
+                    <span class="badge">🎓 Exclusivo para estudantes e professores!</span>
+                    <h2 class="hero__title">Conecte-se, colabore e construa o futuro</h2>
+                    <p class="hero__description">
+                        O Project Hub é a plataforma onde estudantes do IFRN compartilham projetos, 
+                        formam equipes e desenvolvem habilidades juntos. Conecte-se com sua conta 
+                        SUAP e faça parte dessa comunidade inovadora.
+                    </p>
+                </div>
+
+                <div class="hero__cta-group">
+                    <button onclick="handleSuapLogin()" class="btn btn--primary btn--lg shadow-glow">
+                        Conectar com SUAP
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon-lg">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <polyline points="15 3 21 3 21 9"/>
+                            <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                    </button>
+                    <p class="helper-text">Use sua matrícula e senha do SUAP para acessar</p>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <p class="stat-number">500+</p>
+                        <p class="stat-label">Projetos publicados</p>
+                    </div>
+                    <div class="stat-item">
+                        <p class="stat-number">1.2k</p>
+                        <p class="stat-label">Estudantes ativos</p>
+                    </div>
+                    <div class="stat-item">
+                        <p class="stat-number">50+</p>
+                        <p class="stat-label">Professores orientadores</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero__visual">
+                <div class="visual-wrapper">
+                    <div class="glow-bg"></div>
+          
+                    <div class="floating-card float-star">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#FACC15" stroke="#FACC15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <div class="floating-card float-users">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="floating-card float-award">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#50CE67" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="6"/>
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                        </svg>
+                    </div>
+
+                    <div class="phone-frame">
+                        <div class="phone-body">
+                            <div class="phone-bezel">
+                                <div class="phone-screen">
+                                    <div class="dynamic-island">
+                                        <div class="island-notch">
+                                            <div class="cam-lens"></div>
+                                            <div class="sensor"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="app-header">
+                                        <div class="app-top-bar">
+                                            <div class="app-logo">
+                                                <div class="app-icon-box">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-text-align-justify-icon lucide-text-align-justify"><path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/></svg>
+                                                </div>
+                                                <span class="app-title-logo">Feed</span>
+                                            </div>
+                                            <div class="app-avatar">
+                                                <div class="add-icon-box">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="app-tabs">
+                                            <span class="tab active">Para você</span>
+                                            <span class="tab">Seguindo</span>
+                                            <span class="tab">Em alta</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="app-feed">
+                                        <div class="feed-card">
+                                            <div class="card-cover">
+                                                <img src="/static/img/img2-card.png" alt="">
+                                                <div class="card-tag">Projeto Integrador</div>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="user-info">
+                                                    <div class="user-avatar">
+                                                        <span>MS</span>
+                                                    </div>
+                                                    <div class="user-meta">
+                                                        <span class="user-name">Maria Silva</span>
+                                                        <span class="post-time">há 2 horas</span>
+                                                    </div>
+                                                </div>
+                                                <p class="post-title">App de Gestão Acadêmica</p>
+                                                <p class="post-desc">Sistema para gerenciar notas e frequência...</p>
+                                                <div class="tech-tags">
+                                                    <span>React</span>
+                                                    <span>Node</span>
+                                                </div>
+                                                <div class="card-stats">
+                                                    <div class="stat">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                                                        42
+                                                    </div>
+                                                    <div class="stat">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                                        12
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="feed-card">
+                                            <div class="card-cover">
+                                                <img src="/static/img/img1-card.jpg" alt="">
+                                                <div class="card-tag text-emerald">TCC</div>
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="user-info">
+                                                    <div class="user-avatar">
+                                                        <span>JP</span>
+                                                    </div>
+                                                    <div class="user-meta">
+                                                        <span class="user-name">João Pedro</span>
+                                                        <span class="post-time">há 5 horas</span>
+                                                    </div>
+                                                </div>
+                                                <p class="post-title">IoT na Agricultura</p>
+                                                <p class="post-desc">Sensores inteligentes para irrigação...</p>
+                                                <div class="card-stats">
+                                                    <div class="stat">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                                                        38
+                                                    </div>
+                                                    <div class="stat">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                                        8
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                  
+                                    <div class="home-indicator"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btn-side btn-mute"></div>
+                        <div class="btn-side btn-vol-up"></div>
+                        <div class="btn-side btn-vol-down"></div>
+                        <div class="btn-side btn-power"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h3>Como funciona?</h3>
+                <p>Em apenas 3 passos simples, você estará conectado à maior rede de projetos acadêmicos do IFRN.</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Conecte-se com SUAP</h4>
+                    <p>Use sua conta institucional do SUAP para fazer login de forma segura e rápida.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Complete seu Perfil</h4>
+                    <p>Adicione suas habilidades, interesses e áreas de atuação para encontrar projetos compatíveis.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Explore e Colabore</h4>
+                    <p>Descubra projetos incríveis, junte-se a equipes ou publique suas próprias ideias.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recursos" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h3>Por que usar o Project Hub?</h3>
+                <p>Desenvolvemos uma plataforma pensada para potencializar a visibilidade e colaboração acadêmica.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h4>Colaboração em Equipe</h4>
+                    <p>Organize seus projetos (TCC, Integradores ou Pesquisa) vinculando colegas e orientadores de forma oficial.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb-icon lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                    </div>
+                    <h4>Compartilhe Ideias</h4>
+                    <p>Exponha seus trabalhos para toda a comunidade do IFRN e receba feedback de outros alunos e professores.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                    </div>
+                    <h4>Reconhecimento</h4>
+                    <p>Conquiste visibilidade e credibilidade com projetos reais aprovados por professores.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <h4>Aprenda na Prática</h4>
+                    <p>Documente sua evolução técnica e crie um histórico sólido de projetos para apresentar ao mercado de trabalho.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-box">
+                <h3>Pronto para começar?</h3>
+                <p>Junte-se a centenas de estudantes que já estão construindo projetos incríveis e desenvolvendo suas carreiras.</p>
+                <button onclick="handleSuapLogin()" class="btn btn--white">
+                    Conectar com SUAP
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#50CE67" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon-lg">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer__container">
+            <p class="copyright">© 2025 Project Hub. Todos os direitos reservados.</p>
+            <div class="footer__links">
+                <a href="#">Termos de Uso</a>
+                <a href="#">Política de Privacidade</a>
+                <a href="#">Suporte</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
