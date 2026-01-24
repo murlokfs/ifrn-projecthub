@@ -55,22 +55,22 @@
 
 		<div id="user">
 				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
-					<img src="{% static 'img/profile/avatar.jpg' %}" alt="imagem do usuário" id="img_user">
+					<img src="{{request.user.image}}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">
 							<!-- {% firstof user.get_full_name user.username %} -->
-							Ayrton Senna
+							{{request.user.first_name}}
 						</span>
 						<span class="item_description">
 							<!-- @{{ user.username }} -->
-							@ayrtonsenna
+							@{{request.user.username}}
 						</span>
 					</p>
 				</a>
 			</div>
 
 		<div id="logout">
-			<a id="logout_btn" href="{% url 'login' %}">
+			<a id="logout_btn" href="{% url 'logout' %}">
 				<i class="fa-solid fa-arrow-right-from-bracket"></i>
 				<span class="item_description" id="logout_text">Logout</span>
 			</a>

@@ -45,7 +45,11 @@ INSTALLED_APPS = [
     'authentication',
 
     # Libraries
+    'social_django',
 ]
+
+# Custom User Model
+AUTH_USER_MODEL = 'authentication.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,8 +76,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                # social-auth
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
@@ -94,9 +96,12 @@ DATABASES = {
     }
 }
 
+# Authentication backends
+# https://python-social-auth.readthedocs.io/
+
 AUTHENTICATION_BACKENDS = (
-    'suap_backend.backends.SuapOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'suap_backend.backends.SuapOAuth2',
 )
 
 
@@ -146,3 +151,13 @@ except ImportError:
     pass
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication
+# https://docs.djangoproject.com/en/5.2/ref/settings/#login-redirect-url
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'profile'
+LOGOUT_REDIRECT_URL = 'login'
+
+SOCIAL_AUTH_SUAP_KEY = '7vVVTwhIrSLcOSvBU0CikXM54ZfjOI4SBedrwST3'
+SOCIAL_AUTH_SUAP_SECRET = 'bhDsQJ8KbbV74uGcaf3V37Znqu4hYIR5SuKSFsd1Y750sMzxOai3oxCv8sqNMawtcmqcXsbNJzkIZPwunvmixv8FZrqOKS3aSom6pWTbYYwBmHp0E4AwR6wckwE3JE13'
