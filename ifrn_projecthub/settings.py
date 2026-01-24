@@ -96,8 +96,8 @@ DATABASES = {
 # https://python-social-auth.readthedocs.io/
 
 AUTHENTICATION_BACKENDS = (
-    'suap_backend.backends.SuapOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'suap_backend.backends.SuapOAuth2',
 )
 
 

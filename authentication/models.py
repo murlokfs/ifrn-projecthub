@@ -13,7 +13,6 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('role', 'admin')
         return self.create_user(email, username, password, **extra_fields)
 
 
@@ -25,22 +24,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = [
         ('student', 'Discente'),
         ('teacher', 'Docente'),
-        ('visitor', 'Visitante'),
-        ('admin', 'Administrador'),
+        ('alumni', 'Egresso'),
     ]
 
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
-    email_institucional = models.EmailField(unique=True, null=True, blank=True)
+    email_personal = models.EmailField(unique=True, null=True, blank=True)
     full_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
     registration = models.CharField(max_length=50, unique=True, blank=True, null=True)
     about_me = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=user_avatar_path, blank=True, null=True)
     course = models.ForeignKey('project.Course', on_delete=models.SET_NULL, null=True, blank=True)
-    institution = models.ForeignKey('project.Instituition', on_delete=models.SET_NULL, null=True, blank=True)
+    institution = models.ForeignKey('project.Institution', on_delete=models.SET_NULL, null=True, blank=True)
     linkedin = models.URLField(blank=True, null=True)
     github = models.URLField(blank=True, null=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='visitor')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -55,6 +55,3 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = "Usuário"
         verbose_name_plural = "Usuários"
-
-
-

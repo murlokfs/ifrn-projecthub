@@ -55,12 +55,11 @@
 
 		<div id="user">
 				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
-					<img src="{{request.user.foto}}" alt="imagem do usuário" id="img_user">
-					<p>{{request.user}}</p>
+					<img src="{{request.user.image}}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">
 							<!-- {% firstof user.get_full_name user.username %} -->
-							Ayrton Senna
+							{{request.user.first_name}}
 						</span>
 						<span class="item_description">
 							<!-- @{{ user.username }} -->

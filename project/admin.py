@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Project, Instituition, Course, Tag, ApprovalSolicitation, Comment, ReportProject, ReportComment
+from .models import Project, Institution, Course, Tag, ApprovalSolicitation, Comment, ReportProject, ReportComment
 
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title', 'course', 'status', 'type', 'created_at')
     search_fields = ('title', 'description')
     list_filter = ('status', 'type', 'course')
 
-class InstituitionAdmin(admin.ModelAdmin):
+class InstitutionAdmin(admin.ModelAdmin):
     list_display = ('acronym', 'campus', 'cnpj')
     search_fields = ('name', 'acronym', 'campus')
 
@@ -36,7 +36,7 @@ class ReportCommentAdmin(admin.ModelAdmin):
     search_fields = ('comment__content', 'user__full_name', 'reason', 'is_resolved')
 
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(Instituition, InstituitionAdmin)
+admin.site.register(Institution, InstitutionAdmin)
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(ApprovalSolicitation, ApprovalSolicitationAdmin)

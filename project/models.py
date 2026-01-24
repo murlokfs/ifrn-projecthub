@@ -1,6 +1,6 @@
 from django.db import models
 
-class Instituition(models.Model):
+class Institution(models.Model):
 
     name = models.CharField(max_length=100, null=False, blank=False)
     cnpj = models.CharField(max_length=20, unique=True, null=False, blank=False)
@@ -17,7 +17,7 @@ class Instituition(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    institution = models.ForeignKey(Instituition, on_delete=models.CASCADE, related_name='courses')
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='courses')
 
     def __str__(self):
         return f"{self.name} - {self.institution.acronym}"
@@ -39,7 +39,7 @@ class Tag(models.Model):
 class Project(models.Model):
 
     STATUS_CHOICES = [
-        ('pending_approval', 'Aprovação Pendente'),
+        ('pending_approval', 'Pendente de Aprovação'),
         ('in_progress', 'Em Andamento'),
         ('completed', 'Concluído'),
     ]
@@ -52,14 +52,19 @@ class Project(models.Model):
 
     title = models.CharField(max_length=200, null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='curso', null=False, blank=False)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_approval')
+    is_private = models.BooleanField(default=False)
 
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='research')
 
-    members = models.ManyToManyField('authentication.User', related_name='integrantes', blank=True)
+    members = models.ManyToManyField('authentication.User', related_name='members', blank=True)
+    orientators = models.ManyToManyField('authentication.User', related_name='orientators', blank=True)
+    
+    link_github = models.URLField(null=True, blank=True)
+    link_youtube = models.URLField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
 
     def __str__(self):
@@ -68,7 +73,6 @@ class Project(models.Model):
     class Meta:
         verbose_name = "Projeto"
         verbose_name_plural = "Projetos"
-
 
 class ApprovalSolicitation(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='approval_solicitations')
