@@ -38,22 +38,7 @@
 	</div>
 
 	<div id="sidebar_end">
-		<!-- <div class="theme-container">
-			<p class="title-theme"> Tema </p>
-			<div class="toggle-wrapper">
-				<div class="toggle-switch" id="themeToggle" role="button" aria-pressed="false" aria-label="Alternar tema">
-					<div class="moon-icon inactive" id="moonIcon" aria-hidden="true">
-						<i class="fa-solid fa-moon"></i>
-					</div>
-					<div class="sun-icon inactive" id="sunIcon" aria-hidden="true">
-						<i class="fa-solid fa-sun"></i>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
-
-		<div id="user">
+		<div id="user" class="{% if active_page == 'profile' %}active{% endif %}">
 				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
 					<img src="{{request.user.image}}" alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
