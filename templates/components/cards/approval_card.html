@@ -1,19 +1,28 @@
-<div class="approval-card">
-    <div class="card-status-badge">Pendente de aprovação</div>
-    
-    <h2 class="project-title">Project Hub - Armazene seus projetos e trabalhos</h2>
-    
-    <p class="project-desc">
+<div class="project-card">
+    <div class="card-header">
+        <div class="badges-wrapper">
+            <span class="status-badge outline-yellow">Pendente de aprovação</span>
+            <span class="status-badge outline-blue">Em Desenvolvimento</span>
+        </div>
+        <button class="btn-more-options" title="Denunciar/Excluir"
+            onclick="openDeleteModal('Project Hub - Armazene seus projetos')">
+            <i class="ph ph-dots-three"></i>
+        </button>
+    </div>
+
+    <h3 class="card-title">Project Hub - Armazene seus projetos e trabalhos</h3>
+
+    <p class="card-desc">
         O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="#">VER MAIS</a>
     </p>
 
-    <div class="tags-row">
+    <div class="card-tags">
         <span class="tag">NOSQL</span>
         <span class="tag">NOSQL</span>
         <span class="tag">NOSQL</span>
     </div>
 
-    <div class="members-section">
+    <div class="card-members">
         <p class="members-label">Integrantes:</p>
         
         <div class="member-item">
@@ -28,13 +37,22 @@
             <div class="member-info">
                 <span class="name">Nathan Maniçoba</span>
             </div>
+        <div class="member-row">
+            <span class="avatar-mini">AC</span>
+            <span>Ayrton Cavalcante</span>
+        </div>
+        <div class="member-row">
+            <span class="avatar-mini">NM</span>
+            <span>Nathan Maniçoba</span>
         </div>
     </div>
 
-    <p class="submit-date">Submetido em: 21/12/2005</p>
+    <div class="card-meta">
+        Submetido em: 21/12/2005
+    </div>
 
-    <div class="card-actions">
-        <button class="btn-secondary">Ver detalhes</button>
-        <button class="btn-primary" onclick="openModal()">Avaliar Projeto</button>
+    <div class="card-footer">
+        <button class="btn-cancel">Cancelar</button>
+        <button class="btn-confirm" onclick="openModal()">Confirmar avaliação</button>
     </div>
 </div>

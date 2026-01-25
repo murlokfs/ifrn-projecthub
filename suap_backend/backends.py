@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from django.db.models import Q
 from social_core.backends.oauth import BaseOAuth2
 from authentication.models import User
 
@@ -29,88 +30,49 @@ class SuapOAuth2(BaseOAuth2):
         """Retorna o ID único do usuário (identificacao)"""
         return response.get(self.ID_KEY)
     
-    def user_details_from_response(self, response):
-        """Processa resposta do SUAP e cria/atualiza usuário"""
-        user_details = self.get_user_details(response)
-        email = user_details.get('email')
-        
-        if email:
-            try:
-                user = User.objects.get(email=email)
-                user_details['id'] = user.id
-            except User.DoesNotExist:
-                pass
-        
-        return user_details
-    
-    def get_user(self, user_id):
-        """
-        Busca usuário por ID após autenticação.
-        Pode receber email ao invés de ID.
-        """
-        if isinstance(user_id, str) and '@' in user_id:
-            # Se receber email, busca por email
-            try:
-                return User.objects.get(email=user_id)
-            except User.DoesNotExist:
-                return None
-        
-        # Caso contrário, busca por ID
-        try:
-            return User.objects.get(pk=user_id)
-        except (User.DoesNotExist, ValueError):
-            return None
-    
     def generate_username(self, details, response):
         base_username = response.get('primeiro_nome', 'user')
-        base_username = (base_username + " " + response.get('ultimo_nome', '')).strip().replace(" ", "_").lower()
+        base_username = (base_username + response.get('ultimo_nome', '')).strip().lower()
         username = base_username
         suffix = 1
         
         while User.objects.filter(username=username).exists():
-            username = f"{base_username}_{suffix}"
+            username = f"{base_username}{suffix}"
             suffix += 1
         
         return username
 
     def get_user_details(self, response):
-        """Extrai e processa detalhes do usuário"""
+        """Extrai e processa detalhes do usuário, criando/atualizando no banco"""
         tipo_dict = {
             'Aluno': 'student',
             'Docente': 'teacher',
         }
 
-        email = response.get('email', '')
-        # Verificar se usuário com este email já existe
-        existing_user = None
-        if email:
-            try:
-                existing_user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                pass
-
-        # Gerar username apenas se não existir usuário
-        if existing_user:
+        cpf_clean = response.get('cpf', '').strip().replace('.', '').replace('-', '') or None
+        try:
+            existing_user = User.objects.get(cpf=cpf_clean)
             username = existing_user.username
-        else:
+        except User.DoesNotExist:
+            existing_user = None
             username = self.generate_username({}, response)
 
         user_data = {
             'username': username,
-            'registration': response.get('identificacao', ''),
-            'email': email,
-            'email_personal': response.get('email_secundario', ''),
-            'first_name': response.get('primeiro_nome', ''),
-            'last_name': response.get('ultimo_nome', ''),
-            'full_name': response.get('nome_registro', ''),
+            'registration': response.get('identificacao', '').strip(),
+            'email': response.get('email', '').strip(),
+            'email_personal': response.get('email_secundario', '').strip() or None,
+            'first_name': response.get('primeiro_nome', '').strip(),
+            'last_name': response.get('ultimo_nome', '').strip(),
+            'full_name': response.get('nome_registro', '').strip(),
             'role': tipo_dict.get(response.get('tipo_usuario', ''), 'student'),
-            'image': (response.get('foto', None)).replace("75x100", "150x200") if response.get('foto', None) else None,
+            'image': (response.get('foto', '').replace("75x100", "150x200")) if response.get('foto') else None,
+            'cpf': response.get('cpf', '').strip().replace('.', '').replace('-', '') or None,
         }
 
-        # Se usuário existe, atualiza dados; se não, cria
         if existing_user:
             for key, value in user_data.items():
-                if key != 'email' and key != 'username':  # Não atualiza email e username
+                if key not in ('email', 'username', 'cpf'):
                     setattr(existing_user, key, value)
             existing_user.save()
             user = existing_user
@@ -126,11 +88,12 @@ class SuapOAuth2(BaseOAuth2):
                     'email_personal': user_data['email_personal'],
                     'role': user_data['role'],
                     'image': user_data['image'],
+                    'cpf': user_data['cpf'],
                 }
             )
+            if cpf_clean:
+                user.set_password(cpf_clean)
+                user.save()
 
-        # Adicionar ID e username do usuário criado/atualizado
-        user_data['username'] = user.username
         user_data['id'] = user.id
-
         return user_data
