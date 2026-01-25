@@ -4,132 +4,132 @@
 {% block title %}Perfil{% endblock title %}
 
 {% block imports %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/new_feed.css' %}"> 
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 {% endblock imports %}
 
-{% block header %}{% comment %}Sem cabeçalho nesta página{% endcomment %}{% endblock header %}
+{% block header %}{% endblock header %}
 
 {% block content %}
 
-{% url 'project_details' as project_details_url %}
+{% with is_owner=True user_name="Nathan Maniçoba" user_handle="@nathan" total_projetos=12 %}
 
 <div class="perfil-container">
     
-        <header class="profile-header">
-            <div class="main-info">
-                <img src="{% static 'img/profile/avatar.jpg' %}" alt="Profile picture"
-                    class="profile-photo">
-                <div class="profile-texts">
-                    <h1 class="user-name">Nathan Manicoba</h1>
-                    <p class="username">@nathan</p>
-                    <p class="profile-bio">Desenvolvedor full-stack e designer de UI/UX apaixonado por criar experiências belas e funcionais. Construindo o futuro um pixel de cada vez.</p>
-                    <div class="social-links">
-                        <div class="social-item location-item">
-                            <span class="icon-stat"><i class="ph ph-map-pin-simple-area" aria-hidden="true"></i></span>
-                            <span class="location">Pau dos Ferros, RN</span>
-                        </div>
-
-                        <div class="social-item github-item">
-                            <span class="icon-stat"><i class="ph ph-github-logo" aria-hidden="true"></i></span>
-                            <a href="#" class="github-link">nathan1227.github</a>
-                        </div>
-
-                        <div class="social-item enrollment-item">
-                            <span class="icon-stat"><i class="ph ph-graduation-cap" aria-hidden="true"></i></span>
-                            <span class="enrollment">2024109404093</span>
-                        </div>
+    <header class="profile-header">
+        <div class="main-info">
+            <img src="{% static 'img/profile/avatar.jpg' %}" alt="Profile picture" class="profile-photo">
+            
+            <div class="profile-texts">
+                <h1 class="user-name">{{ user_name }}</h1>
+                <p class="username">{{ user_handle }}</p>
+                <p class="profile-bio">Desenvolvedor full-stack e designer de UI/UX apaixonado por criar experiências belas e funcionais.</p>
+                
+                <div class="social-links">
+                    <div class="social-item location-item">
+                        <span class="icon-stat"><i class="ph ph-map-pin-simple-area"></i></span>
+                        <span class="location">Pau dos Ferros, RN</span>
                     </div>
+
+                    <div class="social-item github-item">
+                        <span class="icon-stat"><i class="ph ph-github-logo"></i></span>
+                        <a href="#" class="github-link">nathan1227.github</a>
+                    </div>
+
+                    {% if is_owner %}
+                    <div class="social-item enrollment-item">
+                        <span class="icon-stat"><i class="ph ph-graduation-cap"></i></span>
+                        <span class="enrollment">2024109404093</span>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
-            <button class="edit-button">Edit profile</button>
-        </header>
-    
+        </div>
+
+        <div class="profile-actions">
+            {% if is_owner %}
+                <button class="edit-button">
+                    <i class="ph ph-pencil-simple"></i> <a href="url {%%}"></a>
+                </button>
+            {% else %}
+                <div style="display: flex; gap: 10px;">
+                    <button class="edit-button" style="background-color: var(--primary); color: white; border: none;">
+                        <i class="ph ph-user-plus"></i> Seguir
+                    </button>
+                    <button class="edit-button" style="background-color: transparent; border: 1px solid var(--primary); color: var(--primary);">
+                        <i class="ph ph-chat-circle"></i> Mensagem
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </header>
 
     <section class="statistics">
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-folder-open icon-green"></i></span>
-                <span class="number">12</span>
-                <span class="stat-description">Total de projetos</span>
-            </div>
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-eye icon-blue"></i></span>
-                <span class="number">8</span>
-                <span class="stat-description">Público</span>
-            </div>
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-lock icon-red"></i></span>
-                <span class="number">4</span>
-                <span class="stat-description">Privado</span>
-            </div>
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-users icon-black"></i></span>
-                <span class="number">125</span>
-                <span class="stat-description">Seguidores</span>
-            </div>
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-chat-circle icon-blue"></i></span>
-                <span class="number">86</span>
-                <span class="stat-description">Comentários</span>
-            </div>
-            <div class="stat-card">
-                <span class="icon-stat"><i class="ph ph-heart icon-red"></i></span>
-                <span class="number">236</span>
-                <span class="stat-description">Total de likes</span>
-            </div>
-        </section>
-    
-    
+        <div class="stat-card">
+            <span class="icon-stat"><i class="ph ph-folder-open icon-green"></i></span>
+            <span class="number">{{ total_projetos }}</span>
+            <span class="stat-description">Total de projetos</span>
+        </div>
+        <div class="stat-card">
+            <span class="icon-stat"><i class="ph ph-eye icon-blue"></i></span>
+            <span class="number">8</span>
+            <span class="stat-description">Público</span>
+        </div>
+        
+        {% if is_owner %}
+        <div class="stat-card">
+            <span class="icon-stat"><i class="ph ph-lock icon-red"></i></span>
+            <span class="number">4</span>
+            <span class="stat-description">Privado</span>
+        </div>
+        {% endif %}
+
+        <div class="stat-card">
+            <span class="icon-stat"><i class="ph ph-users icon-black"></i></span>
+            <span class="number">125</span>
+            <span class="stat-description">Seguidores</span>
+        </div>
+        <div class="stat-card">
+            <span class="icon-stat"><i class="ph ph-heart icon-red"></i></span>
+            <span class="number">236</span>
+            <span class="stat-description">Total de likes</span>
+        </div>
+    </section>
+
     <section class="published-projects">
-            <div class="projects-header">
-                <div class="title-group">
-                    <h2>Projetos publicados</h2>
-                    <p class="subtitle">Seus projetos cadastrados</p>
-                </div>
-
-                <div class="filters">
-                    <select class="selector">
-                        <option>Todos</option>
-                    </select>
-                    <select class="selector">
-                        <option>Mais recente</option>
-                    </select>
-                </div>
+        <div class="projects-header">
+            <div class="title-group">
+                <h2>Projetos publicados</h2>
+                <p class="subtitle">
+                    {% if is_owner %}
+                        Seus projetos cadastrados
+                    {% else %}
+                        Projetos de {{ user_name }}
+                    {% endif %}
+                </p>
             </div>
 
-            <div class="search-bar">
-                <i class="ph ph-magnifying-glass search-icon"></i>
-                <input type="text" placeholder="Search projects by title, description, or tags...">
+            <div class="filters">
+                <select class="selector"><option>Todos</option></select>
+                <select class="selector"><option>Mais recente</option></select>
             </div>
+        </div>
 
-            <div class="project-card">
-                <div class="project-info">
-                    <h3>Sistema de Gestão Acadêmica</h3>
-                    <p>Sistema completo para gerenciar atividades acadêmicas, notas e frequência dos alunos.</p>
-                    {% include 'components/cards/project_parts/tag.html' %}
-                    <div class="metadata">
-                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
-                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
-                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
-                    </div>
-                </div>
-                {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
-            </div>
+        <div class="search-bar">
+            <i class="ph ph-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="Search projects by title, description, or tags...">
+        </div>
 
-            <div class="project-card">
-                <div class="project-info">
-                    <h3>Sistema de Gestão Acadêmica</h3>
-                    <p>Sistema completo para gerenciar atividades acadêmicas, notas e frequência dos alunos.</p>
-                    {% include 'components/cards/project_parts/tag.html' %}
-                    <div class="metadata">
-                        <span class="likes-meta"><i class="ph ph-heart"></i>25</span>
-                        <span class="comments-meta"><i class="ph ph-chat-circle"></i>52</span>
-                        <span class="date-meta"><i class="ph ph-graduation-cap"></i>10/04/2025</span>
-                    </div>
-                </div>
-                {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
-            </div>
-        </section>
+        <div class="feed-list" style="margin-top: 20px;">
+            
+            {% include 'components/cards/feed/project_card.html' %} 
+            
+            {% include 'components/cards/feed/project_card.html' %}
+
+        </div>
+    </section>
 
 </div>
-{% endblock content %}
+
+{% endwith %} {% endblock content %}
