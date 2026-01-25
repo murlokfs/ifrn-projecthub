@@ -1,3 +1,4 @@
+{% load static %}
 <header class="header">
     <div class="header-content">
         <button class="menu-toggle" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" type="button">
@@ -5,20 +6,21 @@
         </button>
         {% comment %}Título dinâmico baseado em active_page passado pelo context{% endcomment %}
         {% if page_title %}
-            <h1>{{ page_title }}</h1>
+        <h1>{{ page_title }}</h1>
         {% else %}
-            {% if active_page == 'feed' %}
-                <h1>Feed</h1>
-            {% elif active_page == 'my_projects' %}
-                <h1>Projetos</h1>
-            {% else %}
-                <h1>ProjectHub</h1>
-            {% endif %}
+        {% if active_page == 'feed' %}
+        <h1>Feed</h1>
+        {% elif active_page == 'my_projects' %}
+        <h1>Projetos</h1>
+        {% else %}
+        <h1>ProjectHub</h1>
         {% endif %}
-        <div id="search_container">
+        {% endif %}
+        <form method="get" action="{% url 'index' %}" id="search_container">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="search_input" placeholder="Busque por projetos, perfis ou tags...">
-        </div>
+            <input type="text" name="q" placeholder="Busque por projetos, perfis ou tags..."
+                value="{{ request.GET.q }}">
+        </form>
 
         {% include 'components/buttons/create_project.html' %}
     </div>

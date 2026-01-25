@@ -4,8 +4,8 @@
 {% block title %}Feed - Project Hub{% endblock title %}
 
 {% block imports %}
-<link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
-<link rel="stylesheet" href="{% static 'css/new_feed.css' %}">
+    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
+    <link rel="stylesheet" href="{% static 'css/new_feed.css' %}">
 {% endblock imports %}
 
 {% block content %}
@@ -16,7 +16,7 @@
         <div class="feed-header-section">
             <div class="tabs-row">
                 <button class="tab-btn active">Para você</button>
-                <button class="tab-btn">Seguindo</button>
+                <button class="tab-btn">Meu Campus</button>
                 <button class="tab-btn">Em alta</button>
             </div>
 
@@ -30,36 +30,78 @@
                 </div>
             </div>
 
-            <div id="filterPanel" class="filter-expanded-panel" style="display: none;">
-                <div class="filter-grid">
+            <div id="filterPanel" class="filter-expanded-panel" 
+                 {% if filters.type or filters.tag or filters.status %} style="display:block" {% else %} style="display:none" {% endif %}>
+                
+                <form method="get">
+                    {# mantém a busca do header #}
+                    {% if search_query %}
+                        <input type="hidden" name="search" value="{{ search_query }}">
+                    {% endif %}
 
-                    <div class="filter-input-group">
-                        <label>Tipo de Projeto</label>
-                        <div class="select-wrapper">
-                            <select class="custom-select">
-                                <option>Todos os tipos</option>
-                                <option>Projeto Integrador</option>
-                                <option>TCC</option>
-                                <option>Projeto De Pesquisa</option>
-                            </select>
-                            <i class="ph ph-caret-down select-icon"></i>
+                    <div class="filter-grid">
+
+                        <div class="filter-input-group">
+                            <label>Tipo de Projeto</label>
+                            <div class="select-wrapper">
+                                <select name="type" class="custom-select">
+                                    <option value="all">Todos os tipos</option>
+                                    <option value="research" {% if filters.type == "research" %}selected{% endif %}>
+                                        Pesquisa e Desenvolvimento
+                                    </option>
+                                    <option value="integrator" {% if filters.type == "integrator" %}selected{% endif %}>
+                                        Projeto Integrador
+                                    </option>
+                                    <option value="thesis" {% if filters.type == "thesis" %}selected{% endif %}>
+                                        TCC
+                                    </option>
+                                </select>
+                                <i class="ph ph-caret-down select-icon"></i>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="filter-input-group">
-                        <label>Tag</label>
-                        <div class="select-wrapper">
-                            <select class="custom-select">
-                                <option>Todas as tags</option>
-                                <option>Python</option>
-                                <option>Java</option>
-                                <option>React</option>
-                            </select>
-                            <i class="ph ph-caret-down select-icon"></i>
+                        <div class="filter-input-group">
+                            <label>Tag</label>
+                            <div class="select-wrapper">
+                                <select name="tag" class="custom-select">
+                                    <option value="all">Todas as tags</option>
+                                    {% for tag in tags %}
+                                        <option value="{{ tag.id }}" {% if filters.tag == tag.id|stringformat:"s" %}selected{% endif %}>
+                                            {{ tag.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <i class="ph ph-caret-down select-icon"></i>
+                            </div>
                         </div>
-                    </div>
 
-                </div>
+                        <div class="filter-input-group">
+                            <label>Status</label>
+                            <div class="select-wrapper">
+                                <select name="status" class="custom-select">
+                                    <option value="all">Todos</option>
+                                    <option value="pending_approval" {% if filters.status == "pending_approval" %}selected{% endif %}>
+                                        Pendente
+                                    </option>
+                                    <option value="in_progress" {% if filters.status == "in_progress" %}selected{% endif %}>
+                                        Em andamento
+                                    </option>
+                                    <option value="completed" {% if filters.status == "completed" %}selected{% endif %}>
+                                        Concluído
+                                    </option>
+                                </select>
+                                <i class="ph ph-caret-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="filter-input-group filter-actions">
+                            <button type="submit" class="btn-apply-filters">
+                                Aplicar filtros
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
             </div>
 
             <script>
@@ -69,12 +111,10 @@
 
                     if (panel.style.display === 'none' || panel.style.display === '') {
                         panel.style.display = 'block';
-                        // Opcional: Adiciona estilo ativo ao botão
                         btn.style.borderColor = 'var(--primary)';
                         btn.style.color = 'var(--primary)';
                     } else {
                         panel.style.display = 'none';
-                        // Remove estilo ativo
                         btn.style.borderColor = '';
                         btn.style.color = '';
                     }
@@ -82,73 +122,129 @@
             </script>
         </div>
 
+        {% if search_query %}
+            <p class="search-info">
+                Resultados para: <strong>"{{ search_query }}"</strong>
+            </p>
+        {% endif %}
+
         <div class="feed-list">
-            {% for projeto in contador_list %}
-            <article class="feed-card">
+            {% for projeto in projects %}
+                <article class="feed-card">
 
-                <div class="card-image-box">
-                    {% if projeto.imagem %}
-                    <img src="{{ projeto.imagem.url }}" alt="Capa">
-                    {% else %}
-                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
-                        alt="Placeholder Tech">
-                    {% endif %}
-
-                    <div class="card-badges-container">
-
-                        <span class="floating-tag">Projeto Integrador</span>
-                        <span class="status-badge outline-yellow">Pendente de aprovação</span>
-                        <span class="status-badge outline-blue">Em Desenvolvimento</span>
-
-                    </div>
-                </div>
-
-                <div class="card-content">
-                    <div class="author-row">
-                        <div class="avatar-mini">AC</div>
-                        <div class="author-info">
-                            <strong>Ayrton Cavalcante</strong>
-                            <span><i class="ph ph-calendar-blank"></i> 24 de set. de 2025</span>
+                    <div class="card-image-box">
+                        {% if projeto.imagem %}
+                            <img src="{{ projeto.imagem.url }}" alt="Capa">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop">
+                        {% endif %}
+                        
+                        <div class="card-badges-container">
+                            <span class="floating-tag">{{ projeto.get_type_display }}</span>
+                            <span class="status-badge 
+                                {% if projeto.status == 'pending_approval' %}
+                                    outline-yellow
+                                {% elif projeto.status == 'in_progress' %}
+                                    outline-blue
+                                {% elif projeto.status == 'completed' %}
+                                    outline-green
+                                {% endif %}
+                                ">
+                                {{ projeto.get_status_display }}
+                        </span>
                         </div>
                     </div>
 
-                    <h2 class="project-title">ProjectHub - Plataforma de Portfólio</h2>
-                    <p class="project-desc">
-                        O projeto é uma plataforma digital inspirada na Steam, mas voltada para armazenar, organizar e
-                        compartilhar projetos acadêmicos.
-                    </p>
-
-                    <div class="tags-row">
-                        <span class="tech-tag">ADS</span>
-                        <span class="tech-tag">Django</span>
-                        <span class="tech-tag">IA</span>
-                    </div>
-
-                    <div class="card-footer">
-                        <div class="members-info">
-                            <i class="ph ph-users"></i> 2 membros
-                        </div>
-
-                        <div class="actions-right">
-                            <div class="stats-icons">
-                                {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    <div class="card-content">
+                        <div class="author-row">
+                            <div class="avatar-mini">
+                                {{ projeto.members.first.full_name|default:"?"|slice:":2"|upper }}
                             </div>
-                            <a href="{{ project_details_url }}" class="btn-details">
-                                Ver Detalhes <i class="ph ph-arrow-up-right"></i>
-                            </a>
+                            <div class="author-info">
+                                <strong>{{ projeto.members.first.full_name|default:"Autor não informado" }}</strong>
+                                <span>
+                                    <i class="ph ph-calendar-blank"></i> {{ projeto.created_at|date:"d/m/Y" }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <h2 class="project-title">{{ projeto.title }}</h2>
+                        <p class="project-desc">
+                            {{ projeto.description|truncatechars:180 }}
+                        </p>
+
+                        <div class="tags-row">
+                            {% for tag in projeto.tags.all %}
+                                <span class="tech-tag">{{ tag.name }}</span>
+                            {% empty %}
+                                <span class="tech-tag muted">Sem tags</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="members-info">
+                                <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
+                            </div>
+
+                            <div class="actions-right">
+                                <div class="stats-icons">
+                                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                                </div>
+                                <a href="{% url 'index' %}?id={{projeto.id}}" class="btn-details">
+                                    Ver Detalhes <i class="ph ph-arrow-up-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </article>
+                </article>
+            {% empty %}
+                <p>Nenhum projeto encontrado.</p>
             {% endfor %}
         </div>
+
+        {% if is_paginated %}
+            <div class="pagination-container">
+
+            <!-- ANTERIOR -->
+        {% if page_obj.has_previous %}
+            <a class="pagination-arrow"
+                href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                ‹
+            </a>
+        {% endif %}
+
+            <!-- NÚMEROS -->
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <span class="pagination-number active">
+                    {{ num }}
+                </span>
+            {% else %}
+                <a class="pagination-number"
+                    href="?page={{ num }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                    {{ num }}
+                </a>
+            {% endif %}
+        {% endfor %}
+
+            <!-- PRÓXIMA -->
+        {% if page_obj.has_next %}
+            <a class="pagination-arrow"
+                href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
+                ›
+            </a>
+        {% endif %}
+
+        </div>
+    {% endif %}
+
     </main>
 
     <aside class="feed-sidebar">
 
         <div class="sidebar-widget widget-create">
             <div class="widget-create-header">
-                <i class="ph ph-plus-circle" style="font-size: 20px;"></i>
+                <i class="ph ph-plus-circle"></i>
                 <h3>Criar Projeto</h3>
             </div>
             <p>Compartilhe seu trabalho acadêmico e receba feedback da comunidade.</p>
@@ -160,62 +256,9 @@
                 <i class="ph ph-trend-up"></i> Tags em Alta
             </div>
             <div class="cloud-tags">
-                <span class="cloud-tag"># Python</span>
-                <span class="cloud-tag"># React</span>
-                <span class="cloud-tag"># Node.js</span>
-                <span class="cloud-tag"># PostgreSQL</span>
-                <span class="cloud-tag"># ADS</span>
-                <span class="cloud-tag"># Django</span>
-                <span class="cloud-tag"># IA</span>
-                <span class="cloud-tag"># TensorFlow</span>
-            </div>
-        </div>
-
-        <div class="sidebar-widget">
-            <div class="widget-title">
-                <i class="ph ph-trophy"></i> Top Contribuidores
-            </div>
-            <div class="contributors-list">
-                <div class="contributor-row">
-                    <span class="rank-circle rank-1">1</span>
-                    <div class="avatar-mini">AC</div>
-                    <div class="contrib-data">
-                        <strong>Ayrton Cavalcante</strong>
-                        <span>12 projetos</span>
-                    </div>
-                </div>
-                <div class="contributor-row">
-                    <span class="rank-circle rank-2">2</span>
-                    <div class="avatar-mini">CM</div>
-                    <div class="contrib-data">
-                        <strong>Carolina Martins</strong>
-                        <span>9 projetos</span>
-                    </div>
-                </div>
-                <div class="contributor-row">
-                    <span class="rank-circle rank-3">3</span>
-                    <div class="avatar-mini">RC</div>
-                    <div class="contrib-data">
-                        <strong>Roberto Costa</strong>
-                        <span>7 projetos</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="sidebar-widget">
-            <div class="widget-title">
-                <i class="ph ph-chart-bar"></i> Estatísticas da Comunidade
-            </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <span class="stat-number">248</span>
-                    <span class="stat-label">Projetos</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">1.2K</span>
-                    <span class="stat-label">Membros</span>
-                </div>
+                {% for tag in tags %}
+                    <span class="cloud-tag"># {{ tag.name }}</span>
+                {% endfor %}
             </div>
         </div>
 
