@@ -1,20 +1,108 @@
+from django.http import JsonResponse
+from django.views import View
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView,ListView,DetailView
+from django.db.models import Q
+from .models import Project, Tag
+
+class SearchView(View):
+    def get(self, request):
+        query = request.GET.get('q', '').strip()
+
+        if not query:
+            return JsonResponse([], safe=False)
+
+        projects = Project.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(tags__name__icontains=query) |
+            Q(members__full_name__icontains=query) |
+            Q(members__username__icontains=query)
+        ).distinct()
+
+        data = [
+            {
+                "id": project.id,
+                "title": project.title,
+                "author": (
+                    project.members.first().full_name
+                    if project.members.exists()
+                    else "Autor desconhecido"
+                )
+            }
+            for project in projects
+        ]
+
+        return JsonResponse(data, safe=False)
+class FeedView(ListView):
+    model = Project
+    template_name = 'project/feed.html'
+    context_object_name = 'projects'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = Project.objects.filter(
+            is_private=False
+        ).select_related(
+            'course'
+        ).prefetch_related(
+            'tags', 'members'
+        )
+
+        # 🔍 BUSCA GLOBAL (HEADER)
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(tags__name__icontains=query) |
+                Q(members__full_name__icontains=query) |
+                Q(members__username__icontains=query)
+            )
+
+        # 📂 FILTRO POR TIPO
+        project_type = self.request.GET.get('type')
+        if project_type and project_type != 'all':
+            queryset = queryset.filter(type=project_type)
+
+        # 🚦 FILTRO POR STATUS
+        status = self.request.GET.get('status')
+        if status and status != 'all':
+            queryset = queryset.filter(status=status)
+
+        # 🏷️ FILTRO POR TAG
+        tag_id = self.request.GET.get('tag')
+        if tag_id and tag_id != 'all':
+            queryset = queryset.filter(tags__id=tag_id)
+
+        return queryset.distinct().order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['tags'] = Tag.objects.all()
+        context['filters'] = self.request.GET
+        context['search_query'] = self.request.GET.get('q', '')
+        context['active_page'] = 'feed'
+
+        return context
+
+    def status_css_class(self):
+        return {
+        'pending_approval': 'outline-yellow',
+        'in_progress': 'outline-blue',
+        'completed': 'outline-green',
+    }.get(self.status, '')
 
 
-def feed(request):
-    num_iterations = 6
-    contador_list = range(num_iterations)
-    show_status = False
 
-    context = {
-        "contador": num_iterations,
-        "contador_list": contador_list,
-        "show_status": show_status,
-        "active_page": "feed",
-    }
 
-    return render(request, 'project/feed.html', context)
+
+
+
+
+
+
 
 def my_projects(request):
 
@@ -31,8 +119,10 @@ def my_projects(request):
     }
     return render(request, "project/my_projects.html", context)
 
-class DetalhesProjetosView(TemplateView):
+class DetalhesProjetosView(DetailView):
+    model = Project
     template_name = 'project/project_details.html'
+    context_object_name = 'project'
 
 class ComentariosAlunosView(TemplateView):
     template_name = 'project/student_comments.html'
