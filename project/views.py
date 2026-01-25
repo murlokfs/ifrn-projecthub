@@ -1,6 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from project.models import Project, ApprovalSolicitation, Tag
+from project.forms import ProjectForm
+from django.urls import reverse_lazy
+from django.http import JsonResponse
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+import re
 
+User = get_user_model()
 
 def feed(request):
     num_iterations = 6
@@ -37,9 +45,72 @@ class DetalhesProjetosView(TemplateView):
 class ComentariosAlunosView(TemplateView):
     template_name = 'project/student_comments.html'
     
-class CadastroProjetoView(TemplateView):
+class CadastroProjetoView(CreateView):
+    model = Project
+    form_class = ProjectForm
     template_name = 'project/create_project.html'
+    success_url = reverse_lazy('index')
 
+    def form_valid(self, form):
+        # Lógica para converter link do YouTube antes de salvar
+        url = form.cleaned_data.get('link_youtube')
+        if url:
+            # Expressão regular para capturar o ID do vídeo
+            reg = r'^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:\S+)?$'
+            match = re.search(reg, url)
+            if match:
+                video_id = match.group(1)
+                # Salva no formato embed para evitar Erro 153 futuramente
+                form.instance.link_youtube = f'https://www.youtube.com/embed/{video_id}'
+
+        response = super().form_valid(form)
+
+        # Cria solicitação de aprovação
+        ApprovalSolicitation.objects.create(
+            project=self.object,
+            user=self.request.user, # Corrigido para pegar o usuário da sessão
+        )
+
+        return response
+
+def search_entities(request):
+    """FBC para alimentar os popups de busca"""
+    query = request.GET.get('q', '')
+    entity_type = request.GET.get('type', '')
+
+    if not query or len(query) < 2:
+        return JsonResponse([], safe=False)
+
+    if entity_type == 'tag':
+        # Busca tags por nome
+        results = Tag.objects.filter(name__icontains=query)[:15]
+        data = [{'id': t.id, 'name': t.name} for t in results]
+    
+    else:
+        # Busca usuários ativos filtrando por Nome Completo ou Matrícula
+        users = User.objects.filter(
+            Q(full_name__icontains=query) | Q(registration__icontains=query),
+            is_active=True
+        )
+
+        # Filtro refinado por papel (role)
+        if entity_type == 'professor':
+            # Apenas 'teacher' (Docente) para orientadores
+            users = users.filter(role='teacher') 
+        elif entity_type == 'member':
+            # 'student' (Discente) ou 'alumni' (Egresso) para integrantes
+            users = users.filter(role__in=['student', 'alumni'])
+
+        data = [
+            {
+                'id': u.id, 
+                'name': u.full_name, # Usando o campo full_name do model
+                'info': f"{u.get_role_display()} • {u.course.name if u.course else 'IFPE'}",
+                'avatar_letter': u.full_name[0].upper() if u.full_name else '?'
+            } for u in users[:10]
+        ]
+
+    return JsonResponse(data, safe=False)
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/teacher_comments.html'
     

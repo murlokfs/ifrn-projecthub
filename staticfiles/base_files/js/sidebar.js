@@ -1,0 +1,69 @@
+document.addEventListener('DOMContentLoaded', () => {
+	const sidebar = document.getElementById('sidebar');
+	const openBtn = document.getElementById('open_btn');
+	const menuToggle = document.querySelector('.menu-toggle');
+	const themeToggle = document.getElementById('themeToggle');
+	const body = document.body;
+	const moonIcon = document.getElementById('moonIcon');
+	const sunIcon = document.getElementById('sunIcon');
+
+	if (openBtn) {
+		openBtn.addEventListener('click', () => { sidebar.classList.toggle('open-sidebar'); });
+	}
+
+	if (menuToggle && sidebar) {
+		menuToggle.addEventListener('click', () => {
+			const opened = sidebar.classList.toggle('mobile-open');
+			body.classList.toggle('no-scroll', opened);
+			if (opened) {
+				sidebar.classList.add('open-sidebar');
+				setTimeout(() => sidebar.focus(), 0);
+			}
+			menuToggle.setAttribute('aria-expanded', opened ? 'true' : 'false');
+		});
+
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+				sidebar.classList.remove('mobile-open');
+				body.classList.remove('no-scroll');
+				menuToggle.setAttribute('aria-expanded', 'false');
+				menuToggle.focus();
+			}
+		});
+
+		document.addEventListener('click', (e) => {
+			if (sidebar.classList.contains('mobile-open')) {
+				const clickInsideSidebar = sidebar.contains(e.target);
+				const clickOnToggle = menuToggle.contains(e.target);
+				if (!clickInsideSidebar && !clickOnToggle) {
+					sidebar.classList.remove('mobile-open');
+					body.classList.remove('no-scroll');
+					menuToggle.setAttribute('aria-expanded', 'false');
+					menuToggle.focus();
+				}
+			}
+		});
+	}
+
+	window.addEventListener('resize', () => {
+		if (window.innerWidth > 695 && sidebar.classList.contains('mobile-open')) {
+			sidebar.classList.remove('mobile-open');
+			body.classList.remove('no-scroll');
+		}
+	});
+
+	themeToggle?.addEventListener('click', () => {
+		body.classList.toggle('dark-mode');
+		themeToggle.classList.add('active');
+		moonIcon?.classList.toggle('active');
+		moonIcon?.classList.toggle('inactive');
+		sunIcon?.classList.toggle('active');
+		sunIcon?.classList.toggle('inactive');
+		const pressed = body.classList.contains('dark-mode');
+		themeToggle.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+		try { localStorage.setItem('theme', pressed ? 'dark' : 'light'); } catch (e) { console.warn('Falha ao salvar tema', e); }
+		setTimeout(() => themeToggle.classList.remove('active'), 600);
+	});
+
+	initializeTheme();
+});

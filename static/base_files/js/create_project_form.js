@@ -1,33 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const inputNome = document.getElementById('inputNome');
-    const inputProfessor = document.getElementById('inputProfessor');
-    const inputMember = document.getElementById('inputMember');
-    const btnAddMember = document.getElementById('btnAddMember');
-    const membersListContainer = document.getElementById('membersList');
-    const inputTag = document.getElementById('inputTag');
-    const tagsListContainer = document.getElementById('tagsList');
-    const inputGithub = document.getElementById('inputGithub');
-    const inputYoutube = document.getElementById('inputYoutube');
-    const uploadAreaBtn = document.getElementById('uploadAreaBtn');
+    // --- Elementos de UI ---
+    const inputNome = document.getElementsByName('title')[0];
+    const inputGithub = document.getElementsByName('link_github')[0];
+    const inputYoutube = document.querySelector('input[name="link_youtube"]');
+    const publishBtn = document.querySelector('.publish_btn.green');
+    const projectForm = document.querySelector('form');
+    
+    // --- Elementos de Preview (Cards) ---
     const cardTitle = document.getElementById('cardTitle');
     const cardAvatar = document.getElementById('cardAvatar');
-    const cardDate = document.getElementById('cardDate');
-    const metaProfessor = document.getElementById('metaProfessor');
-    const textProfessor = document.getElementById('textProfessor');
     const cardMemberCount = document.getElementById('cardMemberCount');
-    const cardTagsList = document.getElementById('cardTagsList');
-    const metaDocs = document.getElementById('metaDocs');
-    const textDocs = document.getElementById('textDocs');
     const cardGithub = document.getElementById('cardGithub');
     const cardYoutube = document.getElementById('cardYoutube');
-    const cardDesc = document.getElementById('cardDesc');
-    const inputDescricaoHidden = document.getElementById('inputDescricaoHidden');
 
-    let members = [];
-    let tags = [];
+    // --- Elementos do Player YouTube ---
+    const videoContainer = document.getElementById('video-preview-container');
+    const iframe = document.getElementById('youtube-player');
 
-    if(cardDate) cardDate.innerText = new Date().toLocaleDateString('pt-BR');
+    let currentType = '';
 
+    // 1. Submissão pelo Botão do Header
+    if (publishBtn && projectForm) {
+        publishBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (projectForm.reportValidity()) projectForm.submit();
+        });
+    }
+
+    // 2. Sincronização de Inputs e Preview do Card
     if (inputNome) {
         inputNome.addEventListener('input', (e) => {
             const val = e.target.value.trim();
@@ -36,108 +36,189 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    if (inputProfessor) {
-        inputProfessor.addEventListener('input', (e) => {
-            const val = e.target.value.trim();
-            if (metaProfessor && textProfessor) {
-                if(val) { metaProfessor.style.display = 'flex'; textProfessor.innerText = val; }
-                else { metaProfessor.style.display = 'none'; }
-            }
-        });
-    }
-
-    function renderMembers() {
-        if (!membersListContainer || !cardMemberCount) return;
-        membersListContainer.innerHTML = '';
-        members.forEach((member, index) => {
-            const chip = document.createElement('div');
-            chip.className = 'chip-item';
-            chip.innerHTML = `${member} <span class="btn-remove-chip" onclick="removeMember(${index})">×</span>`;
-            membersListContainer.appendChild(chip);
-        });
-        const count = members.length;
-        cardMemberCount.innerText = count === 0 ? "Integrantes: 0" : count === 1 ? "1 Integrante" : `${count} Integrantes`;
-    }
-
-    function addMember() {
-        if (!inputMember) return;
-        const name = inputMember.value.trim();
-        if(name) { members.push(name); inputMember.value = ''; renderMembers(); }
-    }
-
-    if (btnAddMember) { btnAddMember.addEventListener('click', (e) => { e.preventDefault(); addMember(); }); }
-    if (inputMember) { inputMember.addEventListener('keypress', (e) => { if(e.key === 'Enter') { e.preventDefault(); addMember(); } }); }
-    window.removeMember = function(index) { members.splice(index, 1); renderMembers(); }
-
-    function renderTags() {
-        if (!tagsListContainer || !cardTagsList) return;
-        tagsListContainer.innerHTML = '';
-        tags.forEach((tag, index) => {
-            const chip = document.createElement('div');
-            chip.className = 'chip-item';
-            chip.innerHTML = `${tag} <span class="btn-remove-chip" onclick="removeTag(${index})">×</span>`;
-            tagsListContainer.appendChild(chip);
-        });
-        cardTagsList.innerHTML = '';
-        tags.forEach(tag => {
-            const span = document.createElement('span');
-            span.className = 'card-tag';
-            span.innerText = tag;
-            cardTagsList.appendChild(span);
-        });
-    }
-
-    function addTag(text) {
-        if (!inputTag) return;
-        const cleanTag = text.replace('+', '').trim();
-        if(cleanTag && !tags.includes(cleanTag)) { tags.push(cleanTag); renderTags(); }
-        inputTag.value = '';
-    }
-
-    if (inputTag) { inputTag.addEventListener('keydown', (e) => { if(e.key === 'Enter') { e.preventDefault(); addTag(inputTag.value); } }); }
-
-    const sugestoes = document.querySelectorAll('.tag-badge');
-    sugestoes.forEach(badge => { badge.addEventListener('click', function() { addTag(this.innerText); }); });
-    window.removeTag = function(index) { tags.splice(index, 1); renderTags(); }
-
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.multiple = true;
-    fileInput.style.display = 'none';
-    document.body.appendChild(fileInput);
-    if (uploadAreaBtn) { uploadAreaBtn.addEventListener('click', (e) => { e.preventDefault(); fileInput.click(); }); }
-    fileInput.addEventListener('change', function() {
-        const count = this.files.length;
-        if (metaDocs && textDocs) {
-            if(count > 0) { metaDocs.style.display = 'flex'; textDocs.innerText = `${count} Documento(s)`; }
-            else { metaDocs.style.display = 'none'; }
-        }
-    });
-
     if (inputGithub) {
         inputGithub.addEventListener('input', (e) => {
             const url = e.target.value.trim();
-            if (cardGithub) { cardGithub.style.display = url.length > 0 ? 'flex' : 'none'; if (url.length > 0) cardGithub.href = url; }
-        });
-    }
-
-    if (inputYoutube) {
-        inputYoutube.addEventListener('input', (e) => {
-            const url = e.target.value.trim();
-            if (cardYoutube) { cardYoutube.style.display = url.length > 0 ? 'flex' : 'none'; if (url.length > 0) cardYoutube.href = url; }
-        });
-    }
-
-    const editorElement = document.getElementById('editor-container');
-    if (editorElement) {
-        var toolbarOptions = [ ['bold', 'italic', 'underline', 'strike'], ['blockquote', 'code-block'], [{ 'list': 'ordered'}] ];
-        var quill = new Quill('#editor-container', { modules: { toolbar: toolbarOptions }, theme: 'snow', placeholder: 'Escreva a descrição detalhada do projeto...' });
-        quill.on('text-change', function() {
-            if (inputDescricaoHidden) inputDescricaoHidden.value = quill.root.innerHTML;
-            if (cardDesc) {
-                var textoPuro = quill.getText().trim();
-                cardDesc.innerText = textoPuro.length > 0 ? textoPuro.substring(0, 150) + (textoPuro.length > 150 ? "..." : "") : "Nenhuma descrição adicionada ainda...";
+            if (cardGithub) {
+                cardGithub.style.display = url.length > 0 ? 'flex' : 'none';
+                if (url.length > 0) cardGithub.href = url;
             }
         });
     }
+
+    // 3. Lógica do Player de Vídeo (Fim do Erro 153)
+    function updateYoutubePlayer(url) {
+        if (!url || url.trim() === "") {
+            if (videoContainer) videoContainer.style.display = 'none';
+            if (iframe) iframe.src = "";
+            if (cardYoutube) cardYoutube.style.display = 'none';
+            return;
+        }
+
+        let videoId = "";
+        try {
+            if (url.includes("watch?v=")) {
+                const urlParams = new URLSearchParams(new URL(url).search);
+                videoId = urlParams.get('v');
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1]?.split(/[?#]/)[0];
+            } else if (url.includes("embed/")) {
+                videoId = url.split("embed/")[1]?.split(/[?#]/)[0];
+            }
+
+            if (videoId && videoId.length === 11) {
+                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                if (iframe && iframe.src !== embedUrl) iframe.src = embedUrl; 
+                if (videoContainer) videoContainer.style.display = 'block';
+                if (cardYoutube) { cardYoutube.style.display = 'flex'; cardYoutube.href = url; }
+            } else {
+                throw new Error("Invalid ID");
+            }
+        } catch (err) {
+            if (videoContainer) videoContainer.style.display = 'none';
+            if (iframe) iframe.src = "";
+            if (cardYoutube) cardYoutube.style.display = 'none';
+        }
+    }
+
+    if (inputYoutube) {
+        updateYoutubePlayer(inputYoutube.value.trim());
+        inputYoutube.addEventListener('input', (e) => updateYoutubePlayer(e.target.value.trim()));
+    }
+
+    // 4. Lógica do Modal de Busca (Professores, Membros, Tags)
+    window.openModal = function(type) {
+        currentType = type;
+        const modal = document.getElementById('searchModal');
+        const title = document.getElementById('modalTitle');
+        const resultsContainer = document.getElementById('modalResults');
+        const searchInput = document.getElementById('modalSearchInput');
+
+        if (searchInput) searchInput.value = '';
+        if (resultsContainer) resultsContainer.innerHTML = '<p class="helper-text">Digite para buscar...</p>';
+        
+        const titles = {
+            'professor': 'Selecionar Professor Orientador',
+            'member': 'Convidar Integrantes',
+            'tag': 'Adicionar Tags'
+        };
+        if (title) title.innerText = titles[type];
+        if (modal) modal.style.display = 'flex';
+        if (searchInput) searchInput.focus();
+    };
+
+    window.closeModal = function() {
+        const modal = document.getElementById('searchModal');
+        if (modal) modal.style.display = 'none';
+    };
+
+    let debounceTimer;
+    window.debounceSearch = function() {
+        clearTimeout(debounceTimer);
+        const searchInput = document.getElementById('modalSearchInput');
+        if (!searchInput || searchInput.value.length < 2) return;
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                const response = await fetch(`/api/search-entities/?type=${currentType}&q=${searchInput.value}`);
+                const data = await response.json();
+                renderModalResults(data);
+            } catch (error) { console.error("Erro na busca:", error); }
+        }, 300);
+    };
+
+    // 5. Renderização e Seleção (Siglas e Cards)
+    function renderModalResults(data) {
+        const container = document.getElementById('modalResults');
+        const counter = document.getElementById('selectionCounter');
+        if (!container) return;
+
+        if (data.length === 0) {
+            container.innerHTML = '<p class="helper-text" style="text-align:center; padding:20px;">Nenhum resultado encontrado.</p>';
+            return;
+        }
+
+        const isProf = currentType === 'professor';
+        const bg = isProf ? '#E0F2FE' : '#DCFCE7';
+        const textColor = isProf ? '#0369A1' : '#15803D';
+        const selectId = currentType === 'tag' ? 'id_tags' : (currentType === 'professor' ? 'id_orientators' : 'id_members');
+        const hiddenSelect = document.getElementById(selectId);
+        
+        if (counter && hiddenSelect) counter.innerText = `${hiddenSelect.options.length} selecionado(s)`;
+
+        container.innerHTML = data.map(item => {
+            const sigla = item.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            const isSelected = hiddenSelect ? [...hiddenSelect.options].some(opt => opt.value == item.id) : false;
+
+            return `
+                <div class="user-result-card ${isSelected ? 'selected' : ''}" onclick="selectItem('${item.id}', '${item.name}')">
+                    <div class="avatar-sigla" style="background: ${bg}; color: ${textColor}">${sigla}</div>
+                    <div class="user-info-text">
+                        <strong>${item.name}</strong>
+                        <small>${item.info || 'IFPE • Campus Recife'}</small> 
+                    </div>
+                    <div class="btn-add-circle ${isSelected ? 'is-selected' : ''}">${isSelected ? '✓' : '+'}</div>
+                </div>`;
+        }).join('');
+    }
+
+    window.selectItem = function(id, name) {
+        const selectId = currentType === 'tag' ? 'id_tags' : (currentType === 'professor' ? 'id_orientators' : 'id_members');
+        const hiddenSelect = document.getElementById(selectId);
+        if (!hiddenSelect) return;
+
+        if (![...hiddenSelect.options].some(opt => opt.value == id)) {
+            hiddenSelect.add(new Option(name, id, true, true));
+            addChipToUI(currentType, id, name);
+        } else {
+            for (let i = 0; i < hiddenSelect.options.length; i++) {
+                if (hiddenSelect.options[i].value == id) { hiddenSelect.remove(i); break; }
+            }
+            const containerId = currentType === 'tag' ? 'tagsList' : (currentType === 'professor' ? 'orientatorsList' : 'membersList');
+            document.querySelectorAll(`#${containerId} .chip-item`).forEach(chip => {
+                if (chip.dataset.id == id) chip.remove();
+            });
+        }
+        updatePreviews();
+        debounceSearch(); 
+    };
+
+    function addChipToUI(type, id, name) {
+        const listId = type === 'tag' ? 'tagsList' : (type === 'professor' ? 'orientatorsList' : 'membersList');
+        const container = document.getElementById(listId);
+        if (!container) return;
+
+        const chip = document.createElement('div');
+        chip.className = 'chip-item';
+        chip.dataset.id = id;
+        chip.innerHTML = `${name} <span class="remove-chip" onclick="removeItem('${type}', '${id}', this)">×</span>`;
+        container.appendChild(chip);
+    }
+
+    window.removeItem = function(type, id, element) {
+        const selectId = type === 'tag' ? 'id_tags' : (currentType === 'professor' ? 'id_orientators' : 'id_members');
+        const hiddenSelect = document.getElementById(selectId);
+        if (hiddenSelect) {
+            for (let i = 0; i < hiddenSelect.options.length; i++) {
+                if (hiddenSelect.options[i].value == id) { hiddenSelect.remove(i); break; }
+            }
+        }
+        if (element && element.closest('.chip-item')) element.closest('.chip-item').remove();
+        updatePreviews();
+    };
+
+    function updatePreviews() {
+        const membersSelect = document.getElementById('id_members');
+        if (cardMemberCount && membersSelect) {
+            const count = membersSelect.options.length;
+            cardMemberCount.innerText = count === 0 ? "Integrantes: 0" : (count === 1 ? "1 Integrante" : `${count} Integrantes`);
+        }
+        const cardTagsList = document.getElementById('cardTagsList');
+        const tagsSelect = document.getElementById('id_tags');
+        if (cardTagsList && tagsSelect) {
+            cardTagsList.innerHTML = [...tagsSelect.options].map(opt => `<span class="card-tag">${opt.text}</span>`).join('');
+        }
+    }
 });
+
+window.confirmSelection = function() { closeModal(); };

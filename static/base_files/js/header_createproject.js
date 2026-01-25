@@ -34,3 +34,22 @@ document.addEventListener('DOMContentLoaded', () => {
   mq.addEventListener?.('change', handleResize);
   window.addEventListener('resize', handleResize);
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Seleciona o botão de publicar pelas classes definidas no componente
+    const publishBtn = document.querySelector('.publish_btn.green');
+    // Seleciona o formulário principal
+    const projectForm = document.querySelector('.form-container form');
+
+    if (publishBtn && projectForm) {
+        publishBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // Opcional: Adicione uma validação visual simples antes de enviar
+            if (projectForm.reportValidity()) {
+                console.log("Submetendo projeto via Header...");
+                projectForm.submit();
+            }
+        });
+    }
+});

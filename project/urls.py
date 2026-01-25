@@ -10,4 +10,5 @@ urlpatterns = [
     path('teacher-comments/', ComentariosProfessoresView.as_view(), name='teacher_comments'),
     path('', views.feed, name='index'),
     path('projects/', views.my_projects, name='my_projects'),
+    path('api/search-entities/', views.search_entities, name='search_entities'),
 ]

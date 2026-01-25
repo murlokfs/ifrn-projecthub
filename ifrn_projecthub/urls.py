@@ -9,4 +9,5 @@ urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
     path('authentication/', include('authentication.urls')),
     path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('img/favicon.ico'), permanent=True)),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

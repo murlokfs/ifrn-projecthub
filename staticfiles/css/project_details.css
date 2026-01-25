@@ -1,0 +1,569 @@
+/* --- 1. Global Settings --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    background-color: #f3f4f6; /* Light gray page background */
+    color: #17171C;
+}
+
+.ph-fill {
+    font-size: 24px;
+}
+
+* {
+    box-sizing: border-box; 
+}
+
+/* --- 2. Main Layout --- */
+.page-wrapper {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 24px
+}
+
+/* --- 3. Top Block (Header + Tabs) --- */
+.top-container {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    max-width: 100%;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    gap: 20px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.header-right{
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+
+.back-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+}
+
+.project-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.project-title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.project-badge {
+    background-color: #50CE67;
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.project-meta {
+    font-size: 14px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Report Button --- */
+
+.btn-denunciar { /* preserving original class name to avoid template changes */
+    width: 100%;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    background-color: #EC6262; 
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px; 
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500; 
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-denunciar .ph {
+    font-size: 16px;
+}
+
+.btn-denunciar:hover {
+    background-color: #d96a6a;
+}
+
+/* --- 4. Tabs --- */
+.tabs-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-radius: 12px; 
+    padding: 24px
+}
+
+.tab-link {
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    flex-grow: 1;
+    text-align: center;
+}
+
+#active {
+    background-color: #22c55e;
+    color: #ffffff;
+}
+
+.tab-link.active {
+    background-color: #22c55e;
+    color: #ffffff;
+}
+
+.tab-link:not(.active) {
+    background-color: #F4F4F6;
+    color: #6b7280;
+}
+
+/* --- 5. Content Layout (Cards) --- */
+.card-simple {
+    padding: 24px;
+    margin-bottom: 24px; 
+}
+.card-simple h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #17171C;
+}
+.card-simple .description p {
+    line-height: 1.6;
+    max-width: 1280px;
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: #6D6D78;
+}
+
+.ver-mais {
+    color: #22c55e;
+    font-weight: bold;
+    text-decoration: none;
+}
+.tags-container {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+.tag {
+    background-color: #E4FFE8;
+    color: #50CE67;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: #d4f7da;
+}
+
+.tags-container a {
+    text-decoration: none;
+}
+
+.content-columns {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.content-columns > .card-accent {
+    flex-basis: 100%;
+}
+
+.column-left {
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+    gap: 24px;
+    flex: 2;
+}
+
+.column-right {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    min-width: 275px;
+}
+
+/* --- 6. Cards --- */
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;   
+}
+
+.card-accent .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.card-accent .card-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+}
+.card-accent .card-body {
+    padding: 24px;
+    min-height: 255px;
+}
+.card-accent .card-body-video{
+    padding: 24px;
+}
+
+/* --- 7. Inner Content --- */
+.video-placeholder {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.video-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.repo-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.repo-link input {
+    flex-grow: 1;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Inter';
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.github-placeholder {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.github-placeholder a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.github-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.user-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+}
+
+.user-list li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.user-list li a:hover {
+    background-color: rgba(80, 206, 103, 0.13);
+}
+
+.user-list li small {
+    color: #6b7280;
+    font-weight: 400;
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #50CE67;
+    background-color: #DCFCE2;
+    flex-shrink: 0;
+}
+
+.file-list {
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.file-list li {
+    background-color: #F4F4F6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.file-list li:last-child {
+    border-bottom: none;
+}
+.file-list li span {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+}
+.file-list li small {
+    color: #6b7280;
+    font-weight: 400;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.new-feedback-card h3 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #000000;
+}
+.new-feedback-card p {
+    font-size: 14px;
+    color: #000000;
+    margin-top: -10px;
+}
+
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feedback-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    resize: vertical;
+}
+
+.btn-submit {
+    background-color: #50CE67;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #16a34a;
+}
+
+.discussion-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+.discussion-header h3 {
+    margin: 0;
+    font-size: 24px;
+    color: #000000;
+}
+.discussion-header .ph {
+    font-size: 21px;
+    color: #1C1B1F;
+}
+.discussion-header span {
+    font-size: 14px;
+    color: #6D6D78;
+    font-weight: 500;
+}
+
+.discussion-thread {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-item {
+    padding-top: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 16px;
+}
+.post-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.post-author-details {
+    display: flex;
+    flex-direction: column;
+}
+.post-author-details strong {
+    font-size: 16px;
+    font-weight: 600;
+    color: #17171C;
+    transition: color 0.2s ease-in-out;
+}
+.post-author-details a {
+    text-decoration: none;
+    color: inherit;
+}
+.post-author-details a:hover strong {
+    color: #50CE67;
+}
+.post-author-details small {
+    font-size: 14px;
+    color: #6D6D78;
+    font-weight: 400;
+}
+
+.post-author > a {
+    text-decoration: none;
+}
+.post-body {
+    font-size: 16px;
+    color: #6D6D78;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 48px; 
+}
+
+@media (max-width: 992px) {
+    .content-columns {
+        flex-direction: column;
+    }
+    .column-left,
+    .column-right {
+        max-width: 100%;
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-wrapper {
+        padding: 16px;
+    }
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .header-right {
+        width: max-content;
+        flex-direction: column;
+    }
+    .project-title h1 {
+        font-size: 20px;
+    }
+    .tabs-nav {
+        padding: 16px;
+        gap: 10px;
+    }
+    .tabs-nav a{
+        width: 100%;
+    }
+    .tab-link {
+        flex-grow: 0;
+    }
+    .card-accent .card-body {
+        min-height: auto;
+    }
+}
