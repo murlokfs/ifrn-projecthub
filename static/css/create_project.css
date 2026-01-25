@@ -169,6 +169,137 @@ label { display: block; font-size: 14px; font-weight: 600; color: #374151; margi
     transform: translateY(0) !important;
 }
 
+/* Container para as Tags Disponíveis */
+.tags-cloud-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+    padding: 10px 0;
+}
+
+/* Badge Individual no Modal */
+.tag-badge-item {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.tag-badge-item:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+/* Estado Selecionado da Tag */
+.tag-badge-item.selected {
+    background: #dcfce7;
+    color: #16a34a;
+    border-color: #22c55e;
+}
+
+/* Título de seção dentro do modal */
+.modal-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+}
+
+/* 1. O CONTEINER PRINCIPAL (Igual ao Tipo de Projeto) */
+.toggle-wrapper {
+    background-color: #f9fafb !important; /* Cor de fundo idêntica ao Tipo de Projeto */
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    padding: 0 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    height: 46px !important; /* Altura padrão dos inputs */
+    width: 100% !important; /* Largura reduzida pedida anteriormente */
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+
+/* 2. O INTERRUPTOR (SWITCH) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px; /* Largura da pílula */
+    height: 22px; /* Altura da pílula */
+    flex-shrink: 0;
+    order: -1; /* Força ficar à esquerda do texto */
+    margin-bottom: 0 !important;
+}
+
+/* Esconde o checkbox quadrado padrão */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* O corpo da pílula (Desligado) */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1; /* Cinza neutro */
+    transition: .4s;
+    border-radius: 34px;
+}
+
+/* A bolinha branca interna */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estado LIGADO (Verde Lovable) */
+input:checked + .slider {
+    background-color: #22C55E; 
+}
+
+/* Movimento da bolinha */
+input:checked + .slider:before {
+    transform: translateX(22px);
+}
+
+/* 3. O TEXTO AO LADO DO TOGGLE */
+.toggle-text {
+    display: flex;
+    flex-direction: column;
+    pointer-events: none; /* Deixa o clique passar para o container */
+}
+
+.toggle-text strong {
+    font-size: 14px !important;
+    color: #374151 !important;
+    line-height: 1.2;
+}
+
+.toggle-text span {
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    line-height: 1.2;
+}
+
 #video-preview-container {
     width: 100%;
     max-width: 100%;
