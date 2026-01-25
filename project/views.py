@@ -42,4 +42,7 @@ class CadastroProjetoView(TemplateView):
 
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/teacher_comments.html'
+
+class ProjetosAprovacaoView(TemplateView):
+    template_name = 'project/project_approvals.html'
     

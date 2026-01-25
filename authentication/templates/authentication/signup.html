@@ -2,47 +2,31 @@
 {% load static %}
 
 {% block title %}
-Cadastro - ProjectHub
+Login de Egresso - ProjectHub
 {% endblock title %}
 
 {% block content %}
     <div class="auth-form">
-        <h2>Crie sua conta e mostre seus projetos para o mundo acadêmico.</h2>
-        
-        <div class="social-auth">
-            <button class="google-btn">
-                <img src="{% static 'img/google_logo.png' %}" alt="Google Icon">
-                Registro com Google
-            </button>
-            <button class="suap-btn">
-                <img src="{% static 'img/ifrn_logo.png' %}" alt="Suap Icon">
-                Registro com Suap
-            </button>
-        </div>
+        <h2>Acesse sua conta como <span class="headline-accent">egresso</span></h2>
 
         <form method="post">
             {% csrf_token %}
             <div class="input-group">
-                <label for="username">username</label>
-                <input type="text" id="username" name="username" placeholder="johndoedev" required>
-            </div>
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="johndoe@email.com" required>
+                <label for="email">Email pessoal</label>
+                <input type="email" id="email" name="email" placeholder="nome@exemplo.com" required>
             </div>
             <div class="input-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" name="password" placeholder="**************" required>
+                <input type="password" id="password" name="password" placeholder="Sua senha" required>
             </div>
-            <div class="form-options">
-                <input type="checkbox" id="remember">
-                <label for="remember">Eu li e aceito os Termos e Condições</label>
+            <div class="form-options single">
+                <span class="field-hint">Sua senha é seu CPF</span>
             </div>
-            <button type="submit" class="auth-btn">Cadastrar-se</button>
+            <button type="submit" class="auth-btn">Entrar</button>
         </form>
 
         <p class="redirect-link">
-            Já tem uma conta? <a href="{% url 'login' %}">Clique aqui!</a>
+            Possui conta ativa? <a href="{% url 'login' %}">Voltar ao login via SUAP</a>
         </p>
     </div>
 {% endblock %}

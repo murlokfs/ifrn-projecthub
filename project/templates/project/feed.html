@@ -1,39 +1,225 @@
 {% extends 'components/base_files/my_projects_and_feed.html' %}
-
 {% load static %}
 
-{% block title %}
-    Feed
-{% endblock title %}
+{% block title %}Feed - Project Hub{% endblock title %}
 
 {% block imports %}
-    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
+<link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
+<link rel="stylesheet" href="{% static 'css/new_feed.css' %}">
 {% endblock imports %}
 
 {% block content %}
-    <div class="container_projects">
-        {% for _ in contador_list %}
-            <div class="project_card" id="project_in_feed">
-                {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
+<div class="feed-wrapper">
 
-                <div class="content">
-                    <div class="description">O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <b>VER MAIS</b></div>
-                    {% include 'components/cards/project_parts/tag.html' %}
+    <main class="feed-main-column">
 
-                    <div class="colaborators_and_links">
+        <div class="feed-header-section">
+            <div class="tabs-row">
+                <button class="tab-btn active">Para você</button>
+                <button class="tab-btn">Seguindo</button>
+                <button class="tab-btn">Em alta</button>
+            </div>
 
-                        {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
-                        
-                        {% include 'components/cards/project_parts/links.html' with column=True %}
+            <div class="filters-row">
+                <button class="btn-filter" onclick="toggleFilterPanel()">
+                    <i class="ph ph-funnel"></i>Filtros
+                </button>
+
+                <div class="dropdown-filter">
+                    Mais recentes <i class="ph ph-caret-down"></i>
+                </div>
+            </div>
+
+            <div id="filterPanel" class="filter-expanded-panel" style="display: none;">
+                <div class="filter-grid">
+
+                    <div class="filter-input-group">
+                        <label>Tipo de Projeto</label>
+                        <div class="select-wrapper">
+                            <select class="custom-select">
+                                <option>Todos os tipos</option>
+                                <option>Projeto Integrador</option>
+                                <option>TCC</option>
+                                <option>Projeto De Pesquisa</option>
+                            </select>
+                            <i class="ph ph-caret-down select-icon"></i>
+                        </div>
                     </div>
 
-                    <div class="footer">
-                        {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    <div class="filter-input-group">
+                        <label>Tag</label>
+                        <div class="select-wrapper">
+                            <select class="custom-select">
+                                <option>Todas as tags</option>
+                                <option>Python</option>
+                                <option>Java</option>
+                                <option>React</option>
+                            </select>
+                            <i class="ph ph-caret-down select-icon"></i>
+                        </div>
+                    </div>
 
-                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
+                </div>
+            </div>
+
+            <script>
+                function toggleFilterPanel() {
+                    const panel = document.getElementById('filterPanel');
+                    const btn = document.querySelector('.btn-filter');
+
+                    if (panel.style.display === 'none' || panel.style.display === '') {
+                        panel.style.display = 'block';
+                        // Opcional: Adiciona estilo ativo ao botão
+                        btn.style.borderColor = 'var(--primary)';
+                        btn.style.color = 'var(--primary)';
+                    } else {
+                        panel.style.display = 'none';
+                        // Remove estilo ativo
+                        btn.style.borderColor = '';
+                        btn.style.color = '';
+                    }
+                }
+            </script>
+        </div>
+
+        <div class="feed-list">
+            {% for projeto in contador_list %}
+            <article class="feed-card">
+
+                <div class="card-image-box">
+                    {% if projeto.imagem %}
+                    <img src="{{ projeto.imagem.url }}" alt="Capa">
+                    {% else %}
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
+                        alt="Placeholder Tech">
+                    {% endif %}
+
+                    <div class="card-badges-container">
+
+                        <span class="floating-tag">Projeto Integrador</span>
+                        <span class="status-badge outline-yellow">Pendente de aprovação</span>
+                        <span class="status-badge outline-blue">Em Desenvolvimento</span>
+
+                    </div>
+                </div>
+
+                <div class="card-content">
+                    <div class="author-row">
+                        <div class="avatar-mini">AC</div>
+                        <div class="author-info">
+                            <strong>Ayrton Cavalcante</strong>
+                            <span><i class="ph ph-calendar-blank"></i> 24 de set. de 2025</span>
+                        </div>
+                    </div>
+
+                    <h2 class="project-title">ProjectHub - Plataforma de Portfólio</h2>
+                    <p class="project-desc">
+                        O projeto é uma plataforma digital inspirada na Steam, mas voltada para armazenar, organizar e
+                        compartilhar projetos acadêmicos.
+                    </p>
+
+                    <div class="tags-row">
+                        <span class="tech-tag">ADS</span>
+                        <span class="tech-tag">Django</span>
+                        <span class="tech-tag">IA</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="members-info">
+                            <i class="ph ph-users"></i> 2 membros
+                        </div>
+
+                        <div class="actions-right">
+                            <div class="stats-icons">
+                                {% include 'components/cards/project_parts/interaction_btns.html' %}
+                            </div>
+                            <a href="{{ project_details_url }}" class="btn-details">
+                                Ver Detalhes <i class="ph ph-arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </main>
+
+    <aside class="feed-sidebar">
+
+        <div class="sidebar-widget widget-create">
+            <div class="widget-create-header">
+                <i class="ph ph-plus-circle" style="font-size: 20px;"></i>
+                <h3>Criar Projeto</h3>
+            </div>
+            <p>Compartilhe seu trabalho acadêmico e receba feedback da comunidade.</p>
+            <button class="btn-white-full">Começar Agora</button>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="ph ph-trend-up"></i> Tags em Alta
+            </div>
+            <div class="cloud-tags">
+                <span class="cloud-tag"># Python</span>
+                <span class="cloud-tag"># React</span>
+                <span class="cloud-tag"># Node.js</span>
+                <span class="cloud-tag"># PostgreSQL</span>
+                <span class="cloud-tag"># ADS</span>
+                <span class="cloud-tag"># Django</span>
+                <span class="cloud-tag"># IA</span>
+                <span class="cloud-tag"># TensorFlow</span>
+            </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="ph ph-trophy"></i> Top Contribuidores
+            </div>
+            <div class="contributors-list">
+                <div class="contributor-row">
+                    <span class="rank-circle rank-1">1</span>
+                    <div class="avatar-mini">AC</div>
+                    <div class="contrib-data">
+                        <strong>Ayrton Cavalcante</strong>
+                        <span>12 projetos</span>
+                    </div>
+                </div>
+                <div class="contributor-row">
+                    <span class="rank-circle rank-2">2</span>
+                    <div class="avatar-mini">CM</div>
+                    <div class="contrib-data">
+                        <strong>Carolina Martins</strong>
+                        <span>9 projetos</span>
+                    </div>
+                </div>
+                <div class="contributor-row">
+                    <span class="rank-circle rank-3">3</span>
+                    <div class="avatar-mini">RC</div>
+                    <div class="contrib-data">
+                        <strong>Roberto Costa</strong>
+                        <span>7 projetos</span>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+        </div>
+
+        <div class="sidebar-widget">
+            <div class="widget-title">
+                <i class="ph ph-chart-bar"></i> Estatísticas da Comunidade
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number">248</span>
+                    <span class="stat-label">Projetos</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">1.2K</span>
+                    <span class="stat-label">Membros</span>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+</div>
 {% endblock content %}
