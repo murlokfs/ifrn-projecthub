@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from django.db.models import Q
 from social_core.backends.oauth import BaseOAuth2
 from authentication.models import User
 
@@ -31,12 +32,12 @@ class SuapOAuth2(BaseOAuth2):
     
     def generate_username(self, details, response):
         base_username = response.get('primeiro_nome', 'user')
-        base_username = (base_username + " " + response.get('ultimo_nome', '')).strip().replace(" ", "_").lower()
+        base_username = (base_username + response.get('ultimo_nome', '')).strip().lower()
         username = base_username
         suffix = 1
         
         while User.objects.filter(username=username).exists():
-            username = f"{base_username}_{suffix}"
+            username = f"{base_username}{suffix}"
             suffix += 1
         
         return username
@@ -48,12 +49,9 @@ class SuapOAuth2(BaseOAuth2):
             'Docente': 'teacher',
         }
 
-        email = response.get('email', '').strip()
-        if not email:
-            raise ValueError("Email não fornecido pelo SUAP")
-
+        cpf_clean = response.get('cpf', '').strip().replace('.', '').replace('-', '') or None
         try:
-            existing_user = User.objects.get(email=email)
+            existing_user = User.objects.get(cpf=cpf_clean)
             username = existing_user.username
         except User.DoesNotExist:
             existing_user = None
@@ -62,25 +60,25 @@ class SuapOAuth2(BaseOAuth2):
         user_data = {
             'username': username,
             'registration': response.get('identificacao', '').strip(),
-            'email': email,
+            'email': response.get('email', '').strip(),
             'email_personal': response.get('email_secundario', '').strip() or None,
             'first_name': response.get('primeiro_nome', '').strip(),
             'last_name': response.get('ultimo_nome', '').strip(),
             'full_name': response.get('nome_registro', '').strip(),
             'role': tipo_dict.get(response.get('tipo_usuario', ''), 'student'),
             'image': (response.get('foto', '').replace("75x100", "150x200")) if response.get('foto') else None,
+            'cpf': response.get('cpf', '').strip().replace('.', '').replace('-', '') or None,
         }
 
-        # Criar ou atualizar usuário
         if existing_user:
             for key, value in user_data.items():
-                if key not in ('email', 'username'):
+                if key not in ('email', 'username', 'cpf'):
                     setattr(existing_user, key, value)
             existing_user.save()
             user = existing_user
         else:
             user, created = User.objects.update_or_create(
-                email=email,
+                email=user_data['email'],
                 defaults={
                     'registration': user_data['registration'],
                     'username': username,
@@ -90,9 +88,9 @@ class SuapOAuth2(BaseOAuth2):
                     'email_personal': user_data['email_personal'],
                     'role': user_data['role'],
                     'image': user_data['image'],
+                    'cpf': user_data['cpf'],
                 }
             )
 
-        # Adicionar ID do usuário aos dados retornados
         user_data['id'] = user.id
         return user_data
