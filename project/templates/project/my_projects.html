@@ -63,8 +63,15 @@ Meus projetos
             </div>
         </div>
 
-        <div class="card-meta">
-            Submetido em: 21/12/2005
+        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Submetido em: {{ projeto.data_criacao|date:"d/m/Y" }}</span>
+
+                {% if 'pendente' in projeto.status|lower %}
+                <button class="btn-cancel-submission" title="Cancelar pedido de avaliação"
+                    onclick="cancelarEnvio('{{ projeto.id }}')">
+                    <i class="ph ph-arrow-u-up-left"></i> Cancelar envio
+                </button>
+                {% endif %}
         </div>
 
         <div class="card-footer">
@@ -84,7 +91,8 @@ Meus projetos
             </div>
 
             <p class="delete-desc">
-                Você está prestes a excluir permanentemente o projeto <strong id="deleteProjectName">"Nome do Projeto"</strong> por violar diretrizes éticas ou direitos humanos.
+                Você está prestes a excluir permanentemente o projeto <strong id="deleteProjectName">"Nome do
+                    Projeto"</strong> por violar diretrizes éticas ou direitos humanos.
             </p>
 
             <p class="delete-warning">
@@ -102,7 +110,7 @@ Meus projetos
 
 <script>
     // Variável para guardar o ID do projeto que será deletado
-    let projectToDeleteId = null; 
+    let projectToDeleteId = null;
 
     // Abre o modal e recebe o ID e o Nome do Django
     function openDeleteModal(projectId, projectName) {
@@ -114,7 +122,7 @@ Meus projetos
         if (nameElement) {
             nameElement.innerText = `"${projectName}"`;
         }
-        
+
         // 3. Mostra o modal
         const modal = document.getElementById('deleteModal');
         if (modal) {
@@ -134,9 +142,18 @@ Meus projetos
             window.location.href = `/projetos/deletar/${projectToDeleteId}/`;
         }
     }
-    
+
+    // Função para cancelar o envio
+    function cancelarEnvio(projetoId) {
+        if (confirm("Deseja realmente cancelar o pedido de avaliação? O projeto voltará para Rascunho.")) {
+            // Redireciona para a URL do Django que muda o status
+            // Exemplo: /projetos/cancelar-envio/123/
+            window.location.href = `/projetos/cancelar-envio/${projetoId}/`;
+        }
+    }
+
     // Fecha ao clicar fora
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         const modal = document.getElementById('deleteModal');
         if (event.target == modal) {
             closeDeleteModal();
