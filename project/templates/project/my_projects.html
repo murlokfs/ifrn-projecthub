@@ -5,58 +5,167 @@
 {% url 'detalhes_projetos' as project_details_url %}
 
 {% block title %}
-    Meus projetos
+Meus projetos
 {% endblock title %}
 
 {% block content %}
-    {% include 'components/cards/projects_per_status.html' %}
+{% include 'components/cards/projects_per_status.html' %}
 
-    <div class="search_project">
-        <div class="input_container">
-            <img src="{% static 'img/magnifying-glass.svg' %}" alt="">
-            <input type="text" placeholder="Busque por projetos, perfis ou tags...">
+<div class="search_project">
+    <div class="input_container">
+        <img src="{% static 'img/magnifying-glass.svg' %}" alt="">
+        <input type="text" placeholder="Busque por projetos, perfis ou tags...">
+    </div>
+    <div class="filter_btns">
+        <button id="all">Todos</button>
+        <button id="approved">Aprovado</button>
+        <button id="pendant">Pendente</button>
+        <button id="reproved">Reprovado</button>
+    </div>
+</div>
+
+<div class="container_projects">
+
+    {% for projeto in projetos %}
+    <div class="project-card">
+        <div class="card-header">
+            <div class="badges-wrapper">
+                <span class="status-badge outline-yellow">Pendente de aprovação</span>
+                <span class="status-badge outline-blue">Em Desenvolvimento</span>
+            </div>
+            <button class="btn-more-options" title="Denunciar/Excluir"
+                onclick="openDeleteModal('{{projeto.id}}', '{{projeto.nome|escapejs}}')">
+                <i class="ph ph-dots-three"></i>
+            </button>
         </div>
-        <div class="filter_btns">
-            <button id="all">Todos</button>
-            <button id="approved">Aprovado</button>
-            <button id="pendant">Pendente</button>
-            <button id="reproved">Reprovado</button>
+
+        <h3 class="card-title">Project Hub - Armazene seus projetos e trabalhos</h3>
+
+        <p class="card-desc">
+            O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="#">VER MAIS</a>
+        </p>
+
+        <div class="card-tags">
+            <span class="tag">NOSQL</span>
+            <span class="tag">NOSQL</span>
+            <span class="tag">NOSQL</span>
+        </div>
+
+        <div class="card-members">
+            <p class="members-label">Integrantes:</p>
+            <div class="member-row">
+                <span class="avatar-mini">AC</span>
+                <span>Ayrton Cavalcante</span>
+            </div>
+            <div class="member-row">
+                <span class="avatar-mini">NM</span>
+                <span>Nathan Maniçoba</span>
+            </div>
+        </div>
+
+        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Submetido em: {{ projeto.data_criacao|date:"d/m/Y" }}</span>
+
+                {% if 'pendente' in projeto.status|lower %}
+                <button class="btn-cancel-submission" title="Cancelar pedido de avaliação"
+                    onclick="cancelarEnvio('{{ projeto.id }}')">
+                    <i class="ph ph-arrow-u-up-left"></i> Cancelar envio
+                </button>
+                {% endif %}
+        </div>
+
+        <div class="card-footer">
+            <button class="btn-cancel">Ver Detalhes</button>
+            <button class="btn-confirm">Editar</button>
         </div>
     </div>
+    {% endfor %}
+</div>
 
-    <div class="container_projects">
+<div id="deleteModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container delete-theme">
+        <div class="modal-body delete-body">
+            <div class="delete-header">
+                <i class="ph ph-warning"></i>
+                <h2>Excluir Projeto por Violação</h2>
+            </div>
 
-        {% for projeto in projetos %}
-            <div class="project_card" id="project_in_my_projects">
-                {% include 'components/cards/project_parts/header.html' with status=projeto.status %}
+            <p class="delete-desc">
+                Você está prestes a excluir permanentemente o projeto <strong id="deleteProjectName">"Nome do
+                    Projeto"</strong> por violar diretrizes éticas ou direitos humanos.
+            </p>
 
-                {% include 'components/cards/project_parts/tag.html' %}
+            <p class="delete-warning">
+                Esta ação é irreversível e o aluno será notificado sobre a exclusão e o motivo.
+            </p>
+        </div>
 
-                <div class="colaborators_and_links">
-                    {% include 'components/cards/project_parts/collaborators_and_docs.html' %}
-                    {% include 'components/cards/project_parts/links.html' with column=True %}
-                </div>
+        <div class="modal-footer delete-footer">
+            <button class="btn-secondary" onclick="closeDeleteModal()">Cancelar</button>
+            <button class="btn-danger" onclick="confirmDelete()">Confirmar Exclusão</button>
+        </div>
 
-                    {% include 'components/cards/project_parts/interaction_btns.html' %}
-                    
-                    <div class="action_btns">
-                        {% include 'components/buttons/button_base.html' with btn=False url=project_details_url classes="green" label="Ver detalhes" %}
-                        
-                        <button class="edit_project">
-                            <img src="{% static 'img/project_parts/edit.svg' %}" alt="">
-                        </button>
-                        <button class="edit_project">
-                            <img src="{% static 'img/project_parts/notepad.svg' %}" alt="">
-                        </button>
-                    </div>
-                </div>
-        {% endfor %}
     </div>
+</div>
 
-    {% include 'components/modals/types_projects.html' %}
+<script>
+    // Variável para guardar o ID do projeto que será deletado
+    let projectToDeleteId = null;
+
+    // Abre o modal e recebe o ID e o Nome do Django
+    function openDeleteModal(projectId, projectName) {
+        // 1. Guarda o ID na variável global
+        projectToDeleteId = projectId;
+
+        // 2. Atualiza o texto do modal com o nome do projeto
+        const nameElement = document.getElementById('deleteProjectName');
+        if (nameElement) {
+            nameElement.innerText = `"${projectName}"`;
+        }
+
+        // 3. Mostra o modal
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+        projectToDeleteId = null; // Limpa a variável por segurança
+    }
+
+    function confirmDelete() {
+        if (projectToDeleteId) {
+            // REDIRECIONA PARA A URL DE DELETAR DO DJANGO
+            // Certifique-se de ter uma url 'deletar_projeto' configurada no urls.py
+            window.location.href = `/projetos/deletar/${projectToDeleteId}/`;
+        }
+    }
+
+    // Função para cancelar o envio
+    function cancelarEnvio(projetoId) {
+        if (confirm("Deseja realmente cancelar o pedido de avaliação? O projeto voltará para Rascunho.")) {
+            // Redireciona para a URL do Django que muda o status
+            // Exemplo: /projetos/cancelar-envio/123/
+            window.location.href = `/projetos/cancelar-envio/${projetoId}/`;
+        }
+    }
+
+    // Fecha ao clicar fora
+    window.onclick = function (event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            closeDeleteModal();
+        }
+    }
+</script>
+
+
+{% include 'components/modals/types_projects.html' %}
 
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="{% static 'base_files/js/create_project.js' %}"></script>
+<script src="{% static 'base_files/js/create_project.js' %}"></script>
 {% endblock extra_js %}

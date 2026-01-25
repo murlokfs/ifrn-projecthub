@@ -77,105 +77,137 @@
         </div>
     </div>
 
-    <script>
-        // --- FUNÇÕES GLOBAIS (Acessíveis pelo HTML) ---
+<script>
+    // --- FUNÇÕES GLOBAIS (Acessíveis pelo HTML) ---
 
-        // ==========================
-        // 1. MODAL DE AVALIAÇÃO
-        // ==========================
-        function openModal() {
-            const input = document.querySelector('.feedback-input');
-            if (input) input.classList.remove('input-error');
+    // ==========================
+    // 1. MODAL DE AVALIAÇÃO
+    // ==========================
+    function openModal() {
+        const input = document.querySelector('.feedback-input');
+        if (input) input.classList.remove('input-error');
 
-            // Limpa a seleção dos radios
-            const radios = document.querySelectorAll('input[name="decision"]');
-            radios.forEach(r => r.checked = false);
+        // Limpa a seleção dos radios
+        const radios = document.querySelectorAll('input[name="decision"]');
+        radios.forEach(r => r.checked = false);
 
-            // Limpa o texto
-            if (input) input.value = '';
+        // Limpa o texto
+        if (input) input.value = '';
 
-            document.getElementById('evaluationModal').style.display = 'flex';
+        const modal = document.getElementById('evaluationModal');
+        if(modal) modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('evaluationModal');
+        if(modal) modal.style.display = 'none';
+    }
+
+    function submitEvaluation() {
+        const feedbackInput = document.querySelector('.feedback-input');
+        const decisionInputs = document.querySelectorAll('input[name="decision"]');
+
+        let decisionSelected = false;
+
+        // Verifica radio selecionado
+        decisionInputs.forEach(input => {
+            if (input.checked) decisionSelected = true;
+        });
+
+        const feedbackText = feedbackInput.value.trim();
+
+        // Validação
+        if (!decisionSelected) {
+            alert("Por favor, selecione uma decisão (Aprovar ou Reprovar).");
+            return;
         }
 
-        function closeModal() {
-            document.getElementById('evaluationModal').style.display = 'none';
+        if (feedbackText === "") {
+            alert("O campo de feedback é obrigatório.");
+            feedbackInput.classList.add('input-error');
+            feedbackInput.focus();
+            return;
         }
 
-        function submitEvaluation() {
-            const feedbackInput = document.querySelector('.feedback-input');
-            const decisionInputs = document.querySelectorAll('input[name="decision"]');
+        // Sucesso
+        console.log("Enviando avaliação...");
+        // AQUI VOCÊ DEVE ADICIONAR A LÓGICA DE ENVIO DO FEEDBACK PARA O DJANGO DEPOIS
+        alert("Avaliação registrada com sucesso!");
+        closeModal();
+    }
 
-            let decisionSelected = false;
 
-            // Verifica radio selecionado
-            decisionInputs.forEach(input => {
-                if (input.checked) decisionSelected = true;
-            });
+    // ==========================
+    // 2. MODAL DE EXCLUSÃO (Lógica do Django integrada)
+    // ==========================
+    
+    // Variável global para guardar o ID do projeto que será deletado
+    let projectToDeleteId = null; 
 
-            const feedbackText = feedbackInput.value.trim();
+    // Agora recebe projectId E projectName
+    function openDeleteModal(projectId, projectName) {
+        // 1. Guarda o ID
+        projectToDeleteId = projectId;
 
-            // Validação
-            if (!decisionSelected) {
-                alert("Por favor, selecione uma decisão (Aprovar ou Reprovar).");
-                return;
-            }
-
-            if (feedbackText === "") {
-                alert("O campo de feedback é obrigatório.");
-                feedbackInput.classList.add('input-error');
-                feedbackInput.focus();
-                return;
-            }
-
-            // Sucesso
-            console.log("Enviando avaliação...");
-            alert("Avaliação registrada com sucesso!");
-            closeModal();
+        // 2. Atualiza o texto em negrito com o nome do projeto clicado
+        const nameElement = document.getElementById('deleteProjectName');
+        if (nameElement) {
+            nameElement.innerText = `"${projectName}"`;
         }
-
-
-        // ==========================
-        // 2. MODAL DE EXCLUSÃO
-        // ==========================
         
-        let projectToDelete = null; // Variável global para guardar o projeto
-
-        function openDeleteModal(projectName) {
-            // Atualiza o texto em negrito com o nome do projeto clicado
-            const nameElement = document.getElementById('deleteProjectName');
-            if (nameElement) {
-                nameElement.innerText = `"${projectName}"`;
-            }
-            // Exibe o modal
-            document.getElementById('deleteModal').style.display = 'flex';
+        // 3. Exibe o modal
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'flex';
         }
+    }
 
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').style.display = 'none';
+    function closeDeleteModal() {
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'none';
         }
+        projectToDeleteId = null; // Limpa a variável por segurança
+    }
 
-        function confirmDelete() {
-            // Aqui entraria a chamada ao Django para deletar
-            console.log("Projeto excluído por violação.");
-            alert("Projeto excluído e aluno notificado.");
+    function confirmDelete() {
+        if (projectToDeleteId) {
+            // REDIRECIONA PARA A URL DE DELETAR DO DJANGO
+            window.location.href = `/projetos/deletar/${projectToDeleteId}/`;
+        } else {
+            console.error("Erro: Nenhum ID de projeto encontrado para exclusão.");
             closeDeleteModal();
         }
+    }
 
 
-        // --- EVENTOS DE CARREGAMENTO (Lógica interna) ---
-        document.addEventListener("DOMContentLoaded", () => {
-            
-            // Remove borda vermelha ao digitar no feedback
-            const feedbackInput = document.querySelector('.feedback-input');
-            if (feedbackInput) {
-                feedbackInput.addEventListener('input', function () {
-                    if (this.value.trim() !== "") {
-                        this.classList.remove('input-error');
-                    }
-                });
-            }
-        });
-    </script>
+    // --- EVENTOS DE CARREGAMENTO & FECHAMENTO GERAL ---
+    document.addEventListener("DOMContentLoaded", () => {
+        
+        // Remove borda vermelha ao digitar no feedback
+        const feedbackInput = document.querySelector('.feedback-input');
+        if (feedbackInput) {
+            feedbackInput.addEventListener('input', function () {
+                if (this.value.trim() !== "") {
+                    this.classList.remove('input-error');
+                }
+            });
+        }
+    });
+
+    // Fecha os modais se clicar fora deles (Overlay)
+    window.onclick = function(event) {
+        const modalDelete = document.getElementById('deleteModal');
+        const modalEval = document.getElementById('evaluationModal');
+
+        if (event.target == modalDelete) {
+            closeDeleteModal();
+        }
+        if (event.target == modalEval) {
+            closeModal();
+        }
+    }
+</script>
 
     <div id="deleteModal" class="modal-overlay">
         <div class="modal-container delete-theme">
