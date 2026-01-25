@@ -45,15 +45,12 @@
                     {% endif %}
                 </div>
             </div>
-            <a href="{% url 'edit_profile' %}" class="edit-button">Edit profile</a>
-        </header>
-    
         </div>
 
         <div class="profile-actions">
             {% if is_owner %}
                 <button class="edit-button">
-                    <i class="ph ph-pencil-simple"></i> Editar Perfil
+                    <i class="ph ph-pencil-simple"></i> <a class="link-edit-profile" href="{% url 'edit_profile' %}">Editar Perfil</a>
                 </button>
             {% else %}
                 <div style="display: flex; gap: 10px;">
