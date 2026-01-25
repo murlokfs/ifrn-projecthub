@@ -20,8 +20,7 @@ class LogoutView(LoginRequiredMixin, View):
 class PerfilView(LoginRequiredMixin, TemplateView):
     template_name = 'authentication/profile.html'
     login_url = 'login'
-    # passa active_page para que a sidebar marque a rota correta
-    extra_context = {'active_page': 'perfil'}
+    extra_context = {'active_page': 'profile'}
 
 
 class SignupView(TemplateView):

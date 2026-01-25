@@ -52,20 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 
-	function initializeTheme() {
-		try {
-			const savedTheme = localStorage.getItem('theme');
-			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-			if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-				body.classList.add('dark-mode');
-				moonIcon?.classList.add('active');
-				moonIcon?.classList.remove('inactive');
-				sunIcon?.classList.remove('active');
-				sunIcon?.classList.add('inactive');
-			}
-		} catch (e) { console.warn('Falha ao acessar localStorage para tema', e); }
-	}
-
 	themeToggle?.addEventListener('click', () => {
 		body.classList.toggle('dark-mode');
 		themeToggle.classList.add('active');
