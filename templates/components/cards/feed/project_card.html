@@ -1,0 +1,55 @@
+<article class="feed-card">
+    <div class="card-image-box">
+        {% if projeto.imagem %}
+        <img src="{{ projeto.imagem.url }}" alt="Capa">
+        {% else %}
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
+            alt="Placeholder Tech">
+        {% endif %}
+
+        <div class="card-badges-container">
+
+            <span class="floating-tag">Projeto Integrador</span>
+            <span class="status-badge outline-yellow">Pendente</span>
+            <span class="status-badge outline-blue">Em Desenvolvimento</span>
+
+        </div>
+    </div>
+
+    <div class="card-content">
+        <div class="author-row">
+            <div class="avatar-mini">AC</div>
+            <div class="author-info">
+                <strong>Ayrton Cavalcante</strong>
+                <span><i class="ph ph-calendar-blank"></i> 24 de set. de 2025</span>
+            </div>
+        </div>
+
+        <h2 class="project-title">ProjectHub - Plataforma de Portfólio</h2>
+        <p class="project-desc">
+            O projeto é uma plataforma digital inspirada na Steam, mas voltada para armazenar, organizar e
+            compartilhar projetos acadêmicos.
+        </p>
+
+        <div class="tags-row">
+            <span class="tech-tag">ADS</span>
+            <span class="tech-tag">Django</span>
+            <span class="tech-tag">IA</span>
+        </div>
+
+        <div class="card-footer">
+            <div class="members-info">
+                <i class="ph ph-users"></i> 2 membros
+            </div>
+
+            <div class="actions-right">
+                <div class="stats-icons">
+                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                </div>
+                <a href="{{ project_details_url }}" class="btn-details">
+                    Ver Detalhes <i class="ph ph-arrow-up-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</article>
