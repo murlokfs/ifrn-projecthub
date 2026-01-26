@@ -1,0 +1,47 @@
+{% extends 'components/base_files/base_approval.html' %}
+{% load static %}
+
+{% block title%} Aprovação de Projetos{% endblock %}
+
+{%block extra_css %}
+<link rel="stylesheet" href="{% static 'css/aprovacao.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% include 'components/base_files/header_approval.html' %}
+
+<div class="main-content">
+
+    <div class="tabs-container">
+        <button class="tab-btn active">Todos</button>
+
+        <button class="tab-btn">
+            Pendentes
+            <span class="notification-badge">2</span>
+        </button>
+
+        <button class="tab-btn">Em Desenvolvimento</button>
+        <button class="tab-btn">Concluído</button>
+    </div>
+    <div class="tabs-line"></div>
+
+    <div class="search-section">
+        <div class="search-input-wrapper">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" placeholder="Busque por nome, tag ou aluno...">
+        </div>
+    </div>
+
+    <div class="cards-grid">
+
+        {% include 'components/cards/approval_card.html' %}
+        {% include 'components/cards/approval_card.html' %}
+        {% include 'components/cards/approval_card.html' %}
+
+    </div>
+</div>
+
+{% include 'components/modals/modal_approval.html' %}
+
+{% endblock %}

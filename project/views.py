@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DetailView
 from project.models import Project, ApprovalSolicitation, Tag
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
@@ -38,7 +38,9 @@ def my_projects(request):
     }
     return render(request, "project/my_projects.html", context)
 
-class DetalhesProjetosView(TemplateView):
+class DetalhesProjetosView(DetailView):
+    model = Project
+    context_object_name = 'project'
     template_name = 'project/project_details.html'
 
 class ComentariosAlunosView(TemplateView):
@@ -62,6 +64,8 @@ class CadastroProjetoView(CreateView):
                 # Salva no formato embed para evitar Erro 153 futuramente
                 form.instance.link_youtube = f'https://www.youtube.com/embed/{video_id}'
 
+        # adicionando o curso do usuario logado no projeto
+        form.instance.course = self.request.user.course
         response = super().form_valid(form)
 
         self.object.members.add(self.request.user)
@@ -118,4 +122,7 @@ def search_entities(request):
 
 class ComentariosProfessoresView(TemplateView):
     template_name = 'project/teacher_comments.html'
+
+class ProjetosAprovacaoView(TemplateView):
+    template_name = 'project/project_approvals.html'
     

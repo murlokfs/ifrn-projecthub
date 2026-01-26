@@ -1,0 +1,66 @@
+{% load static %}
+<header class="green-hero-header">
+        <div class="hero-content-wrapper">
+
+            <div class="top-navigation">
+                <div class="left-nav-group">
+                    <a href="{% url 'index' %}" class="back-btn">
+                        <i class="ph ph-arrow-left"></i> Voltar
+                    </a>
+
+                    <div class="nav-divider"></div>
+
+                    <div class="professor-profile">
+                        <div class="shield-icon-box">
+                            <i class="ph ph-shield-check"></i>
+                        </div>
+                        <div class="profile-texts">
+                            <span class="role-label">Painel do Professor</span>
+                            <span class="user-name">Prof. Maria Santos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-nav-group">
+                    <a href="{% url 'profile' %}" class="back-btn">
+                        <div class="avatar-circle">PM</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-middle-row">
+                <div class="hero-texts">
+                    <h1>
+                        <i class="ph ph-clipboard-text"></i> Aprovação de Projetos
+                    </h1>
+                    <p>Revise e aprove os projetos acadêmicos submetidos pelos alunos. Garanta a qualidade e
+                        conformidade com as diretrizes institucionais.</p>
+                </div>
+
+                <div class="hero-stats-group">
+                    <div class="stat-glass-card">
+                        <span class="stat-label">PENDENTES</span>
+                        <span class="stat-value">2</span>
+                    </div>
+                    <div class="stat-glass-card">
+                        <span class="stat-label">Concluídos</span>
+                        <span class="stat-value">1</span>
+                    </div>
+                    <div class="stat-glass-card">
+                        <span class="stat-label">Em Desenvolvimento</span>
+                        <span class="stat-value">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compliance-banner">
+                <i class="ph ph-warning-circle"></i>
+                <div class="banner-content">
+                    <strong>Política de Conformidade</strong>
+                    <span>Projetos que violem direitos humanos, contenham conteúdo impróprio ou infrinjam diretrizes
+                        éticas devem ser excluídos imediatamente usando o botão de exclusão.</span>
+                </div>
+            </div>
+
+        </div>
+    </header>

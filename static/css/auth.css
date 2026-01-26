@@ -1,10 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
+/* --- Variables (alinha com o padrão do app) --- */
+:root {
+    --primary: #50CE67;
+    --primary-hover: #45b85c;
+    --primary-light: rgba(80, 206, 103, 0.15);
+    --bg: #F4F4F6;
+    --white: #ffffff;
+    --foreground: #0f172a;
+    --muted: #64748b;
+    --border: #e5e7eb;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: var(--bg);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,23 +29,32 @@ body {
     display: flex;
     width: 100%;
     height: 100vh;
-    background-color: #fff;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    border: none;
+    box-shadow: 0 25px 60px rgba(2, 6, 23, 0.08);
     overflow: hidden;
 }
 
 .left-panel {
-    background-image: url('../img/login_background.png');
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    padding: 50px;
-    width: 45%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+        position: relative;
+        /* Novo background condizente com o restante do projeto */
+        background:
+            radial-gradient(900px 500px at -10% 10%, rgba(80, 206, 103, 0.22), transparent 60%),
+            radial-gradient(700px 420px at 110% 90%, rgba(80, 206, 103, 0.16), transparent 60%),
+            linear-gradient(180deg, #0b1220 0%, #0f172a 60%, #0b1220 100%);
+        color: #fff;
+        padding: 50px;
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 }
+
+.left-panel::after { display: none; }
+
+/* Padrão sutil para dar textura ao fundo */
+.left-panel::before { display: none; }
 
 .left-panel .logo {
     display: flex;
@@ -41,12 +64,12 @@ body {
 }
 
 .left-panel .logo img {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
 }
 
 .left-panel .logo h1 {
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 600;
     margin: 0;
 }
@@ -54,10 +77,11 @@ body {
 .left-panel .illustration img {
     max-width: 100%;
     margin-bottom: 10px;
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.25));
 }
 
 .left-panel h2 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     margin-bottom: 11px;
     max-width: 600px;
@@ -66,7 +90,7 @@ body {
 }
 
 .left-panel p {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     color: #e0e0e0;
     max-width: 600px;
@@ -75,7 +99,7 @@ body {
 
 .right-panel {
     width: 55%;
-    padding: 50px;
+    padding: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,12 +111,33 @@ body {
 }
 
 .auth-form h2 {
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 700;
-    color: #333;
-    margin-bottom: 30px;
+    color: var(--foreground);
+    margin-bottom: 28px;
     text-align: center;
-    line-height: 1.3;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    position: relative;
+}
+
+.auth-form h2 .headline-accent {
+    color: var(--primary);
+}
+
+.auth-form h2::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 4px;
+    margin: 12px auto 0;
+    background: linear-gradient(to right, var(--primary), #3db558);
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(80, 206, 103, 0.35);
+}
+
+@media (min-width: 768px) {
+    .auth-form h2 { font-size: 36px; }
 }
 
 .auth-form > p {
@@ -139,7 +184,7 @@ body {
 }
 
 .input-group {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     position: relative;
 }
 
@@ -147,30 +192,38 @@ body {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: var(--foreground);
     margin-bottom: 8px;
 }
 
 .input-group input {
     width: 100%;
-    padding: 12px 12px 12px 0;
-    border: none;
-    border-bottom: 1px solid #ddd;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
     font-size: 14px;
     box-sizing: border-box;
-    background: transparent;
+    background: var(--white);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .input-group input:focus {
     outline: none;
-    border-bottom-color: #007bff;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
 }
 
 .form-options {
     display: flex;
     align-items: center;
-    margin-bottom: 25px;
-    margin-top: -10px;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 24px;
+    margin-top: 4px;
+}
+
+.form-options.single {
+    justify-content: flex-end;
 }
 
 .form-options input {
@@ -179,42 +232,81 @@ body {
 
 .form-options label {
     font-size: 14px;
-    color: #666;
+    color: var(--muted);
+}
+
+/* Texto informativo no lugar do link */
+.form-options .field-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--muted);
+    opacity: 0.85;
+    letter-spacing: 0.01em;
+}
+
+.form-options .field-hint::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+/* Link "Esqueceu a senha?" */
+.form-options .forgot-link {
+    font-size: 14px;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: color 0.2s ease, background-size 0.2s ease, opacity 0.2s ease;
+}
+
+.form-options .forgot-link:hover {
+    background-size: 100% 1px;
+    opacity: 0.9;
 }
 
 .auth-btn {
     width: 100%;
     display: inline-block; 
-    text-align:center;
-    padding: 15px;
+    text-align: center;
+    height: 52px;
+    padding: 0 20px;
     border: none;
-    border-radius: 25px;
-    background-color: #28a745;
+    border-radius: var(--radius-full);
+    background-color: var(--primary);
     color: #fff;
     text-decoration: none;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 12px;
+    box-shadow: 0 10px 20px rgba(80, 206, 103, 0.25);
 }
 
 .auth-btn:hover {
-    background-color: #218838;
+    background-color: var(--primary-hover);
 }
 
 .redirect-link {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 22px;
     font-size: 14px;
-    color: #666;
+    color: var(--muted);
 }
 
 .redirect-link a {
-    color: #28a745;
+    color: var(--primary);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .redirect-link a:hover {

@@ -7,10 +7,11 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['title', 'banner', 'type', 'description', 'orientators', 'is_private', 'tags', 'members', 'link_github', 'link_youtube']
+        fields = ['title', 'image', 'course', 'type', 'description', 'orientators', 'is_private', 'tags', 'members', 'link_github', 'link_youtube']
+
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Ex: Nome do Projeto'}),
-            'banner': forms.FileInput(attrs={'id': 'id_banner'}),
+            'image': forms.FileInput(attrs={'id': 'id_image'}),
             'type': forms.Select(attrs={'class': 'form-input'}),
             'link_github': forms.URLInput(attrs={'class': 'form-input has-icon', 'placeholder': 'Ex.: https://github.com/murlokfs/ifrn-projecthub'}),
             'link_youtube': forms.URLInput(attrs={'class': 'form-input has-icon', 'placeholder': 'Ex.: https://www.youtube.com/watch?v=xrEvNTEtrQ4'}),
