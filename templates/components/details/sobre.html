@@ -3,21 +3,14 @@
     <h3>Sobre o Projeto</h3>
     <div class="description">
         <p><strong>Descrição</strong></p>
-        <p>🎓 Academic Hub – A Plataforma de Projetos Acadêmicos do Futuro</p>
-        <p>O Academic Hub é uma plataforma digital inovadora, inspirada na experiência dinâmica da Steam, mas totalmente
-            voltada para o universo acadêmico.Nosso objetivo é transformar a forma como alunos, professores e
-            profissionais compartilham, exploram e valorizam projetos de pesquisa e desenvolvimento.</p>
-        <p>🚀 Uma vitrine interativa para o seu conhecimento</p>
-        <p>Aqui, cada aluno pode criar um perfil profissional completo, reunindo suas produções acadêmicas em um só
-            lugar. É possível publicar Trabalhos de Conclusão de Curso (TCCs), Projetos Integradores, artigos
-            científicos e experimentos, enriquecendo cada publicação com descrições detalhadas, imagens, vídeos e links
-            para repositórios como o GitHub... <a href="#" class="ver-mais">VER MAIS</a></p>
+        {{ project.description|safe }}
     </div>
     <h4>Tags</h4>
     <div class="tags-container">
-        <a href="#"><span class="tag">ADS</span></a>
-        <a href="#"><span class="tag">Django</span></a>
-        <a href="#"><span class="tag">IA</span></a>
-        <a href="#"><span class="tag">React</span></a>
+        {% for tag in project.tags.all %}
+            <div class="tag">{{ tag.name }}</div>
+        {% empty %}
+            <p>Sem tags associadas.</p>
+        {% endfor %}
     </div>
 </section>

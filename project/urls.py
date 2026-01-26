@@ -14,4 +14,5 @@ urlpatterns = [
     path('search/', SearchView.as_view(), name='search'),
     path('delete/<int:pk>/', delete_project, name='delete_project'),
     path('cancel-submission/<int:pk>/', cancel_project_submission, name='cancel_submission'),
+    path('api/search-entities/', views.search_entities, name='search_entities'),
 ]
