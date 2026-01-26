@@ -56,7 +56,6 @@ class Project(models.Model):
     ]
 
     title = models.CharField(max_length=200, null=False, blank=False)
-    banner = models.ImageField(upload_to='projects/banners/', null=True, blank=True)
     description = RichTextField()
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=False, blank=False) # só foi alterado para true para testar a criação de projetos sem curso, mudar para false antes de fazer commit
     created_at = models.DateTimeField(auto_now_add=True)
