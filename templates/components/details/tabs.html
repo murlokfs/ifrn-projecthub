@@ -1,20 +1,35 @@
 {% load static %}
 <nav class="tabs-nav">
 
+   {% if request.resolver_match.url_name == 'project_details_pending' %}
+   <a href="{% url 'project_details_pending' %}"
+      class="tab-link active">
+      Informações Gerais
+   </a>
+   {% else %}
    <a href="{% url 'project_details' %}"
       class="tab-link {% if request.resolver_match.url_name == 'project_details' %}active{% endif %}">
       Informações Gerais
    </a>
+   {% endif %}
 
+   {% if request.resolver_match.url_name == 'project_details_pending' %}
+   <span class="tab-link disabled">Comentários de usuários</span>
+   {% else %}
    <a href="{% url 'student_comments' %}"
       class="tab-link {% if request.resolver_match.url_name == 'student_comments' %}active{% endif %}">
       Comentários de usuários
    </a>
+   {% endif %}
 
+   {% if request.resolver_match.url_name == 'project_details_pending' %}
+   <span class="tab-link disabled">Avaliações de Professores</span>
+   {% else %}
    <a href="{% url 'teacher_comments' %}"
       class="tab-link {% if request.resolver_match.url_name == 'teacher_comments' %}active{% endif %}">
       Avaliações de Professores
    </a>
+   {% endif %}
 
 
 </nav>

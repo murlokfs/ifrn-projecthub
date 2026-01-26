@@ -13,6 +13,17 @@ body {
     min-height: 100vh;
 }
 
+/* Layout com sidebar (mínimo invasivo) */
+.approval-layout {
+    display: flex;
+    align-items: stretch;
+}
+.approval-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 .green-hero-header {
     background-color: #4ADE80;
     background: linear-gradient(135deg, #4ADE80 0%, #22C55E 100%);
@@ -103,10 +114,10 @@ body {
 .hero-middle-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     margin-bottom: 35px;
     gap: 40px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .hero-texts h1 {
@@ -128,7 +139,11 @@ body {
 .hero-stats-group {
     display: flex;
     gap: 15px;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
 }
+
+.hero-texts { flex: 1 1 auto; min-width: 0; }
 
 .stat-glass-card {
     background-color: rgba(255,255,255, 0.15);
@@ -183,9 +198,15 @@ body {
    2. CONTEÚDO PRINCIPAL
    ========================================================================== */
 .main-content {
-    max-width: 1400px; 
-    margin: 0 auto;
-    padding: 20px 40px 60px 40px;
+        width: 100%;
+        max-width: none; 
+        margin: 0; 
+        padding: 20px 40px 60px 40px;
+}
+
+/* Em telas realmente menores, permitimos quebra para evitar overflow */
+@media (max-width: 1100px) {
+    .hero-middle-row { flex-wrap: wrap; align-items: flex-end; }
 }
 
 /* --- Abas --- */
