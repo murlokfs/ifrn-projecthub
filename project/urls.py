@@ -1,6 +1,6 @@
 from django.urls import path
 from project import views
-from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView,FeedView,SearchView
+from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView,FeedView,SearchView,MeusProjetosView, delete_project, cancel_project_submission
 
 urlpatterns = [
 
@@ -10,6 +10,8 @@ urlpatterns = [
     path('teacher-comments/<int:pk>/', ComentariosProfessoresView.as_view(), name='teacher_comments'),
     path('project-approval/', ProjetosAprovacaoView.as_view(), name='project_approval'),
     path('', FeedView.as_view(), name='index'),
-    path('projects/', views.my_projects, name='my_projects'),
+    path('projects/', MeusProjetosView.as_view(), name='my_projects'),
     path('search/', SearchView.as_view(), name='search'),
+    path('delete/<int:pk>/', delete_project, name='delete_project'),
+    path('cancel-submission/<int:pk>/', cancel_project_submission, name='cancel_submission'),
 ]

@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView,ListView,DetailView
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from .models import Project, Tag
 
 class SearchView(View):
@@ -115,6 +117,91 @@ class FeedView(ListView):
         'completed': 'outline-green',
     }.get(self.status, '')
 
+class MeusProjetosView(ListView):
+    model = Project
+    template_name = 'project/my_projects.html'
+    context_object_name = 'projetos'
+    paginate_by = 6
+
+    # Garante que o usuário está logado
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Project.objects.none()
+        
+        # Busca projetos onde o usuário é membro
+        queryset = Project.objects.filter(members=self.request.user)\
+            .select_related('course')\
+            .prefetch_related(
+                'tags', 
+                'members', 
+                'approval_solicitations' # Traz as solicitações para mostrar o feedback
+            ).order_by('-created_at')
+        
+        # --- Lógica de Busca (Barra de Pesquisa) ---
+        query = self.request.GET.get('q')
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct()
+
+        # --- Lógica dos Botões de Filtro (Todos, Aprovado, Pendente...) ---
+        status_filter = self.request.GET.get('status')
+        if status_filter == 'approved':
+            # Considera aprovado se tiver solicitação aprovada OU status concluído/em andamento
+            queryset = queryset.filter(
+                Q(status='in_progress') | 
+                Q(status='completed') |
+                Q(approval_solicitations__status='approved')
+            ).distinct()
+        elif status_filter == 'pendant':
+            queryset = queryset.filter(status='pending_approval')
+        elif status_filter == 'reproved':
+            # Filtra projetos que têm UMA solicitação rejeitada e ainda estão pendentes
+            queryset = queryset.filter(
+                status='pending_approval',
+                approval_solicitations__status='rejected'
+            ).distinct()
+
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_page'] = 'my_projects'
+        # Passa os filtros atuais para o template (para manter o botão ativo se precisar)
+        context['current_status'] = self.request.GET.get('status', 'all')
+        context['search_query'] = self.request.GET.get('q', '')
+        
+        # Contar projetos por status (sem duplicação)
+        if self.request.user.is_authenticated:
+            user_projects = Project.objects.filter(members=self.request.user).prefetch_related('approval_solicitations')
+            
+            # Reprovados: projetos que têm approval_solicitations com status='rejected'
+            reproved_projects = set()
+            for project in user_projects:
+                if project.approval_solicitations.filter(status='rejected').exists():
+                    reproved_projects.add(project.id)
+            reproved_count = len(reproved_projects)
+            
+            # Pendentes: pending_approval E que NÃO estão em reprovados
+            pending_count = user_projects.filter(
+                status='pending_approval'
+            ).exclude(id__in=reproved_projects).count()
+            
+            # Aprovados: in_progress, completed OU com approval_solicitations.status='approved'
+            # E que NÃO estão em reprovados
+            approved_count = user_projects.filter(
+                Q(status='in_progress') | 
+                Q(status='completed') |
+                Q(approval_solicitations__status='approved')
+            ).exclude(id__in=reproved_projects).distinct().count()
+            
+            context['approved_count'] = approved_count
+            context['pending_count'] = pending_count
+            context['reproved_count'] = reproved_count
+        
+        return context
 
 
 
@@ -125,20 +212,7 @@ class FeedView(ListView):
 
 
 
-def my_projects(request):
 
-    projetos = [
-        {"status": "aprovado"},
-        {"status": "pendente"},
-        {"status": "reprovado"},
-        {"status": "aprovado"},
-    ]
-
-    context = {
-        "projetos": projetos,
-        "active_page": "my_projects",
-    }
-    return render(request, "project/my_projects.html", context)
 
 class DetalhesProjetosView(DetailView):
     model = Project
@@ -160,4 +234,37 @@ class ComentariosProfessoresView(DetailView):
 
 class ProjetosAprovacaoView(TemplateView):
     template_name = 'project/project_approvals.html'
+
+
+@login_required
+def delete_project(request, pk):
+    """Delete a project if the user is a member"""
+    project = get_object_or_404(Project, pk=pk)
+    
+    # Verifica se o usuário é membro do projeto
+    if request.user not in project.members.all():
+        return redirect('my_projects')
+    
+    # Delete the project
+    project.delete()
+    
+    # Redirect back to my_projects
+    return redirect('my_projects')
+
+
+@login_required
+def cancel_project_submission(request, pk):
+    """Cancel a project submission (change status from pending_approval back to draft)"""
+    project = get_object_or_404(Project, pk=pk)
+    
+    # Verifica se o usuário é membro do projeto
+    if request.user not in project.members.all():
+        return redirect('my_projects')
+    
+    # Only cancel if project is in pending_approval status
+    if project.status == 'pending_approval':
+        project.status = 'draft'
+        project.save()
+    
+    return redirect('my_projects')
     

@@ -9,18 +9,35 @@ Meus projetos
 {% endblock title %}
 
 {% block content %}
+
 {% include 'components/cards/projects_per_status.html' %}
 
 <div class="search_project">
-    <div class="input_container">
+    <form method="get" class="input_container">
         <img src="{% static 'img/magnifying-glass.svg' %}" alt="">
-        <input type="text" placeholder="Busque por projetos, perfis ou tags...">
-    </div>
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Busque por projetos, perfis ou tags...">
+        {% if current_status != 'all' %}
+            <input type="hidden" name="status" value="{{ current_status }}">
+        {% endif %}
+    </form>
+    
     <div class="filter_btns">
-        <button id="all">Todos</button>
-        <button id="approved">Aprovado</button>
-        <button id="pendant">Pendente</button>
-        <button id="reproved">Reprovado</button>
+        <a href="?status=all{% if search_query %}&q={{ search_query }}{% endif %}" 
+           class="{% if current_status == 'all' %}active-filter{% endif %} link-button">
+           <button id="all">Todos</button>
+        </a>
+        
+        <a href="?status=approved{% if search_query %}&q={{ search_query }}{% endif %}" class="link-button">
+            <button id="approved">Aprovados</button>
+        </a>
+        
+        <a href="?status=pendant{% if search_query %}&q={{ search_query }}{% endif %}" class="link-button">
+            <button id="pendant">Pendentes</button>
+        </a>
+        
+        <a href="?status=reproved{% if search_query %}&q={{ search_query }}{% endif %}" class="link-button">
+            <button id="reproved">Reprovados</button>
+        </a>
     </div>
 </div>
 
@@ -30,73 +47,193 @@ Meus projetos
     <div class="project-card">
         <div class="card-header">
             <div class="badges-wrapper">
-                <span class="status-badge outline-yellow">Pendente de aprovação</span>
-                <span class="status-badge outline-blue">Em Desenvolvimento</span>
+                <span class="status-badge 
+                    {% if projeto.status == 'pending_approval' %}outline-yellow
+                    {% elif projeto.status == 'in_progress' %}outline-blue
+                    {% elif projeto.status == 'completed' %}outline-green{% endif %}">
+                    {{ projeto.get_status_display }}
+                </span>
+                
+                <span class="floating-tag">{{ projeto.get_type_display }}</span>
             </div>
-            <button class="btn-more-options" title="Denunciar/Excluir"
-                onclick="openDeleteModal('{{projeto.id}}', '{{projeto.nome|escapejs}}')">
+            
+            <button class="btn-more-options" title="Opções"
+                onclick="openDeleteModal('{{projeto.id}}', '{{projeto.title|escapejs}}')">
                 <i class="ph ph-dots-three"></i>
             </button>
         </div>
 
-        <h3 class="card-title">Project Hub - Armazene seus projetos e trabalhos</h3>
+        <h3 class="card-title">{{ projeto.title }}</h3>
 
         <p class="card-desc">
-            O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="#">VER MAIS</a>
+            {{ projeto.description|truncatechars:120 }} 
+            <a href="{% url 'project_details' pk=projeto.id %}">VER MAIS</a>
         </p>
 
         <div class="card-tags">
-            <span class="tag">NOSQL</span>
-            <span class="tag">NOSQL</span>
-            <span class="tag">NOSQL</span>
+            {% for tag in projeto.tags.all|slice:":3" %}
+                <span class="tag">{{ tag.name }}</span>
+            {% empty %}
+                <span class="tag no-tags">Sem tags</span>
+            {% endfor %}
         </div>
 
         <div class="card-members">
             <p class="members-label">Integrantes:</p>
-            <div class="member-row">
-                <span class="avatar-mini">AC</span>
-                <span>Ayrton Cavalcante</span>
-            </div>
-            <div class="member-row">
-                <span class="avatar-mini">NM</span>
-                <span>Nathan Maniçoba</span>
-            </div>
+            {% for member in projeto.members.all|slice:":2" %}
+                <div class="member-row">
+                    <span class="avatar-mini">
+                        {% if member.image %}
+                            <img src="{{ member.image.url }}" class="avatar-image">
+                        {% else %}
+                            {{ member.full_name|slice:":2"|upper }}
+                        {% endif %}
+                    </span>
+                    <span>{{ member.full_name }}</span>
+                </div>
+            {% endfor %}
+            {% if projeto.members.count > 2 %}
+                <small class="extra-members">+ {{ projeto.members.count|add:"-2" }} outro(s)</small>
+            {% endif %}
         </div>
 
-        <div class="card-meta" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>Submetido em: {{ projeto.data_criacao|date:"d/m/Y" }}</span>
+        {% with ultimo_feedback=projeto.get_latest_feedback %}
+            
+            {% if ultimo_feedback %}
+                {% if ultimo_feedback.status == 'pending' %}
+                    <div class="feedback-box pending">
+                        <div class="feedback-header">
+                            <i class="ph ph-clock"></i>
+                            <span>PENDENTE DE APROVAÇÃO</span>
+                        </div>
 
-                {% if 'pendente' in projeto.status|lower %}
+                        <p class="feedback-message">
+                            Seu projeto foi enviado para avaliação e está aguardando retorno.
+                        </p>
+                        
+                        <div class="feedback-meta">
+                            Enviado em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}
+                        </div>
+                    </div>
+                {% elif ultimo_feedback.status == 'rejected' %}
+                    <div class="feedback-box error">
+                        <div class="feedback-header">
+                            <i class="ph ph-warning-circle"></i> 
+                            <span>PRECISA DE AJUSTES</span>
+                        </div>
+
+                        <p class="feedback-message">
+                            "{{ ultimo_feedback.message }}"
+                        </p>
+                        
+                        <div class="feedback-meta">
+                            Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}
+                        </div>
+                    </div>
+                {% elif ultimo_feedback.status == 'approved' %}
+                    <div class="feedback-box success">
+                        <div class="feedback-header">
+                            <i class="ph ph-check-circle"></i>
+                            <span>APROVADO</span>
+                        </div>
+
+                        <p class="feedback-message">
+                            "{{ ultimo_feedback.message }}"
+                        </p>
+                        
+                        <div class="feedback-meta">
+                            Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}
+                        </div>
+                    </div>
+                {% endif %}
+            {% elif projeto.status == 'pending_approval' %}
+                <div class="feedback-box pending">
+                    <div class="feedback-header">
+                        <i class="ph ph-clock"></i>
+                        <span>PENDENTE DE APROVAÇÃO</span>
+                    </div>
+
+                    <p class="feedback-message">
+                        Seu projeto foi enviado para avaliação e está aguardando retorno.
+                    </p>
+                    
+                    <div class="feedback-meta">
+                        Enviado em {{ projeto.created_at|date:"d/m às H:i" }}
+                    </div>
+                </div>
+            {% endif %}
+
+        {% endwith %}
+        <div class="card-meta card-meta-flex">
+            <span>Criado em: {{ projeto.created_at|date:"d/m/Y" }}</span>
+
+            {% if projeto.status == 'pending_approval' %}
                 <button class="btn-cancel-submission" title="Cancelar pedido de avaliação"
                     onclick="cancelarEnvio('{{ projeto.id }}')">
-                    <i class="ph ph-arrow-u-up-left"></i> Cancelar envio
+                    <i class="ph ph-arrow-u-up-left"></i> Cancelar
                 </button>
-                {% endif %}
+            {% endif %}
         </div>
 
         <div class="card-footer">
-            <button class="btn-cancel">Ver Detalhes</button>
-            <button class="btn-confirm">Editar</button>
+            <a href="{% url 'project_details' pk=projeto.id %}" class="btn-cancel link-button">Ver Detalhes</a>
+            <a href="{% url 'project_details' pk=projeto.id %}#editar" class="btn-confirm link-button">Editar</a>
         </div>
     </div>
+    {% empty %}
+        <div class="empty-state">
+            <p>Nenhum projeto encontrado nesta categoria.</p>
+        </div>
     {% endfor %}
 </div>
 
-<div id="deleteModal" class="modal-overlay" style="display: none;">
+{% if is_paginated %}
+    <div class="pagination-container">
+
+    {% if page_obj.has_previous %}
+        <a class="pagination-arrow"
+           href="?page={{ page_obj.previous_page_number }}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+            ‹
+        </a>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if num == page_obj.number %}
+            <span class="pagination-number active">
+                {{ num }}
+            </span>
+        {% else %}
+            <a class="pagination-number"
+               href="?page={{ num }}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                {{ num }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a class="pagination-arrow"
+           href="?page={{ page_obj.next_page_number }}{% if current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+            ›
+        </a>
+    {% endif %}
+
+    </div>
+{% endif %}
+
+<div id="deleteModal" class="modal-overlay">
     <div class="modal-container delete-theme">
         <div class="modal-body delete-body">
             <div class="delete-header">
                 <i class="ph ph-warning"></i>
-                <h2>Excluir Projeto por Violação</h2>
+                <h2>Excluir Projeto</h2>
             </div>
 
             <p class="delete-desc">
-                Você está prestes a excluir permanentemente o projeto <strong id="deleteProjectName">"Nome do
-                    Projeto"</strong> por violar diretrizes éticas ou direitos humanos.
+                Você está prestes a excluir permanentemente o projeto <strong id="deleteProjectName">"Nome do Projeto"</strong>.
             </p>
 
             <p class="delete-warning">
-                Esta ação é irreversível e o aluno será notificado sobre a exclusão e o motivo.
+                Esta ação é irreversível.
             </p>
         </div>
 
@@ -138,17 +275,15 @@ Meus projetos
     function confirmDelete() {
         if (projectToDeleteId) {
             // REDIRECIONA PARA A URL DE DELETAR DO DJANGO
-            // Certifique-se de ter uma url 'deletar_projeto' configurada no urls.py
-            window.location.href = `/projetos/deletar/${projectToDeleteId}/`;
+            window.location.href = `/projetos/delete/${projectToDeleteId}/`;
         }
     }
 
     // Função para cancelar o envio
     function cancelarEnvio(projetoId) {
-        if (confirm("Deseja realmente cancelar o pedido de avaliação? O projeto voltará para Rascunho.")) {
+        if (confirm("Deseja realmente cancelar o pedido de avaliação?")) {
             // Redireciona para a URL do Django que muda o status
-            // Exemplo: /projetos/cancelar-envio/123/
-            window.location.href = `/projetos/cancelar-envio/${projetoId}/`;
+            window.location.href = `/projetos/cancel-submission/${projetoId}/`;
         }
     }
 

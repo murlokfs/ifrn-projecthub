@@ -34,7 +34,6 @@ main {
     padding: 30px;
     display: flex;
     width: 100%;
-    min-height: 100vh;
     flex-direction: column;
     align-items: center; /* Centraliza o grid */
     gap: 30px;
@@ -45,7 +44,7 @@ main {
    ========================================================================== */
 
 .search_project {
-    max-width: 1100px;
+    max-width: 1400px;
     width: 100%;
     padding: 15px 20px;
     display: flex;
@@ -123,11 +122,10 @@ main {
 
 .container_projects {
     display: grid;
-    /* Define colunas automáticas. Tenta colocar 2, se não der, vira 1. */
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); 
-    gap: 30px; 
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr)); 
+    gap: 30px;
     width: 100%;
-    max-width: 1100px; /* Limita a largura máxima */
+    max-width: 1400px;
     margin-top: 20px;
 }
 
@@ -208,29 +206,29 @@ main {
 .card-title { font-size: 18px; margin-bottom: 10px; color: #111827; font-weight: 700; line-height: 1.4; }
 
 .card-desc { font-size: 14px; color: #6B7280; margin-bottom: 15px; line-height: 1.6; }
-.card-desc a { color: #22C55E; font-weight: 600; text-decoration: none; font-size: 11px; text-transform: uppercase; }
+.card-desc a { color: #22C55E; font-weight: 600; text-decoration: none; font-size: 12px; text-transform: uppercase; }
 
 .card-tags { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.tag { background: #DCFCE7; color: #16A34A; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.tag { background: #DCFCE7; color: #16A34A; padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
 
 /* Membros */
 .card-members { margin-bottom: 15px; }
-.members-label { font-size: 12px; font-weight: 600; color: #6B7280; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+.members-label { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px; }
 .member-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 14px; color: #111827; }
-.avatar-mini { width: 28px; height: 28px; background: #D1FAE5; color: #065F46; border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: 700; object-fit: cover; }
+.avatar-mini { width: 26px; height: 26px; background: #D1FAE5; color: #065F46; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
 /* Rodapé */
-.card-meta { font-size: 12px; color: #9CA3AF; margin-bottom: 20px; padding-top: 15px; border-top: 1px solid #F9FAFB; }
+.card-meta { font-size: 12px; color: #9CA3AF; margin-bottom: 20px; padding-top: 10px; border-top: 1px solid #F9FAFB; }
 
 .card-footer { display: flex; gap: 15px; margin-top: auto; }
 
 .btn-cancel {
-    flex: 1; background: #F3F4F6; color: #4B5563; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 14px;
+    flex: 1; background: #F3F4F6; color: #4B5563; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s;
 }
 .btn-cancel:hover { background: #E5E7EB; }
 
 .btn-confirm {
-    flex: 1; background: #22C55E; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2); font-size: 14px;
+    flex: 1; background: #22C55E; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2);
 }
 .btn-confirm:hover { background: #16A34A; }
 
@@ -286,6 +284,25 @@ main {
 
 .btn-cancel-submission i {
     font-size: 14px;
+}
+
+/* Floating Tag Style */
+.floating-tag {
+    background: linear-gradient(135deg, #22C55E, #16A34A);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+}
+
+/* Helper Text */
+.helper-text {
+    font-size: 13px;
+    color: #6B7280;
+    line-height: 1.5;
 }
 
 #search_container {
@@ -401,11 +418,22 @@ main {
         flex-direction: column;
         align-items: stretch;
     }
-    .input_container { width: 100%; }
+    .input_container { 
+        width: 100%; 
+        min-width: auto;
+    }
     .filter_btns {
         justify-content: flex-start;
         overflow-x: auto;
         padding-bottom: 5px;
+    }
+
+    .container_projects {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    main {
+        padding: 20px;
     }
 }
 
@@ -415,27 +443,198 @@ main {
     /* Grid vira 1 coluna */
     .container_projects {
         grid-template-columns: 1fr; 
+        gap: 20px;
     }
 
-    main { padding: 20px 15px; }
+    main { 
+        padding: 15px;
+        gap: 20px;
+    }
     
-    .project-card { padding: 20px; }
+    .search_project {
+        padding: 12px 15px;
+        gap: 15px;
+    }
+
+    .input_container {
+        height: 40px;
+        min-width: auto;
+    }
+
+    .filter_btns button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .project-card { 
+        padding: 15px; 
+    }
+
+    .card-title {
+        font-size: 16px;
+    }
+
+    .card-desc {
+        font-size: 13px;
+    }
+
+    .card-members {
+        margin-bottom: 10px;
+    }
+
+    .member-row {
+        margin-bottom: 5px;
+    }
 
     /* --- Botões Empilhados e Menores --- */
     .card-footer {
-        flex-direction: column; /* Um embaixo do outro */
+        flex-direction: column;
         gap: 8px;
     }
 
-    /* Agora afeta tanto os botões do Card quanto do Modal */
     .btn-cancel, 
     .btn-confirm,
     .btn-secondary,
     .btn-danger {
-        width: 100%;            /* Largura total */
+        width: 100%;
         justify-content: center; 
-        padding: 10px;          /* Espaço interno menor */
-        font-size: 13px;        /* Fonte menor */
+        padding: 10px;
+        font-size: 13px;
         height: auto;
+    }
+
+    .pagination-container {
+        margin: 20px 0;
+        gap: 8px;
+    }
+
+    .pagination-number,
+    .pagination-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+    }
+}
+
+/* ==========================================================================
+   FEEDBACK BOX STYLES (MY PROJECTS)
+   ========================================================================== */
+.feedback-box {
+    margin: 15px 0;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    border-left: 4px solid;
+    background-color: #F9FAFB;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Reprovado/Rejeitado */
+.feedback-box.error {
+    border-left-color: #EF4444;
+    background-color: #FEF2F2;
+}
+.feedback-box.error .feedback-header {
+    color: #991B1B;
+}
+
+/* Aprovado */
+.feedback-box.success {
+    border-left-color: #22C55E;
+    background-color: #F0FDF4;
+}
+.feedback-box.success .feedback-header {
+    color: #166534;
+}
+
+/* Pendente de Aprovação */
+.feedback-box.pending {
+    border-left-color: #FBBF24;
+    background-color: #FFFBEB;
+}
+.feedback-box.pending .feedback-header {
+    color: #B45309;
+}
+
+.feedback-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.feedback-message {
+    font-style: italic;
+    color: #4B5563;
+    line-height: 1.4;
+    margin-bottom: 6px;
+}
+
+.feedback-meta {
+    font-size: 11px;
+    color: #9CA3AF;
+    text-align: right;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 4px;
+    margin-top: 8px;
+}
+
+/* Empty State Message */
+.empty-state {
+    width: 100%;
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+/* No Tags Message */
+.no-tags {
+    background: #f3f3f3;
+    color: #999;
+}
+
+/* Extra Members Count */
+.extra-members {
+    color: #666;
+    margin-left: 5px;
+}
+
+/* Card Meta with Flex Layout */
+.card-meta-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+/* Avatar Image Styles */
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Link Button Styles */
+.link-button {
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Keyboard Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

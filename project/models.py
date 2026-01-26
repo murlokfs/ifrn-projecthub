@@ -74,6 +74,10 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    def get_latest_feedback(self):
+        """Retorna o feedback mais recente da solicitação de aprovação"""
+        return self.approval_solicitations.filter(is_active=True).order_by('-created_at').first()
+
     class Meta:
         verbose_name = "Projeto"
         verbose_name_plural = "Projetos"
