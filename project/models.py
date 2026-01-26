@@ -36,6 +36,9 @@ class Tag(models.Model):
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
 
+def project_image_path(instance, filename):
+    return f'projects/{instance.id}/images/{filename}'
+
 class Project(models.Model):
 
     STATUS_CHOICES = [
@@ -57,6 +60,7 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_approval')
     is_private = models.BooleanField(default=False)
+    image = models.ImageField(upload_to=project_image_path, null=True, blank=True)
 
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='research')
 
@@ -75,11 +79,18 @@ class Project(models.Model):
         verbose_name_plural = "Projetos"
 
 class ApprovalSolicitation(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('approved', 'Aprovado'),
+        ('rejected', 'Rejeitado'),
+    ]
+    
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='approval_solicitations')
     message = models.TextField(null=False, blank=False)
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='approval_solicitations')
     created_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)
+    # is_approved = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
