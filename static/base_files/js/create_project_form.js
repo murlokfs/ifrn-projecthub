@@ -16,11 +16,66 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- Elementos do Player YouTube ---
     const videoContainer = document.getElementById('video-preview-container');
     const iframe = document.getElementById('youtube-player');
-    const bannerInput = document.querySelector('input[type="file"][name="banner"]');
+    const bannerInput = document.querySelector('input[type="file"][name="image"]');
     
     // --- Elementos de Preview ---
     const bannerPreviewContainer = document.getElementById('banner-preview-container');
     const bannerPreviewImg = document.getElementById('banner-preview-img');
+
+    // --- Campos Obrigatórios ---
+    const titleInput = document.querySelector('input[name="title"]');
+    const descriptionInput = document.querySelector('textarea[name="description"]');
+    const bannerUploadInput = document.querySelector('input[type="file"][name="image"]');
+    const orientatorsSelect = document.getElementById('id_orientators');
+    const membersSelect = document.getElementById('id_members');
+    const tagsSelect = document.getElementById('id_tags');
+
+    // Função para validar campos obrigatórios
+    function validateRequiredFields() {
+        const titleFilled = titleInput && titleInput.value.trim().length > 0;
+        
+        // Validar descrição (pode ser CKEditor ou textarea normal)
+        let descriptionFilled = false;
+        if (descriptionInput) {
+            descriptionFilled = descriptionInput.value.trim().length > 0;
+        }
+        // Se for CKEditor, verificar também o iframe
+        if (!descriptionFilled && typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.id_description) {
+            const editorData = CKEDITOR.instances.id_description.getData();
+            descriptionFilled = editorData.trim().length > 0;
+        }
+        
+        const bannerUploaded = bannerUploadInput && bannerUploadInput.files && bannerUploadInput.files.length > 0;
+        const orientatorsSelected = orientatorsSelect && [...orientatorsSelect.selectedOptions].length > 0;
+        const membersSelected = membersSelect && [...membersSelect.selectedOptions].length > 0;
+        const tagsSelected = tagsSelect && [...tagsSelect.selectedOptions].length > 0;
+
+        console.log('Validação dos campos:', {
+            titleFilled,
+            descriptionFilled,
+            bannerUploaded,
+            orientatorsSelected,
+            membersSelected,
+            tagsSelected
+        });
+
+        const allValid = titleFilled && descriptionFilled && bannerUploaded && orientatorsSelected && membersSelected && tagsSelected;
+        
+        return allValid;
+    }
+
+    // Função para atualizar estado do botão
+    function updatePublishButton() {
+        if (publishBtn) {
+            const isValid = validateRequiredFields();
+            publishBtn.disabled = !isValid;
+            publishBtn.style.opacity = isValid ? '1' : '0.5';
+            publishBtn.style.cursor = isValid ? 'pointer' : 'not-allowed';
+        }
+    }
+
+    // Atualizar botão inicialmente
+    updatePublishButton();
 
     const userData = document.getElementById('user-data');
     if (userData) {
@@ -41,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
             chip.innerHTML = `${userName} (Você)`;
             container.appendChild(chip);
             updatePreviews();
+            updatePublishButton();
         }
     }    
 
@@ -55,10 +111,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Sincroniza com o card de preview lateral se o elemento existir
                     const cardBanner = document.getElementById('cardBanner');
                     if (cardBanner) cardBanner.src = e.target.result;
+                    updatePublishButton();
                 }
                 reader.readAsDataURL(file);
             } else {
                 bannerPreviewContainer.style.display = 'none';
+                updatePublishButton();
             }
         });
     }
@@ -69,9 +127,35 @@ document.addEventListener("DOMContentLoaded", () => {
     if (publishBtn && projectForm) {
         publishBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            if (projectForm.reportValidity()) projectForm.submit();
+            if (projectForm.reportValidity()) {
+                // Mostrar modal de confirmação ao invés de submeter direto
+                showConfirmationModal();
+            }
         });
     }
+
+    // Função para mostrar modal de confirmação
+    window.showConfirmationModal = function() {
+        const modal = document.getElementById('confirmationModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    };
+
+    // Função para submeter o formulário
+    window.submitProjectForm = function() {
+        if (projectForm) {
+            projectForm.submit();
+        }
+    };
+
+    // Função para fechar modal de confirmação
+    window.closeConfirmationModal = function() {
+        const modal = document.getElementById('confirmationModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    };
 
     
 
@@ -81,6 +165,22 @@ document.addEventListener("DOMContentLoaded", () => {
             const val = e.target.value.trim();
             if (cardTitle) cardTitle.innerText = val || "Nome do projeto";
             if (cardAvatar) cardAvatar.innerText = val ? val.charAt(0).toUpperCase() : "P";
+            updatePublishButton();
+        });
+    }
+
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', (e) => {
+            updatePublishButton();
+        });
+    }
+
+    // Listener para CKEditor (se estiver sendo usado)
+    if (typeof CKEDITOR !== 'undefined') {
+        CKEDITOR.on('instanceReady', function(evt) {
+            evt.editor.on('change', function() {
+                updatePublishButton();
+            });
         });
     }
 
@@ -255,17 +355,18 @@ document.addEventListener("DOMContentLoaded", () => {
             for (let i = 0; i < hiddenSelect.options.length; i++) {
                 if (hiddenSelect.options[i].value == id) { hiddenSelect.remove(i); break; }
             }
-            const containerId = currentType === 'tag' ? 'tagsList' : (currentType === 'professor' ? 'orientatorsList' : 'membersList');
+            const containerId = currentType === 'tag' ? 'tagsList' : (currentType === 'professor' ? 'orientators-list' : 'membersList');
             document.querySelectorAll(`#${containerId} .chip-item`).forEach(chip => {
                 if (chip.dataset.id == id) chip.remove();
             });
         }
         updatePreviews();
+        updatePublishButton();
         debounceSearch(); 
     };
 
     function addChipToUI(type, id, name) {
-        const listId = type === 'tag' ? 'tagsList' : (type === 'professor' ? 'orientatorsList' : 'membersList');
+        const listId = type === 'tag' ? 'tagsList' : (type === 'professor' ? 'orientators-list' : 'membersList');
         const container = document.getElementById(listId);
         if (!container) return;
 
@@ -286,6 +387,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (element && element.closest('.chip-item')) element.closest('.chip-item').remove();
         updatePreviews();
+        updatePublishButton();
     };
 
     function updatePreviews() {

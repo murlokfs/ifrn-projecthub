@@ -15,7 +15,7 @@
 
         <div class="form-group">
     <label>Imagem de Apresentação (Banner) <span class="required">*</span></label>
-    {{ form.banner }}
+    {{ form.image }}
     <div id="banner-preview-container" style="display: none; margin-top: 15px;">
         <img id="banner-preview-img" src="" alt="Preview do Banner" 
              style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid #e2e8f0;">
@@ -53,7 +53,7 @@
                 <i class="ph ph-graduation-cap"></i> Selecionar Professores Orientadores
             </button>
             <div id="orientators-list" class="chips-container"></div>
-            <div style="display:none;">{{ form.orientators }}</div>
+            <select name="orientators" id="id_orientators" multiple hidden></select>
         </div>
 
         <div class="form-group">
@@ -116,6 +116,29 @@
         <div class="modal-footer">
             <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
             <button type="button" class="btn-confirm-final" onclick="confirmSelection()">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmação de Publicação -->
+<div id="confirmationModal" class="modal-overlay confirmation-modal" style="display: none;">
+    <div class="modal-container confirmation-container">
+        <div class="modal-header">
+            <h3>Confirmar Publicação</h3>
+            <button class="close-icon" onclick="closeConfirmationModal()">&times;</button>
+        </div>
+
+        <div class="confirmation-content">
+            <div class="confirmation-icon">
+                <i class="ph ph-check-circle"></i>
+            </div>
+            <p class="confirmation-message">Você tem certeza que deseja publicar este projeto?</p>
+            <p class="confirmation-subtitle">Uma vez publicado, o projeto será enviado para aprovação dos professores orientadores.</p>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" onclick="closeConfirmationModal()">Cancelar</button>
+            <button type="button" class="btn-confirm-final" onclick="submitProjectForm()">Publicar Projeto</button>
         </div>
     </div>
 </div>

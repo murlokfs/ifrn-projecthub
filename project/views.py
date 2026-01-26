@@ -90,30 +90,27 @@ def search_entities(request):
         data = [{'id': t.id, 'name': t.name} for t in results]
     
     else:
-        # Usamos select_related para trazer os dados de curso e instituição em uma única consulta
         users = User.objects.filter(
-            Q(full_name__icontains=query) | Q(registration__icontains=query),
+            Q(full_name__icontains=query) | Q(registration__icontains=query) | Q(username__icontains=query),
             is_active=True
-        ).select_related('course__institution')
+        ).select_related('course__campus')
 
         if entity_type == 'professor':
             users = users.filter(role='teacher') 
         elif entity_type == 'member':
-            users = users.filter(role__in=['student', 'alumni']).exclude(id=request.user.id)
+            users = users.filter(role='student').exclude(id=request.user.id)
 
         data = []
         for u in users[:10]:
-            # Pegamos a sigla da instituição e o campus dinamicamente
-            if u.course and u.course.institution:
-                # Exemplo: "IFPE • Campus Recife"
-                info_text = f"{u.get_role_display()} • {u.course.institution.acronym} • {u.course.institution.campus}"
+            if u.course and u.course.campus:
+                info_text = f"{u.get_role_display()} • {u.course.campus.name}"
             else:
-                info_text = f"{u.get_role_display()} • Instituição não informada"
+                info_text = f"{u.get_role_display()} • Campus não informado"
 
             data.append({
                 'id': u.id, 
                 'name': u.full_name,
-                'info': info_text, # Aqui vai o texto formatado dinamicamente
+                'info': info_text,
                 'avatar_letter': u.full_name[0].upper() if u.full_name else '?'
             })
 

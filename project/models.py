@@ -1,28 +1,24 @@
 from django.db import models
 from ckeditor.fields import RichTextField
-
-class Institution(models.Model):
-
+class Campus(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     cnpj = models.CharField(max_length=20, unique=True, null=False, blank=False)
-    campus = models.CharField(max_length=50, null=False, blank=False)
     acronym = models.CharField(max_length=10, null=False, blank=False)
-    image = models.ImageField(upload_to='institutions/photos/', null=True, blank=True)
-
+    image = models.ImageField(upload_to='media/campus/photos/', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.acronym} - {self.campus}"
+        return f"{self.name} - {self.acronym}"
 
     class Meta:
-        verbose_name = "Instituição"
-        verbose_name_plural = "Instituições"
+        verbose_name = "Campus"
+        verbose_name_plural = "Campi"
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='courses')
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, related_name='courses', default=None)
 
     def __str__(self):
-        return f"{self.name} - {self.institution.acronym}"
+        return f"{self.name} - {self.campus.acronym}"
 
     class Meta:
         verbose_name = "Curso"
@@ -39,7 +35,7 @@ class Tag(models.Model):
         verbose_name_plural = "Tags"
 
 def project_image_path(instance, filename):
-    return f'projects/{instance.id}/images/{filename}'
+    return f'media/projects/{instance.id}/images/{filename}'
 
 class Project(models.Model):
 

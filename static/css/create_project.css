@@ -329,3 +329,81 @@ input:checked + .slider:before {
     .modal-container { padding: 18px !important; }
     .avatar-sigla { width: 38px !important; height: 38px !important; margin-right: 10px !important; }
 }
+
+/* 8. MODAL DE CONFIRMAÇÃO DE PUBLICAÇÃO */
+.confirmation-modal {
+    animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.confirmation-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    padding: 32px 28px !important;
+}
+
+.modal-header {
+    position: relative !important;
+    margin-bottom: 10px !important;
+    padding: 0 !important;
+}
+
+.modal-header h3 {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    margin: 0 !important;
+}
+
+.confirmation-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 16px !important;
+    padding: 20px 0 !important;
+}
+
+.confirmation-icon {
+    width: 64px !important;
+    height: 64px !important;
+    background: #dcfce7 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 32px !important;
+    color: #22c55e !important;
+}
+
+.confirmation-message {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    text-align: center !important;
+    margin: 0 !important;
+}
+
+.confirmation-subtitle {
+    font-size: 13px !important;
+    color: #64748b !important;
+    text-align: center !important;
+    margin: 0 !important;
+    line-height: 1.5 !important;
+}
+
+.confirmation-container .modal-footer {
+    gap: 10px !important;
+    margin-top: 10px !important;
+    flex-direction: row-reverse !important;
+}

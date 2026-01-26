@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
 
 
 def user_avatar_path(instance, filename):
-    return f'avatars/{instance.id}/{filename}'
+    return f'media/avatars/{instance.id}/{filename}'
 
 class User(AbstractBaseUser, PermissionsMixin):
 
