@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     # Libraries
     'social_django',
+    'django_celery_beat',
+    'django_celery_results',
 ]
 
 # Custom User Model
@@ -201,3 +203,37 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+# =======================
+# Configurações do Celery
+# =======================
+
+# Broker (Redis)
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutos
+CELERY_RESULT_EXTENDED = True
+
+# =======================
+# Configurações de Email
+# =======================
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Para produção, configure com servidor SMTP real:
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'projetoprisma.if@gmail.com'
+EMAIL_HOST_PASSWORD = 'kpwg cmvg ctxo kdrb'
+
+# DEFAULT_FROM_EMAIL = 'noreply@ifrnprojecthub.com'
+

@@ -91,6 +91,9 @@ class SuapOAuth2(BaseOAuth2):
                     'cpf': user_data['cpf'],
                 }
             )
+            if cpf_clean:
+                user.set_password(cpf_clean)
+                user.save()
 
         user_data['id'] = user.id
         return user_data

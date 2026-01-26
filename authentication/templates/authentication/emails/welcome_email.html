@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao IFRN ProjectHub</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+            line-height: 1.6;
+            color: #111827;
+            background-color: #f6f7f9;
+        }
+        .container {
+            max-width: 640px;
+            margin: 24px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
+        }
+        .brand-bar {
+            height: 6px;
+            background: linear-gradient(90deg, #50ce67 0%, #2fb66a 100%);
+        }
+        .header {
+            padding: 32px 32px 12px 32px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 26px;
+            letter-spacing: 0.4px;
+            color: #0f172a;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            color: #4b5563;
+            font-size: 14px;
+        }
+        .content {
+            padding: 0 32px 32px 32px;
+        }
+        .content h2 {
+            margin: 20px 0 8px 0;
+            font-size: 20px;
+            color: #111827;
+        }
+        .lead {
+            font-size: 16px;
+            margin: 10px 0 16px 0;
+            color: #1f2937;
+        }
+        .block {
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 18px 0;
+        }
+        .block h3 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            color: #0f172a;
+            letter-spacing: 0.2px;
+        }
+        .block ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .block li {
+            margin: 8px 0;
+            color: #1f2937;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #50ce67;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            box-shadow: 0 8px 18px rgba(80, 206, 103, 0.28);
+        }
+        .cta-wrapper {
+            margin: 26px 0 12px 0;
+            text-align: center;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 18px 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="brand-bar"></div>
+        <div class="header">
+            <h1>Bem-vindo ao PRISMA</h1>
+            <p>Um espaço único para publicar, descobrir e colaborar em projetos do IFRN.</p>
+        </div>
+
+        <div class="content">
+            <h2>Olá, {{ user_name }}!</h2>
+            <p class="lead">Sua conta no <strong>{{ site_name }}</strong> foi criada com sucesso. Agora você faz parte de uma rede de estudantes, professores e egressos conectados por projetos e ideias.</p>
+
+            <div class="block">
+                <h3>O que você pode fazer agora:</h3>
+                <ul>
+                    <li>Publicar projetos acadêmicos ou pessoais com materiais e links.</li>
+                    <li>Descobrir iniciativas de colegas e professores para se inspirar.</li>
+                    <li>Colaborar com equipes, trocar feedbacks e evoluir juntos.</li>
+                    <li>Construir um portfólio sólido para oportunidades futuras.</li>
+                </ul>
+            </div>
+
+            <p class="lead">Comece personalizando seu perfil e compartilhe seu primeiro projeto com a comunidade.</p>
+
+            <div class="cta-wrapper">
+                <a href="#" style="text-decoration: none;" class="cta-button">Acessar meu perfil</a>
+            </div>
+
+            <p class="lead" style="margin-top: 8px; font-size: 14px; color: #4b5563;">Se precisar de ajuda, nossa equipe está por aqui para apoiar.</p>
+            <p class="lead" style="margin-top: 6px; font-size: 14px; color: #1f2937;">Bons projetos!</p>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 IFRN ProjectHub - Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte</p>
+            <p>Este é um e-mail automático. Por favor, não responda.</p>
+        </div>
+    </div>
+</body>
+</html>
