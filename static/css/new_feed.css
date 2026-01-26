@@ -465,6 +465,72 @@ body {
     font-size: 14px;
 }
 
+/* --- DROPDOWN DE ORDENAÇÃO --- */
+.dropdown-sort {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-filter {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dropdown-filter:hover {
+    background-color: #F3F4F6;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    min-width: 180px;
+    margin-top: 5px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.2s;
+    border-bottom: 1px solid var(--border);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.dropdown-item.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    font-weight: 600;
+}
+
 /* Responsividade para celular */
 @media (max-width: 600px) {
     .filter-grid {

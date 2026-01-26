@@ -344,11 +344,10 @@ main {
     font-weight: 600;
     border: none;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .btn-apply-filters:hover {
-    background-color: var(--primary-dark);
+    background-color:#50CE67;
 }
 
 /* ==========================================================================

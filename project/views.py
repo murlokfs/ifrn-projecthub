@@ -42,12 +42,24 @@ class FeedView(ListView):
 
     def get_queryset(self):
         queryset = Project.objects.filter(
-            is_private=False
+            is_private=False,
+            status__in=['in_progress', 'completed']
+            #approval_solicitations__status='approved'
         ).select_related(
-            'course'
+            'course__institution'
         ).prefetch_related(
             'tags', 'members'
-        )
+        ).distinct() # O distinct é importante para não duplicar o projeto se tiver mais de uma aprovação
+
+        tab = self.request.GET.get('tab', 'trending') # Padrão é 'Em alta' (trending)
+
+        if tab == 'my_campus' and self.request.user.is_authenticated:
+            # Verifica se o usuário tem um curso vinculado
+            # Ajuste 'course' se o nome do campo no seu User for diferente
+            if hasattr(self.request.user, 'course') and self.request.user.course:
+                user_institution = self.request.user.course.institution
+                # Filtra projetos da MESMA instituição do usuário
+                queryset = queryset.filter(course__institution=user_institution)
 
         # 🔍 BUSCA GLOBAL (HEADER)
         query = self.request.GET.get('q')
@@ -75,7 +87,14 @@ class FeedView(ListView):
         if tag_id and tag_id != 'all':
             queryset = queryset.filter(tags__id=tag_id)
 
-        return queryset.distinct().order_by('-created_at')
+        # 📅 ORDENAÇÃO
+        sort_by = self.request.GET.get('sort', 'newest')  # Padrão: mais recentes
+        if sort_by == 'oldest':
+            queryset = queryset.order_by('created_at')
+        else:
+            queryset = queryset.order_by('-created_at')
+
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,6 +103,8 @@ class FeedView(ListView):
         context['filters'] = self.request.GET
         context['search_query'] = self.request.GET.get('q', '')
         context['active_page'] = 'feed'
+        context['current_tab'] = self.request.GET.get('tab', 'trending')
+        context['sort_by'] = self.request.GET.get('sort', 'newest')
 
         return context
 
@@ -124,14 +145,18 @@ class DetalhesProjetosView(DetailView):
     template_name = 'project/project_details.html'
     context_object_name = 'project'
 
-class ComentariosAlunosView(TemplateView):
+class ComentariosAlunosView(DetailView):
+    model = Project
     template_name = 'project/student_comments.html'
+    context_object_name = 'project'
     
 class CadastroProjetoView(TemplateView):
     template_name = 'project/create_project.html'
 
-class ComentariosProfessoresView(TemplateView):
+class ComentariosProfessoresView(DetailView):
+    model = Project
     template_name = 'project/teacher_comments.html'
+    context_object_name = 'project'
 
 class ProjetosAprovacaoView(TemplateView):
     template_name = 'project/project_approvals.html'

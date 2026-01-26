@@ -14,10 +14,19 @@
     <main class="feed-main-column">
 
         <div class="feed-header-section">
+            
             <div class="tabs-row">
-                <button class="tab-btn active">Para você</button>
-                <button class="tab-btn">Meu Campus</button>
-                <button class="tab-btn">Em alta</button>
+                <a href="?tab=trending{% if search_query %}&q={{ search_query }}{% endif %}{% if filters.type %}&type={{ filters.type }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}" 
+                   class="tab-btn {% if current_tab == 'trending' or not current_tab %}active{% endif %}">
+                   Em alta
+                </a>
+
+                {% if user.is_authenticated %}
+                <a href="?tab=my_campus{% if search_query %}&q={{ search_query }}{% endif %}{% if filters.type %}&type={{ filters.type }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}" 
+                   class="tab-btn {% if current_tab == 'my_campus' %}active{% endif %}">
+                   Meu Campus
+                </a>
+                {% endif %}
             </div>
 
             <div class="filters-row">
@@ -25,8 +34,28 @@
                     <i class="ph ph-funnel"></i>Filtros
                 </button>
 
-                <div class="dropdown-filter">
-                    Mais recentes <i class="ph ph-caret-down"></i>
+                <div class="dropdown-sort">
+                    <button class="dropdown-filter" onclick="toggleSortDropdown(event)">
+                        <span id="sort-label">
+                            {% if sort_by == 'oldest' %}
+                                Mais antigos
+                            {% else %}
+                                Mais recentes
+                            {% endif %}
+                        </span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    
+                    <div class="dropdown-menu" id="sortMenu" style="display: none;">
+                        <a class="dropdown-item {% if sort_by == 'newest' or not sort_by %}active{% endif %}" 
+                           href="?tab={{ current_tab|default:'trending' }}&sort=newest{% if search_query %}&q={{ search_query }}{% endif %}{% if filters.type %}&type={{ filters.type }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}">
+                            <i class="ph ph-arrow-up"></i> Mais recentes
+                        </a>
+                        <a class="dropdown-item {% if sort_by == 'oldest' %}active{% endif %}" 
+                           href="?tab={{ current_tab|default:'trending' }}&sort=oldest{% if search_query %}&q={{ search_query }}{% endif %}{% if filters.type %}&type={{ filters.type }}{% endif %}{% if filters.tag %}&tag={{ filters.tag }}{% endif %}{% if filters.status %}&status={{ filters.status }}{% endif %}">
+                            <i class="ph ph-arrow-down"></i> Mais antigos
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -34,10 +63,13 @@
                  {% if filters.type or filters.tag or filters.status %} style="display:block" {% else %} style="display:none" {% endif %}>
                 
                 <form method="get">
-                    {# mantém a busca do header #}
+                    {# Mantém a busca #}
                     {% if search_query %}
-                        <input type="hidden" name="search" value="{{ search_query }}">
+                        <input type="hidden" name="q" value="{{ search_query }}">
                     {% endif %}
+                    
+                    {# Mantém a aba atual ao filtrar #}
+                    <input type="hidden" name="tab" value="{{ current_tab|default:'trending' }}">
 
                     <div class="filter-grid">
 
@@ -119,6 +151,21 @@
                         btn.style.color = '';
                     }
                 }
+
+                function toggleSortDropdown(event) {
+                    event.preventDefault();
+                    const sortMenu = document.getElementById('sortMenu');
+                    const isVisible = sortMenu.style.display === 'block';
+                    sortMenu.style.display = isVisible ? 'none' : 'block';
+                }
+
+                // Fechar dropdown ao clicar fora
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.querySelector('.dropdown-sort');
+                    if (dropdown && !dropdown.contains(event.target)) {
+                        document.getElementById('sortMenu').style.display = 'none';
+                    }
+                });
             </script>
         </div>
 
@@ -133,8 +180,8 @@
                 <article class="feed-card">
 
                     <div class="card-image-box">
-                        {% if projeto.imagem %}
-                            <img src="{{ projeto.imagem.url }}" alt="Capa">
+                        {% if projeto.image %}
+                            <img src="{{ projeto.image.url }}" alt="Capa do projeto {{ projeto.title }}">
                         {% else %}
                             <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop">
                         {% endif %}
@@ -151,7 +198,7 @@
                                 {% endif %}
                                 ">
                                 {{ projeto.get_status_display }}
-                        </span>
+                            </span>
                         </div>
                     </div>
 
@@ -190,7 +237,7 @@
                                 <div class="stats-icons">
                                     {% include 'components/cards/project_parts/interaction_btns.html' %}
                                 </div>
-                                <a href="{% url 'index' %}?id={{projeto.id}}" class="btn-details">
+                                <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
                                     Ver Detalhes <i class="ph ph-arrow-up-right"></i>
                                 </a>
                             </div>
@@ -205,38 +252,35 @@
         {% if is_paginated %}
             <div class="pagination-container">
 
-            <!-- ANTERIOR -->
-        {% if page_obj.has_previous %}
-            <a class="pagination-arrow"
-                href="?page={{ page_obj.previous_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
-                ‹
-            </a>
-        {% endif %}
-
-            <!-- NÚMEROS -->
-        {% for num in page_obj.paginator.page_range %}
-            {% if num == page_obj.number %}
-                <span class="pagination-number active">
-                    {{ num }}
-                </span>
-            {% else %}
-                <a class="pagination-number"
-                    href="?page={{ num }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
-                    {{ num }}
+            {% if page_obj.has_previous %}
+                <a class="pagination-arrow"
+                   href="?page={{ page_obj.previous_page_number }}&tab={{ current_tab|default:'trending' }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                    ‹
                 </a>
             {% endif %}
-        {% endfor %}
 
-            <!-- PRÓXIMA -->
-        {% if page_obj.has_next %}
-            <a class="pagination-arrow"
-                href="?page={{ page_obj.next_page_number }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">
-                ›
-            </a>
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <span class="pagination-number active">
+                        {{ num }}
+                    </span>
+                {% else %}
+                    <a class="pagination-number"
+                       href="?page={{ num }}&tab={{ current_tab|default:'trending' }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                        {{ num }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="pagination-arrow"
+                   href="?page={{ page_obj.next_page_number }}&tab={{ current_tab|default:'trending' }}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">
+                    ›
+                </a>
+            {% endif %}
+
+            </div>
         {% endif %}
-
-        </div>
-    {% endif %}
 
     </main>
 
@@ -248,7 +292,7 @@
                 <h3>Criar Projeto</h3>
             </div>
             <p>Compartilhe seu trabalho acadêmico e receba feedback da comunidade.</p>
-            <button class="btn-white-full">Começar Agora</button>
+            <a href="{% url 'create_project' %}" class="btn-white-full">Começar Agora</a>
         </div>
 
         <div class="sidebar-widget">
@@ -257,7 +301,7 @@
             </div>
             <div class="cloud-tags">
                 {% for tag in tags %}
-                    <span class="cloud-tag"># {{ tag.name }}</span>
+                    <a href="?tag={{ tag.id }}&tab={{ current_tab|default:'trending' }}" class="cloud-tag" style="text-decoration: none; color: inherit;"># {{ tag.name }}</a>
                 {% endfor %}
             </div>
         </div>
