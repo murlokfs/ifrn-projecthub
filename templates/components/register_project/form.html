@@ -1,94 +1,121 @@
-<h1>Cadastrar Projeto</h1>
+<div class="form-container">
+    <h2 class="form-title">Cadastrando Projeto</h2>
 
-<div class="form-group">
-    <label>Nome do projeto <span class="required">*</span></label>
-    <input type="text" id="inputNome" class="form-input" placeholder="Ex: Project Hub - Armazene seus projetos">
-    <div class="helper-text">3-150 caracteres, Alfanuméricos, hífen e pontos permitidos</div>
+    <form method="post" enctype="multipart/form-data" style="width: 100%;">
+        {% csrf_token %}
+        {{ form.media }} 
+        
+        <div class="form-group">
+            <label>Nome do projeto <span class="required">*</span></label>
+            <input type="text" name="title" class="custom-input" 
+                   value="{{ form.title.value|default:'' }}" 
+                   placeholder="Ex: Project Hub - Armazene seus projetos">
+            <div class="helper-text">3-150 caracteres, Alfanuméricos, hífen e pontos permitidos</div>
+        </div>
+
+        <div class="form-group">
+    <label>Imagem de Apresentação (Banner) <span class="required">*</span></label>
+    {{ form.banner }}
+    <div id="banner-preview-container" style="display: none; margin-top: 15px;">
+        <img id="banner-preview-img" src="" alt="Preview do Banner" 
+             style="width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; border: 1px solid #e2e8f0;">
+    </div>
 </div>
 
-<div class="form-group">
-    <label>Descrição geral</label>
-    <div id="editor-container" style="height: 200px; background: #fff;"></div>
+        <div class="form-group" width="100%">
+            <label>Descrição geral <span class="required">*</span></label>
+            {{ form.description }}
+        </div>
 
-    <input type="hidden" name="descricao" id="inputDescricaoHidden">
-</div>
-
-<div class="form-row">
-    <div class="form-col">
-        <label>Visibilidade</label>
-        <div class="toggle-wrapper">
-            <label class="switch">
-                <input type="checkbox">
-                <span class="slider round"></span>
-            </label>
-            <div class="toggle-text">
-                <strong>Privado</strong>
-                <span>Apenas membros autorizados</span>
+        <div class="form-row" style="display: flex; gap: 20px; align-items: flex-end; margin-bottom: 20px;">
+            <div class="form-col" style="flex: 1;">
+            <label>Visibilidade</label>
+            <div class="toggle-wrapper">
+                <label class="switch">
+                    <input type="checkbox" name="is_private" id="id_is_private" {% if form.is_private.value %}checked{% endif %}>
+                    <span class="slider round"></span>
+                </label>
+                <div class="toggle-text">
+                    <strong id="visibilityStatusText">{% if form.is_private.value %}Privado{% else %}Público{% endif %}</strong>
+                    <span id="visibilityHelperText">{% if form.is_private.value %}Apenas membros autorizados{% else %}Visível para todos os usuários{% endif %}</span>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="form-col">
-        <label>Tipo de projeto</label>
-        <select class="form-input">
-            <option>Projeto Integrador</option>
-            <option>Tcc</option>
-            <option>Projeto Pesquisa</option>
-        </select>
-    </div>
+
+            <div class="form-col" style="flex: 1;">
+                <label>Tipo de projeto</label>
+                {{ form.type }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Professores orientadores <span class="required">*</span></label>
+            <button type="button" class="btn-trigger btn-teacher" onclick="openModal('professor')">
+                <i class="ph ph-graduation-cap"></i> Selecionar Professores Orientadores
+            </button>
+            <div id="orientators-list" class="chips-container"></div>
+            <div style="display:none;">{{ form.orientators }}</div>
+        </div>
+
+        <div class="form-group">
+            <label>Integrantes <span class="required">*</span></label>
+            <button type="button" class="btn-trigger btn-student" onclick="openModal('member')">
+                <i class="ph ph-users"></i> Convidar integrantes
+            </button>
+            <div id="membersList" class="chips-container"></div>
+            <select name="members" id="id_members" multiple hidden></select>
+            <div id="user-data" data-id="{{ request.user.id }}" data-name="{{ request.user.full_name }}"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Tags <span class="required">*</span></label>
+            <button type="button" class="btn-trigger btn-tag-red" onclick="openModal('tag')">
+                <i class="ph ph-tag"></i> Adicionar Tags
+            </button>
+            <div id="tagsList" class="chips-container"></div>
+            <select name="tags" id="id_tags" multiple hidden></select>
+        </div>
+
+        <div class="form-group">
+            <label>Link do repositório no GitHub</label>
+            <div class="input-with-icon">
+                <i class="ph ph-github-logo"></i>
+                {{ form.link_github }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Link do vídeo no YouTube</label>
+            <div class="input-with-icon">
+                <i class="ph ph-youtube-logo"></i>
+                {{ form.link_youtube }}
+            </div>
+            <div id="video-preview-container" style="display: none; margin-top: 15px;"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" style="display: none; margin-top: 30px;">Salvar Projeto</button>
+    </form>
 </div>
 
-<div class="form-group">
-    <label>Professor Orientador <span class="required">*</span></label>
-    <input type="text" id="inputProfessor" class="form-input" placeholder="Buscar professor">
-    <div class="helper-text">Digite para buscar por nome</div>
-</div>
+<div id="searchModal" class="modal-overlay" style="display:none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle">Convidar Integrantes</h3>
+            <button class="close-icon" onclick="closeModal()">&times;</button>
+        </div>
 
-<div class="form-group">
-    <label>Integrantes</label>
-    <div class="input-with-button">
-        <input type="text" id="inputMember" class="form-input" placeholder="Digite o nome do integrante...">
-        <button id="btnAddMember" class="btn-add">+</button>
-    </div>
-    <div id="membersList" class="chips-container"></div>
-    <div class="helper-text">Mínimo 1 integrante obrigatório</div>
-</div>
+        <div class="modal-search-wrapper">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" id="modalSearchInput" placeholder="Buscar por nome, instituição ou campus..." oninput="debounceSearch()">
+        </div>
 
-<div class="form-group">
-    <label>Tags <span class="required">*</span></label>
-    <input type="text" id="inputTag" class="form-input" placeholder="Digite uma tag e clique Enter">
-    <p style="margin-top: 5px; font-size: 12px; color: #666;">Sugestões: </p>
-    <div class="tags-suggestions">
-        <span class="tag-badge">+ ADS</span>
-        <span class="tag-badge">+ Django</span>
-        <span class="tag-badge">+ Python</span>
-    </div>
-    <div id="tagsList" class="chips-container"></div>
-</div>
+        <div class="selection-counter" id="selectionCounter">0 selecionado(s)</div>
 
-<div class="form-group">
-    <label>Documentos do projeto</label>
-    <div class="upload-area" id="uploadAreaBtn">
-        <i class="ph ph-upload-simple upload-icon"></i>
-        <p>Arraste arquivos ou clique para fazer upload</p>
-        <button class="btn-select-files">Selecionar arquivos</button>
-    </div>
-    <div class="helper-text">Tipos permitidos: PDF, DOCX, PPTX, MD, ZIP (máx 50MB)</div>
-</div>
+        <div id="modalResults" class="modal-results-scroll">
+            </div>
 
-<div class="form-group">
-    <label>Link do repositório no GitHub</label>
-    <div class="input-icon-wrapper">
-        <i class="ph ph-github-logo input-icon"></i>
-        <input type="text" id="inputGithub" class="form-input has-icon" placeholder="Ex: https://github.com/usuario/repositorio">
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            <button type="button" class="btn-confirm-final" onclick="confirmSelection()">Confirmar</button>
+        </div>
     </div>
-    <div class="helper-text">Cole o link completo do repositório do projeto</div>
-</div>
-
-<div class="form-group">
-    <label>Link do vídeo no YouTube</label>
-    <div class="input-icon-wrapper">
-        <i class="ph ph-youtube-logo input-icon"></i>
-        <input type="text" id="inputYoutube" class="form-input has-icon" placeholder="Ex: https://youtube.com/watch?v=...">
-    </div>
-    <div class="helper-text">Cole o link do vídeo no YouTube para preview automático</div>
 </div>

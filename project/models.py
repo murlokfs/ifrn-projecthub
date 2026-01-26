@@ -1,4 +1,5 @@
 from django.db import models
+from ckeditor.fields import RichTextField
 
 class Institution(models.Model):
 
@@ -7,6 +8,7 @@ class Institution(models.Model):
     campus = models.CharField(max_length=50, null=False, blank=False)
     acronym = models.CharField(max_length=10, null=False, blank=False)
     image = models.ImageField(upload_to='institutions/photos/', null=True, blank=True)
+
 
     def __str__(self):
         return f"{self.acronym} - {self.campus}"
@@ -51,8 +53,9 @@ class Project(models.Model):
     ]
 
     title = models.CharField(max_length=200, null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=False, blank=False)
+    banner = models.ImageField(upload_to='projects/banners/', null=True, blank=True)
+    description = RichTextField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=False, blank=False) # só foi alterado para true para testar a criação de projetos sem curso, mudar para false antes de fazer commit
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_approval')

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     # Libraries
     'social_django',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 # Custom User Model
@@ -168,7 +170,45 @@ SOCIAL_AUTH_PIPELINE = (
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CKEDITOR_UPLOAD_PATH = "uploads/ckeditor/"
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+# Permite que o editor leia a resposta do servidor dentro do iframe
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# settings.py
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'skin': 'moono-lisa',
+        'toolbar_Custom': [
+            {'name': 'basicstyles', 'items': ['Bold', 'Italic', 'Underline', 'Strike']},
+            {'name': 'paragraph', 'items': ['Blockquote']},
+            {'name': 'insert', 'items': ['Table']},
+            {'name': 'tools', 'items': ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']},
+        ],
+        'toolbar': 'Custom',  # Força o uso da toolbar definida acima
+        'width': '100%',
+        'height': 250,
+        'tabSpaces': 4,
+        'placeholder': 'Escreva a descrição detalhada do projeto...',
+        # Plugins necessários para os ícones de alinhamento e funcionalidades extras
+        'extraPlugins': ','.join([
+            'justify',      # Essencial para os botões de alinhamento
+            'table',        # Para o ícone de tabela
+            'blockquote',   # Para o ícone de citação
+            'link',         # Para links
+        ]),
+        # Remove elementos desnecessários para limpar o visual como na imagem
+        'removePlugins': 'elementspath,resize', 
+        'forcePasteAsPlainText': True,
+    }
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
