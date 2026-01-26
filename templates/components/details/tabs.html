@@ -1,7 +1,7 @@
 {% load static %}
 <nav class="tabs-nav">
 
-   <a href="{% url 'project_details' %}"
+   <a href="{% url 'project_details' project.id %}"
       class="tab-link {% if request.resolver_match.url_name == 'project_details' %}active{% endif %}">
       Informações Gerais
    </a>

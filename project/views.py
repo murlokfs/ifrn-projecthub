@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DetailView
 from project.models import Project, ApprovalSolicitation, Tag
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
@@ -38,7 +38,9 @@ def my_projects(request):
     }
     return render(request, "project/my_projects.html", context)
 
-class DetalhesProjetosView(TemplateView):
+class DetalhesProjetosView(DetailView):
+    model = Project
+    context_object_name = 'project'
     template_name = 'project/project_details.html'
 
 class ComentariosAlunosView(TemplateView):
