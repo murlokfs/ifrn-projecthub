@@ -110,10 +110,78 @@ main {
     background-color: #E5E7EB;
 }
 
-#all {
+.filter_btns button.active-filter {
     background-color: #50CE67;
+    border-color: #50CE67;
     color: white;
     font-weight: 700;
+}
+
+/* ======================================================================
+   TABS (mesmo estilo da tela de aprovação)
+   ====================================================================== */
+
+.tabs-container {
+    display: flex;
+    gap: 15px;
+    padding-left: 5px;
+    overflow-x: auto;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    background: white;
+    border: 1px solid #E5E7EB;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #6B7280;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 25px;
+    transition: 0.2s;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    background-color: #F9FAFB;
+    border-color: #D1D5DB;
+}
+
+.tab-btn.active {
+    border-color: #22C55E;
+    color: #166534;
+    background-color: #DCFCE7;
+    font-weight: 600;
+}
+
+.notification-badge {
+    background-color: #EF4444;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.tab-btn.active .notification-badge {
+    border: 1px solid white;
+}
+
+.tabs-line {
+    height: 1px;
+    background-color: #E5E7EB;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 /* ==========================================================================

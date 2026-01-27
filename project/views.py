@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView,ListView,DetailView,CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -151,29 +151,35 @@ class MeusProjetosView(ListView):
                 Q(tags__name__icontains=query)
             ).distinct()
 
-        # --- Filtros (CORREÇÃO AQUI) ---
-        status_filter = self.request.GET.get('status')
+        # --- Filtros de Status ---
+        status_filter = self.request.GET.get('status', 'all')
         
         if status_filter == 'approved':
-            # Aprovados ou Concluídos
+            # Projetos aprovados (in_progress, completed ou com solicitação aprovada)
             queryset = queryset.filter(
-                Q(status='in_progress') | 
-                Q(status='completed') |
-                Q(approval_solicitations__status='approved')
+                Q(status='in_progress')
+                | Q(status='completed')
+                | Q(approval_solicitations__status='approved')
             ).distinct()
-
-        elif status_filter == 'pendant':
-            # Pendentes que NÃO foram rejeitados na última tentativa
-            # Para simplificar, trazemos todos os pendentes, mas idealmente excluiríamos os rejeitados
-            queryset = queryset.filter(status='pending_approval').distinct()
-
-        elif status_filter == 'reproved':
-            # CORREÇÃO: Busca projetos Pendentes que tenham solicitação Rejeitada
-            # E usamos distinct() para evitar duplicatas se tiver mais de uma rejeição
-            queryset = queryset.filter(
-                status='pending_approval', 
+        
+        elif status_filter in {'pending', 'pendant', 'pending_approval'}:
+            # Pendentes que NÃO foram rejeitados
+            queryset = queryset.filter(status='pending_approval').exclude(
                 approval_solicitations__status='rejected'
             ).distinct()
+        
+        elif status_filter == 'reproved':
+            # Projetos pendentes com solicitação rejeitada
+            queryset = queryset.filter(
+                status='pending_approval',
+                approval_solicitations__status='rejected'
+            ).distinct()
+        
+        elif status_filter == 'in_progress':
+            queryset = queryset.filter(status='in_progress')
+        
+        elif status_filter == 'completed':
+            queryset = queryset.filter(status='completed')
 
         return queryset
     
@@ -207,10 +213,15 @@ class MeusProjetosView(ListView):
                 Q(status='completed') |
                 Q(approval_solicitations__status='approved')
             ).exclude(id__in=reproved_projects).distinct().count()
+
+            in_progress_count = user_projects.filter(status='in_progress').exclude(id__in=reproved_projects).count()
+            completed_count = user_projects.filter(status='completed').exclude(id__in=reproved_projects).count()
             
             context['approved_count'] = approved_count
             context['pending_count'] = pending_count
             context['reproved_count'] = reproved_count
+            context['in_progress_count'] = in_progress_count
+            context['completed_count'] = completed_count
         
         return context
 
@@ -228,6 +239,12 @@ class DetalhesProjetosView(DetailView):
     model = Project
     context_object_name = 'project'
     template_name = 'project/project_details.html'
+
+    def get_queryset(self):
+        return (
+            Project.objects.select_related('course')
+            .prefetch_related('tags', 'members', 'orientators')
+        )
 
 class ComentariosAlunosView(DetailView):
     model = Project
@@ -310,8 +327,53 @@ class ComentariosProfessoresView(DetailView):
     template_name = 'project/teacher_comments.html'
     context_object_name = 'project'
 
-class ProjetosAprovacaoView(TemplateView):
+@method_decorator(login_required, name='dispatch')
+class ProjetosAprovacaoView(ListView):
+    model = Project
     template_name = 'project/project_approvals.html'
+    context_object_name = 'projetos'
+    paginate_by = 9
+
+    def get_queryset(self):
+        queryset = (
+            Project.objects.filter(is_active=True)
+            .prefetch_related('tags', 'members')
+            .distinct()
+        )
+
+        # 🔍 Busca
+        query = self.request.GET.get('q', '').strip()
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query)
+                | Q(description__icontains=query)
+                | Q(tags__name__icontains=query)
+                | Q(members__full_name__icontains=query)
+                | Q(members__username__icontains=query)
+            )
+
+        # 🚦 Filtro por status (tabs)
+        status_filter = self.request.GET.get('status', 'all')
+        if status_filter == 'pending':
+            queryset = queryset.filter(status='pending_approval')
+        elif status_filter in {'in_progress', 'completed'}:
+            queryset = queryset.filter(status=status_filter)
+
+        return queryset.order_by('-created_at').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_page'] = 'project_approval'
+        context['current_status'] = self.request.GET.get('status', 'all')
+        context['search_query'] = self.request.GET.get('q', '')
+
+        base = Project.objects.filter(is_active=True)
+        context['pending_count'] = base.filter(status='pending_approval').count()
+        context['in_progress_count'] = base.filter(status='in_progress').count()
+        context['completed_count'] = base.filter(status='completed').count()
+        context['all_count'] = base.count()
+
+        return context
 
 
 @login_required

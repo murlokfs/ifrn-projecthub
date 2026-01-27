@@ -20,19 +20,17 @@
     .status-badge { padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; background: white; border: 1px solid; display: inline-block; white-space: nowrap; }
 
     .perfil-container .profile-bio {
-    font-size: 14px;
-    max-width: 1000px;
-    opacity: 0.95;
-    margin-top: 5px;
-
-    /* --- ADICIONE ISSO AQUI --- */
-    display: -webkit-box;
-    -webkit-line-clamp: 3;        /* Número máximo de linhas */
-    -webkit-box-orient: vertical;
-    overflow: hidden;             /* Esconde o que passar */
-    text-overflow: ellipsis;      /* Adiciona os "..." */
-    word-wrap: break-word;        /* Previne quebra horizontal */
-}
+        font-size: 14px;
+        max-width: 1000px;
+        opacity: 0.95;
+        margin-top: 5px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+    }
 
     /* --- ESTILOS DOS SOCIAL LINKS COMO BOTÕES --- */
     .perfil-container .social-item {
@@ -73,7 +71,6 @@
     .perfil-container .social-item i {
         font-size: 16px;
     }
-
 </style>
 
 <div class="perfil-container">
@@ -126,31 +123,23 @@
         
         <div class="profile-actions">
             {% if is_owner %}
-                <a href="{% url 'edit_profile' %}" class="edit-button link-edit-profile"><i class="ph ph-pencil-simple"></i> Editar Perfil</a>
-            {% else %}
-                 <button class="edit-button">Seguir</button>
+                <a href="{% url 'edit_profile' %}" class="edit-button link-edit-profile">Editar Perfil</a>
             {% endif %}
         </div>
     </header>
 
     <section class="statistics">
         <div class="stat-card">
-            <span class="icon-green"><i class="ph ph-folder-open"></i></span>
+            <span class="icon-yellow"><i class="ph ph-folder-open"></i></span>
             <div class="stat-content"><span class="number">{{ total_projetos }}</span> <span class="stat-description">Total de projetos</span></div>
         </div>
         <div class="stat-card">
-            <span class="icon-blue"><i class="ph ph-eye"></i></span>
-            <div class="stat-content"><span class="number">8</span> <span class="stat-description">Visualizações</span></div>
+            <span class="icon-blue"><i class="ph ph-gear"></i></span>
+            <div class="stat-content"><span class="number">{{ in_progress_projects }}</span> <span class="stat-description">Em desenvolvimento</span></div>
         </div>
-        {% if is_owner %}
         <div class="stat-card">
-            <span class="icon-red"><i class="ph ph-lock-key"></i></span>
-            <div class="stat-content"><span class="number">{{ profile_user.members.all.count|default:"0" }}</span> <span class="stat-description">Privados</span></div>
-        </div>
-        {% endif %}
-        <div class="stat-card">
-            <span class="icon-black"><i class="ph ph-users"></i></span>
-            <div class="stat-content"><span class="number">0</span> <span class="stat-description">Seguidores</span></div>
+            <span class="icon-green"><i class="ph ph-check-circle"></i></span>
+            <div class="stat-content"><span class="number">{{ completed_projects }}</span> <span class="stat-description">Concluídos</span></div>
         </div>
     </section>
 
@@ -178,78 +167,16 @@
                     </select>
                 </div>
             </div>
+
             <div class="search-bar">
                 <i class="ph ph-magnifying-glass search-icon"></i>
-                <input type="text" name="q" value="{{ current_filters.q }}" placeholder="Busque projetos..." autocomplete="off">
+                <input type="text" name="q" value="{{ current_filters.q }}" placeholder="Busque por título, descrição ou tags..." autocomplete="off">
             </div>
         </form>
 
-        <div class="feed-list" style="margin-top: 10px;">
+        <div class="feed-list" style="margin-top: 20px;">
             {% for project in projects_list %}
-                
-                <article class="feed-card">
-                    <div class="card-image-box">
-                        {% if project.image %}
-                            <img src="{{ project.image.url }}" alt="Capa do projeto {{ project.title }}">
-                        {% else %}
-                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" alt="Capa padrão">
-                        {% endif %}
-                        
-                        {% with feedback=project.get_latest_feedback %}
-                        <div class="card-badges-container">
-                            <span class="floating-tag">{{ project.get_type_display }}</span>
-                            
-                            {% if feedback.status == 'rejected' and project.status == 'pending_approval' %}
-                                <span class="status-badge outline-red">Reprovado / Ajustes</span>
-                            {% elif project.status == 'pending_approval' %}
-                                <span class="status-badge outline-yellow">Pendente de aprovação</span>
-                            {% elif project.status == 'in_progress' %}
-                                <span class="status-badge outline-blue">Em Desenvolvimento</span>
-                            {% elif project.status == 'completed' %}
-                                <span class="status-badge outline-green">Concluído</span>
-                            {% endif %}
-                        </div>
-                        {% endwith %}
-                    </div>
-
-                    <div class="card-content">
-                        <div class="author-row">
-                            <div class="avatar-mini">
-                                {% if project.members.first.image %}
-                                     <img src="{{ project.members.first.image }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                                {% else %}
-                                    {{ project.members.first.full_name|default:"?"|slice:":2"|upper }}
-                                {% endif %}
-                            </div>
-                            <div class="author-info">
-                                <strong>{{ project.members.first.full_name|default:"Autor não informado" }}</strong>
-                                <span><i class="ph ph-calendar-blank"></i> {{ project.created_at|date:"d/m/Y" }}</span>
-                            </div>
-                        </div>
-
-                        <h2 class="project-title">{{ project.title }}</h2>
-                        <p class="project-desc">{{ project.description|striptags|safe|truncatechars:120 }}</p>
-
-                        <div class="tags-row">
-                            {% for tag in project.tags.all|slice:":3" %}
-                                <span class="tech-tag">{{ tag.name }}</span>
-                            {% empty %}
-                                <span class="tech-tag muted">Sem tags</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="card-footer">
-                            <div class="members-info"><i class="ph ph-users"></i> {{ project.members.count }} membro(s)</div>
-                            <div class="actions-right">
-                                <div class="stats-icons">
-                                    {% include 'components/cards/project_parts/interaction_btns.html' %}
-                                </div>
-                                <a href="{% url 'project_details' pk=project.id %}" class="btn-details">Ver Detalhes <i class="ph ph-arrow-up-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
+                {% include 'components/cards/feed/project_card.html' with projeto=project %}
             {% empty %}
                 <div style="text-align: center; padding: 40px; color: #666;">
                     <i class="ph ph-folder-dashed" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>

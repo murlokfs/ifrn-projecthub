@@ -1,45 +1,69 @@
 <div class="project-card">
     <div class="card-header">
         <div class="badges-wrapper">
-            <span class="status-badge outline-yellow">Pendente de aprovação</span>
-            <span class="status-badge outline-blue">Em Desenvolvimento</span>
+            {% if projeto.status == 'reproved' %}
+                <span class="status-badge outline-red">Reprovado / Ajustes</span>
+            {% elif projeto.status == 'pending_approval' %}
+                <span class="status-badge outline-yellow">Pendente de aprovação</span>
+            {% elif projeto.status == 'in_progress' %}
+                <span class="status-badge outline-blue">Em Desenvolvimento</span>
+            {% elif projeto.status == 'completed' %}
+                <span class="status-badge outline-green">Concluído</span>
+            {% endif %}
+            <span class="floating-tag">{{ projeto.get_type_display }}</span>
         </div>
         <button class="btn-more-options" title="Denunciar/Excluir"
-                onclick="openDeleteModal('Project Hub - Armazene seus projetos')">
+                onclick="openDeleteModal('{{ projeto.id }}', '{{ projeto.title|escapejs }}')">
             <i class="ph ph-flag"></i>
         </button>
     </div>
 
-    <h3 class="card-title">Project Hub - Armazene seus projetos e trabalhos</h3>
+    <h3 class="card-title">{{ projeto.title }}</h3>
 
-        <p class="card-desc">
-            O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="{% url 'project_details_pending' %}">VER MAIS</a>
-        </p>
+    <p class="card-desc">
+        {{ projeto.description|striptags|safe|truncatechars:120 }}
+        <a href="{% url 'project_details' pk=projeto.id %}">VER MAIS</a>
+    </p>
 
     <div class="card-tags">
-        <span class="tag">NOSQL</span>
-        <span class="tag">NOSQL</span>
-        <span class="tag">NOSQL</span>
+        {% for tag in projeto.tags.all|slice:":3" %}
+            <span class="tag">{{ tag.name }}</span>
+        {% empty %}
+            <span class="tag no-tags">Sem tags</span>
+        {% endfor %}
     </div>
 
     <div class="card-members">
         <p class="members-label">Integrantes:</p>
-        <div class="member-row">
-            <span class="avatar-mini">AC</span>
-            <span>Ayrton Cavalcante</span>
-        </div>
-        <div class="member-row">
-            <span class="avatar-mini">NM</span>
-            <span>Nathan Maniçoba</span>
-        </div>
+        {% for member in projeto.members.all|slice:":2" %}
+            <div class="member-row">
+                <span class="avatar-mini">
+                    {% if member.image %}
+                        <img src="{{ member.image }}" class="avatar-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="Avatar de {{ member.full_name }}">
+                    {% else %}
+                        {{ member.full_name|default:"?"|slice:":2"|upper }}
+                    {% endif %}
+                </span>
+                <span>{{ member.full_name|default:"Usuário" }}</span>
+            </div>
+        {% endfor %}
+        {% if projeto.members.count > 2 %}
+            <small class="extra-members">+ {{ projeto.members.count|add:"-2" }} outro(s)</small>
+        {% endif %}
     </div>
 
     <div class="card-meta">
-        Submetido em: 21/12/2005
+        {% with ultimo_feedback=projeto.get_latest_feedback %}
+            {% if ultimo_feedback %}
+                Submetido em: {{ ultimo_feedback.created_at|date:"d/m/Y" }}
+            {% else %}
+                Submetido em: {{ projeto.created_at|date:"d/m/Y" }}
+            {% endif %}
+        {% endwith %}
     </div>
 
     <div class="card-footer">
-        <button class="btn-cancel" onclick='window.location.href="{% url "project_details_pending" %}"'>Ver detalhes</button>
+        <button class="btn-cancel" onclick='window.location.href="{% url "project_details" pk=projeto.id %}"'>Ver detalhes</button>
         <button class="btn-confirm" onclick="openModal()">Confirmar avaliação</button>
     </div>
 </div>

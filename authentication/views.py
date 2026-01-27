@@ -4,11 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import TemplateView, DetailView, UpdateView
 from django.contrib import messages
-from .models import User
-from project.models import Project
 from django.db.models import Q
 from django.urls import reverse_lazy, reverse
+from .models import User
 from .forms import EditProfileForm
+from project.models import Project
 
 
 class LoginView(TemplateView):
@@ -27,9 +27,7 @@ class PerfilView(LoginRequiredMixin, DetailView):
     model = User
     template_name = 'authentication/profile.html'
     context_object_name = 'profile_user'
-    
-    # --- ALTERAÇÃO 1: Removidos slug_field e slug_url_kwarg ---
-    # O DetailView agora vai buscar automaticamente pelo 'pk' da URL
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,6 +36,7 @@ class PerfilView(LoginRequiredMixin, DetailView):
         
         is_owner = (user_visitado == user_logado)
         context['is_owner'] = is_owner
+        context['active_page'] = 'profile'
         
         # 1. Base da Query
         if is_owner:
@@ -48,36 +47,48 @@ class PerfilView(LoginRequiredMixin, DetailView):
                 is_private=False,
                 status__in=['in_progress', 'completed']
             )
+        
+        projetos = projetos.prefetch_related('tags', 'members')
 
         # 2. Filtro de Busca (Texto)
-        query = self.request.GET.get('q')
+        query = self.request.GET.get('q', '').strip()
         if query:
             projetos = projetos.filter(
                 Q(title__icontains=query) |
                 Q(description__icontains=query) |
-                Q(tags__name__icontains=query)
+                Q(tags__name__icontains=query) |
+                Q(members__full_name__icontains=query) |
+                Q(members__username__icontains=query)
             ).distinct()
 
         # 3. Filtro de Status
-        status_filter = self.request.GET.get('status')
+        status_filter = self.request.GET.get('status', 'all')
         if status_filter and status_filter != 'all':
             projetos = projetos.filter(status=status_filter)
 
         # 4. Ordenação
-        sort_by = self.request.GET.get('sort')
+        sort_by = self.request.GET.get('sort', 'newest')
         if sort_by == 'oldest':
             projetos = projetos.order_by('created_at')
         else:
             projetos = projetos.order_by('-created_at')
 
         context['projects_list'] = projetos
+        context['published_projects'] = projetos  # Compatibilidade com template antigo
         context['total_projetos'] = projetos.count()
+        context['in_progress_projects'] = projetos.filter(status='in_progress').count()
+        context['completed_projects'] = projetos.filter(status='completed').count()
         
         context['current_filters'] = {
-            'q': query or '',
-            'status': status_filter or 'all',
-            'sort': sort_by or 'newest'
+            'q': query,
+            'status': status_filter,
+            'sort': sort_by
         }
+        
+        # Compatibilidade com templates antigos
+        context['current_status'] = status_filter
+        context['sort_by'] = sort_by
+        context['search_query'] = query
         
         return context
 
@@ -95,7 +106,6 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def get_success_url(self):
-        # --- ALTERAÇÃO 2: Redireciona usando 'pk' em vez de 'username' ---
         return reverse('profile', kwargs={'pk': self.object.pk})
 
 
