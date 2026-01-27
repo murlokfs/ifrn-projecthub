@@ -10,93 +10,112 @@
     <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
 
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
 </head>
 
 <body>
     <div class="main-wrapper">
 
-        <a href="{% url 'profile' %}" class="back-link">
+        <a href="{% url 'profile' request.user.pk %}" class="back-link">
             <i class="ph ph-arrow-left"></i> Voltar ao perfil
         </a>
 
-        <div class="page-header">
+        <form action="" method="POST" class="profile-form">
+            {% csrf_token %}
 
-            <div class="avatar-wrapper">
-                <div class="avatar-circle">NM</div>
-                <div class="avatar-overlay">
-                    <i class="ph ph-camera"></i>
+            <div class="page-header">
+
+                <div class="avatar-wrapper" style="cursor: default;">
+                    {% if user.image %}
+                        <img src="{{ user.image }}" class="avatar-circle" style="object-fit: cover; border: none;">
+                    {% else %}
+                        <div class="avatar-circle">
+                            {{ user.first_name|slice:":2"|upper }}
+                        </div>
+                    {% endif %}
+                    
+                    </div>
+
+                <div class="header-texts">
+                    <div class="title-row">
+                        <i class="ph ph-pencil-simple header-icon"></i>
+                        <h1>Editar Perfil</h1>
+                    </div>
+                    <p>Atualize suas redes sociais e descrição. Dados acadêmicos são sincronizados automaticamente.</p>
                 </div>
             </div>
 
-            <div class="header-texts">
-                <div class="title-row">
-                    <i class="ph ph-pencil-simple header-icon"></i>
-                    <h1>Editar Perfil</h1>
+            <div class="form-card">
+
+                <div class="card-title">
+                    <i class="ph ph-user"></i>
+                    <h2>Informações pessoais</h2>
                 </div>
-                <p>Atualize suas informações pessoais. Passe o mouse sobre a foto para alterá-la.</p>
-            </div>
-        </div>
-
-        <div class="form-card">
-
-            <div class="card-title">
-                <i class="ph ph-user"></i>
-                <h2>Informações pessoais</h2>
-            </div>
-            <p class="card-subtitle">Preencha os campos abaixos com suas informações</p>
-
-            <form action="#" method="POST" class="profile-form">
-                {% csrf_token %}
+                <p class="card-subtitle">Alguns campos são gerenciados pela instituição e não podem ser alterados.</p>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nome Completo</label>
-                        <input type="text" class="form-input" placeholder="Seu nome completo">
-                        <span class="helper-text">Seu nome completo</span>
+                        <input type="text" name="full_name" class="form-input" 
+                               value="{{ user.full_name }}" 
+                               readonly 
+                               style="opacity: 0.7; cursor: not-allowed; background-color: #E5E7EB;">
+                        <span class="helper-text">Sincronizado com o sistema acadêmico.</span>
                     </div>
 
                     <div class="form-group">
                         <label>Handle (nome de usuário)</label>
-                        <input type="text" class="form-input"  placeholder="@usuario">
-                        <span class="helper-text">Este é o seu identificador único na plataforma</span>
+                        <input type="text" name="username" class="form-input" 
+                               value="{{ user.username }}" readonly 
+                               style="opacity: 0.7; cursor: not-allowed; background-color: #E5E7EB;">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Cidade</label>
-                        <input type="text" class="form-input" placeholder="Sua cidade">
-                        <span class="helper-text">Cidade que atualmente mora</span>
+                        <label>Campus</label>
+                        <div class="input-icon-wrapper">
+                            <i class="ph ph-buildings"></i>
+                            <input type="text" class="form-input has-icon" 
+                                   value="{{ user.course.campus.name|default:'Sem campus vinculado' }}" 
+                                   readonly 
+                                   style="opacity: 0.7; cursor: not-allowed; background-color: #E5E7EB;">
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label>GitHub</label>
                         <div class="input-icon-wrapper">
                             <i class="ph ph-github-logo"></i>
-                            <input type="text" class="form-input has-icon"
-                                placeholder="Link do GitHub">
+                            <input type="url" name="github" class="form-input has-icon"
+                                   value="{{ user.github|default:'' }}" placeholder="Link do GitHub">
                         </div>
-                        <span class="helper-text">Link para o seu perfil no GitHub</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label>LinkedIn</label>
+                    <div class="input-icon-wrapper">
+                        <i class="ph ph-linkedin-logo"></i>
+                        <input type="url" name="linkedin" class="form-input has-icon" 
+                               value="{{ user.linkedin|default:'' }}" placeholder="Link do LinkedIn">
                     </div>
                 </div>
 
                 <div class="form-group full-width">
-                    <label>Descrição</label>
-                    <textarea class="form-textarea" placeholder="Conte um pouco sobre você...">Desenvolvedor e estudante — apaixonado por projetos acadêmicos e inovação tecnológica.
-Sempre buscando aprender e compartilhar conhecimento.</textarea>
-                    <span class="helper-text">Uma breve descrição sobre você e seus interesses.</span>
+                    <label>Descrição (Sobre mim)</label>
+                    <textarea name="about_me" class="form-textarea" 
+                              placeholder="Conte um pouco sobre você...">{{ user.about_me|default:'' }}</textarea>
                 </div>
 
                 <div class="form-actions">
-                    <a href="{% url 'profile' %}" class="btn-cancel">Cancelar</a>
+                    <a href="{% url 'profile' request.user.pk %}" class="btn-cancel">Cancelar</a>
                     <button type="submit" class="btn-confirm">Confirmar alterações</button>
                 </div>
 
-            </form>
-        </div>
+            </div>
+        </form>
 
     </div>
-</body>
-
+    
+    </body>
 </html>

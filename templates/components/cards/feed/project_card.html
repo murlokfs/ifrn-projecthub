@@ -3,12 +3,10 @@
         {% if projeto.image %}
             <img src="{{ projeto.image.url }}" alt="Capa do projeto {{ projeto.title }}">
         {% else %}
-            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
-                 alt="Placeholder Tech">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" alt="Capa padrão">
         {% endif %}
-
+        
         <div class="card-badges-container">
-
             <span class="floating-tag">{{ projeto.get_type_display }}</span>
             <span class="status-badge 
                 {% if projeto.status == 'pending_approval' %}
@@ -19,22 +17,26 @@
                     outline-green
                 {% elif projeto.status == 'reproved' %}
                     outline-red
-                {% endif %}
-            ">
+                {% endif %}">
                 {{ projeto.get_status_display }}
             </span>
-
         </div>
     </div>
 
     <div class="card-content">
         <div class="author-row">
             <div class="avatar-mini">
-                {{ projeto.members.first.full_name|default:"?"|slice:":2"|upper }}
+                {% if projeto.members.first.image %}
+                    <img src="{{ projeto.members.first.image }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="Avatar">
+                {% else %}
+                    {{ projeto.members.first.full_name|default:"?"|slice:":2"|upper }}
+                {% endif %}
             </div>
             <div class="author-info">
                 <strong>{{ projeto.members.first.full_name|default:"Autor não informado" }}</strong>
-                <span><i class="ph ph-calendar-blank"></i> {{ projeto.created_at|date:"d/m/Y" }}</span>
+                <span>
+                    <i class="ph ph-calendar-blank"></i> {{ projeto.created_at|date:"d/m/Y" }}
+                </span>
             </div>
         </div>
 
@@ -49,7 +51,6 @@
             {% empty %}
                 <span class="tech-tag muted">Sem tags</span>
             {% endfor %}
-            
         </div>
 
         <div class="card-footer">

@@ -9,6 +9,7 @@ from .models import Project, Tag,ApprovalSolicitation
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
 import re
+import json
 from authentication.models import User
 from django.contrib import messages
 
@@ -132,16 +133,16 @@ class MeusProjetosView(ListView):
         if not self.request.user.is_authenticated:
             return Project.objects.none()
         
-        # Busca projetos onde o usuário é membro
+        # Base: Projetos ativos do usuário
         queryset = Project.objects.filter(members=self.request.user, is_active=True)\
             .select_related('course')\
             .prefetch_related(
                 'tags', 
                 'members', 
-                'approval_solicitations' # Traz as solicitações para mostrar o feedback
+                'approval_solicitations'
             ).order_by('-created_at')
         
-        # --- Lógica de Busca (Barra de Pesquisa) ---
+        # --- Busca ---
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
@@ -150,24 +151,33 @@ class MeusProjetosView(ListView):
                 Q(tags__name__icontains=query)
             ).distinct()
 
-        # --- Lógica dos Botões de Filtro ---
-        # Novo padrão: all, reproved, pending, in_progress, completed
-        # Compatibilidade: approved, pendant
+        # --- Filtros de Status ---
         status_filter = self.request.GET.get('status', 'all')
-
+        
         if status_filter == 'approved':
-            # Compatibilidade antiga: “Aprovados” (in_progress/completed ou solicitação aprovada)
+            # Projetos aprovados (in_progress, completed ou com solicitação aprovada)
             queryset = queryset.filter(
                 Q(status='in_progress')
                 | Q(status='completed')
                 | Q(approval_solicitations__status='approved')
             ).distinct()
+        
         elif status_filter in {'pending', 'pendant', 'pending_approval'}:
-            queryset = queryset.filter(status='pending_approval')
+            # Pendentes que NÃO foram rejeitados
+            queryset = queryset.filter(status='pending_approval').exclude(
+                approval_solicitations__status='rejected'
+            ).distinct()
+        
         elif status_filter == 'reproved':
-            queryset = queryset.filter(status='reproved').distinct()
+            # Projetos pendentes com solicitação rejeitada
+            queryset = queryset.filter(
+                status='pending_approval',
+                approval_solicitations__status='rejected'
+            ).distinct()
+        
         elif status_filter == 'in_progress':
             queryset = queryset.filter(status='in_progress')
+        
         elif status_filter == 'completed':
             queryset = queryset.filter(status='completed')
 

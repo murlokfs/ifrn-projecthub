@@ -13,6 +13,54 @@ main {
 }
 
 
+/* Ajuste do Card para o Layout da Imagem */
+.stat-card {
+    flex: 1;
+    background: white;
+    padding: 20px 24px; /* Mais espaçamento interno */
+    border-radius: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra mais suave igual ao print */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 160px; /* Altura fixa para ficarem iguais */
+    position: relative; /* Para posicionamento se necessário */
+}
+
+/* Força o ícone a ficar na esquerda (Start) */
+.stat-card .icon-green,
+.stat-card .icon-blue,
+.stat-card .icon-red,
+.stat-card .icon-black {
+    align-self: center; /* Joga o ícone para a esquerda */
+    margin-top: 0; /* Remove margem antiga */
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+}
+
+/* O conteúdo de texto (Número e Label) fica centralizado */
+.stat-content {
+    text-align: center;
+    width: 100%;
+    margin-top: auto; /* Empurra para baixo se sobrar espaço */
+    margin-bottom: auto;
+}
+
+.stat-card .number {
+    font-size: 26px; /* Fonte maior igual ao print */
+    font-weight: 800;
+    color: #1F2937;
+    display: block;
+}
+
+.stat-card .stat-description {
+    font-size: 14px;
+    color: #6B7280;
+    margin-top: 4px;
+    display: block;
+}
+
 .badges-wrapper {
     display: flex;
     gap: 8px;
@@ -30,10 +78,12 @@ main {
     border: 1px solid;
     display: inline-block;
     white-space: nowrap;
+    
 }
 .outline-yellow { border-color: #FBBF24; color: #D97706; }
 .outline-blue { border-color: #3B82F6; color: #2563EB; }
 .outline-green { border-color: #22C55E; color: #16A34A; }
+.outline-red { border-color: #EF4444; color: #DC2626; }
 
 .perfil-container { /* keeping original class name */
     width: 100%;
