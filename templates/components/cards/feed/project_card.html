@@ -1,51 +1,67 @@
 <article class="feed-card">
     <div class="card-image-box">
-        {% if projeto.imagem %}
-        <img src="{{ projeto.imagem.url }}" alt="Capa">
+        {% if projeto.image %}
+            <img src="{{ projeto.image.url }}" alt="Capa do projeto {{ projeto.title }}">
         {% else %}
-        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
-            alt="Placeholder Tech">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
+                 alt="Placeholder Tech">
         {% endif %}
 
         <div class="card-badges-container">
 
-            <span class="floating-tag">Projeto Integrador</span>
-            <span class="status-badge outline-yellow">Pendente</span>
-            <span class="status-badge outline-blue">Em Desenvolvimento</span>
+            <span class="floating-tag">{{ projeto.get_type_display }}</span>
+            <span class="status-badge 
+                {% if projeto.status == 'pending_approval' %}
+                    outline-yellow
+                {% elif projeto.status == 'in_progress' %}
+                    outline-blue
+                {% elif projeto.status == 'completed' %}
+                    outline-green
+                {% elif projeto.status == 'reproved' %}
+                    outline-red
+                {% endif %}
+            ">
+                {{ projeto.get_status_display }}
+            </span>
 
         </div>
     </div>
 
     <div class="card-content">
         <div class="author-row">
-            <div class="avatar-mini">AC</div>
+            <div class="avatar-mini">
+                {{ projeto.members.first.full_name|default:"?"|slice:":2"|upper }}
+            </div>
             <div class="author-info">
-                <strong>Ayrton Cavalcante</strong>
-                <span><i class="ph ph-calendar-blank"></i> 24 de set. de 2025</span>
+                <strong>{{ projeto.members.first.full_name|default:"Autor não informado" }}</strong>
+                <span><i class="ph ph-calendar-blank"></i> {{ projeto.created_at|date:"d/m/Y" }}</span>
             </div>
         </div>
 
-        <h2 class="project-title">ProjectHub - Plataforma de Portfólio</h2>
+        <h2 class="project-title">{{ projeto.title }}</h2>
         <p class="project-desc">
-            O projeto é uma plataforma digital inspirada na Steam, mas voltada para armazenar, organizar e
-            compartilhar projetos acadêmicos.
+            {{ projeto.description|striptags|safe|truncatechars:120 }}
         </p>
 
         <div class="tags-row">
-            <span class="tech-tag">ADS</span>
-            <span class="tech-tag">Django</span>
+            {% for tag in projeto.tags.all|slice:":3" %}
+                <span class="tech-tag">{{ tag.name }}</span>
+            {% empty %}
+                <span class="tech-tag muted">Sem tags</span>
+            {% endfor %}
             
         </div>
 
         <div class="card-footer">
             <div class="members-info">
-                <i class="ph ph-users"></i> 2 membros
+                <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
             </div>
 
             <div class="actions-right">
                 <div class="stats-icons">
+                    {% include 'components/cards/project_parts/interaction_btns.html' %}
                 </div>
-                <a href="{{ project_details_url }}" class="btn-details">
+                <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
                     Ver Detalhes <i class="ph ph-arrow-up-right"></i>
                 </a>
             </div>

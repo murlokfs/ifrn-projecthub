@@ -110,24 +110,55 @@
                 </p>
             </div>
 
-            <div class="filters">
-                <select class="selector"><option>Todos</option></select>
-                <select class="selector"><option>Mais recente</option></select>
-            </div>
-        </div>
+            <form method="get" class="projects-controls">
+                <select class="selector" name="status" onchange="this.form.submit()">
+                    <option value="all" {% if current_status == 'all' %}selected{% endif %}>Todos</option>
+                    <option value="in_progress" {% if current_status == 'in_progress' %}selected{% endif %}>Em Desenvolvimento</option>
+                    <option value="completed" {% if current_status == 'completed' %}selected{% endif %}>Concluído</option>
+                </select>
+                <select class="selector" name="sort" onchange="this.form.submit()">
+                    <option value="newest" {% if sort_by == 'newest' or not sort_by %}selected{% endif %}>Mais recentes</option>
+                    <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Mais antigos</option>
+                </select>
 
-        <div class="search-bar">
-            <i class="ph ph-magnifying-glass search-icon"></i>
-            <input type="text" placeholder="Search projects by title, description, or tags...">
+                <div class="search-bar">
+                    <i class="ph ph-magnifying-glass search-icon"></i>
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Busque por título, descrição ou tags...">
+                </div>
+            </form>
         </div>
 
         <div class="feed-list" style="margin-top: 20px;">
-            
-            {% include 'components/cards/feed/project_card.html' %} 
-            
-            {% include 'components/cards/feed/project_card.html' %}
+
+            {% for projeto in published_projects %}
+                {% include 'components/cards/feed/project_card.html' with projeto=projeto %}
+            {% empty %}
+                <p style="color: #6B7280;">Nenhum projeto publicado encontrado.</p>
+            {% endfor %}
 
         </div>
+
+        {% if is_paginated %}
+            <div class="pagination-container">
+
+            {% if page_obj.has_previous %}
+                <a class="pagination-arrow" href="?page={{ page_obj.previous_page_number }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">‹</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <span class="pagination-number active">{{ num }}</span>
+                {% else %}
+                    <a class="pagination-number" href="?page={{ num }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="pagination-arrow" href="?page={{ page_obj.next_page_number }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">›</a>
+            {% endif %}
+
+            </div>
+        {% endif %}
     </section>
 
 </div>

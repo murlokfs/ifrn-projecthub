@@ -18,33 +18,71 @@
 
         <div class="main-content">
 
-    <div class="tabs-container">
-        <button class="tab-btn active">Todos</button>
+            <div class="tabs-container">
+                <a href="?status=all{% if search_query %}&q={{ search_query }}{% endif %}"
+                   class="tab-btn {% if current_status == 'all' %}active{% endif %}">
+                    Todos
+                </a>
 
-        <button class="tab-btn">
-            Pendentes
-            <span class="notification-badge">2</span>
-        </button>
+                <a href="?status=pending{% if search_query %}&q={{ search_query }}{% endif %}"
+                   class="tab-btn {% if current_status == 'pending' %}active{% endif %}">
+                    Pendentes
+                    {% if pending_count %}
+                        <span class="notification-badge">{{ pending_count }}</span>
+                    {% endif %}
+                </a>
 
-        <button class="tab-btn">Em Desenvolvimento</button>
-        <button class="tab-btn">Concluído</button>
-    </div>
-    <div class="tabs-line"></div>
+                <a href="?status=in_progress{% if search_query %}&q={{ search_query }}{% endif %}"
+                   class="tab-btn {% if current_status == 'in_progress' %}active{% endif %}">
+                    Em Desenvolvimento
+                </a>
 
-    <div class="search-section">
-        <div class="search-input-wrapper">
-            <i class="ph ph-magnifying-glass"></i>
-            <input type="text" placeholder="Busque por nome, tag ou aluno...">
-        </div>
-    </div>
+                <a href="?status=completed{% if search_query %}&q={{ search_query }}{% endif %}"
+                   class="tab-btn {% if current_status == 'completed' %}active{% endif %}">
+                    Concluído
+                </a>
+            </div>
 
-    <div class="cards-grid">
+            <div class="tabs-line"></div>
 
-        {% include 'components/cards/approval_card.html' %}
-        {% include 'components/cards/approval_card.html' %}
-        {% include 'components/cards/approval_card.html' %}
+            <div class="search-section">
+                <form method="get" class="search-input-wrapper">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Busque por nome, tag ou aluno...">
+                    {% if current_status and current_status != 'all' %}
+                        <input type="hidden" name="status" value="{{ current_status }}">
+                    {% endif %}
+                </form>
+            </div>
 
-    </div>
+            <div class="cards-grid">
+                {% for projeto in projetos %}
+                    {% include 'components/cards/approval_card.html' with projeto=projeto %}
+                {% empty %}
+                    <p>Nenhum projeto encontrado.</p>
+                {% endfor %}
+            </div>
+
+            {% if is_paginated %}
+                <div class="pagination-container">
+                    {% if page_obj.has_previous %}
+                        <a class="pagination-arrow" href="?page={{ page_obj.previous_page_number }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">‹</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <span class="pagination-number active">{{ num }}</span>
+                        {% else %}
+                            <a class="pagination-number" href="?page={{ num }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="pagination-arrow" href="?page={{ page_obj.next_page_number }}{% if current_status and current_status != 'all' %}&status={{ current_status }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">›</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+
         </div>
     </div>
 </div>

@@ -216,7 +216,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    
+    text-decoration: none;
     background: white; 
     border: 1px solid #E5E7EB; 
     padding: 10px 20px;
