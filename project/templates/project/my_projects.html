@@ -86,7 +86,7 @@ Meus projetos
         <div class="card-header">
             <div class="badges-wrapper">
                 
-                {% if projeto.status == 'reproved'  %}
+                {% if ultimo_feedback.status == 'rejected' and projeto.status == 'pending_approval' %}
                     <span class="status-badge outline-red">Reprovado / Ajustes</span>
                 
                 {% elif projeto.status == 'pending_approval' %}

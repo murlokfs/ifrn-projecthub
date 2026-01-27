@@ -222,7 +222,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#login-redirect-url
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'profile'
+LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 
 SOCIAL_AUTH_SUAP_KEY = '7vVVTwhIrSLcOSvBU0CikXM54ZfjOI4SBedrwST3'

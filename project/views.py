@@ -9,6 +9,7 @@ from .models import Project, Tag,ApprovalSolicitation
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
 import re
+import json
 from authentication.models import User
 from django.contrib import messages
 
@@ -132,16 +133,16 @@ class MeusProjetosView(ListView):
         if not self.request.user.is_authenticated:
             return Project.objects.none()
         
-        # Busca projetos onde o usuário é membro
+        # Base: Projetos ativos do usuário
         queryset = Project.objects.filter(members=self.request.user, is_active=True)\
             .select_related('course')\
             .prefetch_related(
                 'tags', 
                 'members', 
-                'approval_solicitations' # Traz as solicitações para mostrar o feedback
+                'approval_solicitations'
             ).order_by('-created_at')
         
-        # --- Lógica de Busca (Barra de Pesquisa) ---
+        # --- Busca ---
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
@@ -150,21 +151,28 @@ class MeusProjetosView(ListView):
                 Q(tags__name__icontains=query)
             ).distinct()
 
-        # --- Lógica dos Botões de Filtro (Todos, Aprovado, Pendente...) ---
+        # --- Filtros (CORREÇÃO AQUI) ---
         status_filter = self.request.GET.get('status')
+        
         if status_filter == 'approved':
-            # Considera aprovado se tiver solicitação aprovada OU status concluído/em andamento
+            # Aprovados ou Concluídos
             queryset = queryset.filter(
                 Q(status='in_progress') | 
                 Q(status='completed') |
                 Q(approval_solicitations__status='approved')
             ).distinct()
+
         elif status_filter == 'pendant':
-            queryset = queryset.filter(status='pending_approval')
+            # Pendentes que NÃO foram rejeitados na última tentativa
+            # Para simplificar, trazemos todos os pendentes, mas idealmente excluiríamos os rejeitados
+            queryset = queryset.filter(status='pending_approval').distinct()
+
         elif status_filter == 'reproved':
-            # Filtra projetos que têm UMA solicitação rejeitada e ainda estão pendentes
+            # CORREÇÃO: Busca projetos Pendentes que tenham solicitação Rejeitada
+            # E usamos distinct() para evitar duplicatas se tiver mais de uma rejeição
             queryset = queryset.filter(
-                status='reproved',
+                status='pending_approval', 
+                approval_solicitations__status='rejected'
             ).distinct()
 
         return queryset
