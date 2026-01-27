@@ -1,7 +1,7 @@
 {% extends 'components/base_files/my_projects_and_feed.html' %}
 {% load static %}
 
-{% block title %}Perfil{% endblock title %}
+{% block title %}Perfil de {{ profile_user.full_name }}{% endblock title %}
 
 {% block imports %}
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
@@ -9,127 +9,257 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 {% endblock imports %}
 
-{% block header %}{% endblock header %}
-
 {% block content %}
 
-{% with is_owner=True user_name="Nathan Maniçoba" user_handle="@nathan" total_projetos=12 %}
+<style>
+    .filter-form-wrapper { width: 100%; display: flex; flex-direction: column; gap: 20px; }
+    .btn-transparent { background: transparent; border: none; cursor: pointer; padding: 0; }
+
+    /* --- ESTILOS DAS BADGES --- */
+    .badges-wrapper { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    .status-badge { padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; background: white; border: 1px solid; display: inline-block; white-space: nowrap; }
+
+    .perfil-container .profile-bio {
+    font-size: 14px;
+    max-width: 1000px;
+    opacity: 0.95;
+    margin-top: 5px;
+
+    /* --- ADICIONE ISSO AQUI --- */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;        /* Número máximo de linhas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;             /* Esconde o que passar */
+    text-overflow: ellipsis;      /* Adiciona os "..." */
+    word-wrap: break-word;        /* Previne quebra horizontal */
+}
+
+    /* --- ESTILOS DOS SOCIAL LINKS COMO BOTÕES --- */
+    .perfil-container .social-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 8px 14px;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 13px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.2s ease;
+    }
+
+    .perfil-container .social-item:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+    .perfil-container .social-item a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .perfil-container .social-item a:hover {
+        transform: translateY(-2px);
+    }
+
+    .perfil-container .social-item i {
+        font-size: 16px;
+    }
+
+</style>
 
 <div class="perfil-container">
     
     <header class="profile-header">
         <div class="main-info">
-            <img src="{% static 'img/profile/avatar.jpg' %}" alt="Profile picture" class="profile-photo">
+            {% if profile_user.image %}
+                <img src="{{ profile_user.image }}" alt="Foto" class="profile-photo">
+            {% else %}
+                <img src="{% static 'img/profile/avatar.jpg' %}" alt="Avatar" class="profile-photo">
+            {% endif %}
             
             <div class="profile-texts">
-                <h1 class="user-name">{{ user_name }}</h1>
-                <p class="username">{{ user_handle }}</p>
-                <p class="profile-bio">Desenvolvedor full-stack e designer de UI/UX apaixonado por criar experiências belas e funcionais.</p>
+                <h1 class="user-name">{{ profile_user.full_name }}</h1>
+                <p class="username">@{{ profile_user.username }}</p>
+                <p class="profile-bio">{{ profile_user.about_me|default:"<span style='opacity: 0.8; font-style: italic;'>Sem biografia.</span>"|safe }}</p>
                 
                 <div class="social-links">
-                    <div class="social-item location-item">
-                        <span class="icon-stat"><i class="ph ph-map-pin-simple-area"></i></span>
-                        <span class="location">Pau dos Ferros, RN</span>
-                    </div>
-
-                    <div class="social-item github-item">
-                        <span class="icon-stat"><i class="ph ph-github-logo"></i></span>
-                        <a href="#" class="github-link">nathan1227.github</a>
-                    </div>
-
-                    {% if is_owner %}
-                    <div class="social-item enrollment-item">
-                        <span class="icon-stat"><i class="ph ph-graduation-cap"></i></span>
-                        <span class="enrollment">2024109404093</span>
-                    </div>
+                    
+                    {% if profile_user.registration %}
+                        <div class="social-item">
+                            <i class="ph ph-identification-badge"></i> <span>{{ profile_user.registration }}</span>
+                        </div>
                     {% endif %}
+
+                    {% if profile_user.course and profile_user.course.campus %}
+                        <div class="social-item">
+                            <i class="ph ph-buildings"></i>
+                            <span>{{ profile_user.course.campus.name }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if profile_user.github %}
+                        <div class="social-item">
+                            <i class="ph ph-github-logo"></i> 
+                            <a href="{{ profile_user.github }}" target="_blank" class="github-link">GitHub</a>
+                        </div>
+                    {% endif %}
+
+                    {% if profile_user.linkedin %}
+                        <div class="social-item">
+                            <i class="ph ph-linkedin-logo"></i> 
+                            <a href="{{ profile_user.linkedin }}" target="_blank" class="github-link">LinkedIn</a>
+                        </div>
+                    {% endif %}
+                    
                 </div>
             </div>
         </div>
-
+        
         <div class="profile-actions">
             {% if is_owner %}
-                <button class="edit-button">
-                    <i class="ph ph-pencil-simple"></i> <a class="link-edit-profile" href="{% url 'edit_profile' %}">Editar Perfil</a>
-                </button>
+                <a href="{% url 'edit_profile' %}" class="edit-button link-edit-profile"><i class="ph ph-pencil-simple"></i> Editar Perfil</a>
             {% else %}
-                <div style="display: flex; gap: 10px;">
-                    <button class="edit-button" style="background-color: var(--primary); color: white; border: none;">
-                        <i class="ph ph-user-plus"></i> Seguir
-                    </button>
-                    <button class="edit-button" style="background-color: transparent; border: 1px solid var(--primary); color: var(--primary);">
-                        <i class="ph ph-chat-circle"></i> Mensagem
-                    </button>
-                </div>
+                 <button class="edit-button">Seguir</button>
             {% endif %}
         </div>
     </header>
 
     <section class="statistics">
         <div class="stat-card">
-            <span class="icon-stat"><i class="ph ph-folder-open icon-green"></i></span>
-            <span class="number">{{ total_projetos }}</span>
-            <span class="stat-description">Total de projetos</span>
+            <span class="icon-green"><i class="ph ph-folder-open"></i></span>
+            <div class="stat-content"><span class="number">{{ total_projetos }}</span> <span class="stat-description">Total de projetos</span></div>
         </div>
         <div class="stat-card">
-            <span class="icon-stat"><i class="ph ph-eye icon-blue"></i></span>
-            <span class="number">8</span>
-            <span class="stat-description">Público</span>
+            <span class="icon-blue"><i class="ph ph-eye"></i></span>
+            <div class="stat-content"><span class="number">8</span> <span class="stat-description">Visualizações</span></div>
         </div>
-        
         {% if is_owner %}
         <div class="stat-card">
-            <span class="icon-stat"><i class="ph ph-lock icon-red"></i></span>
-            <span class="number">4</span>
-            <span class="stat-description">Privado</span>
+            <span class="icon-red"><i class="ph ph-lock-key"></i></span>
+            <div class="stat-content"><span class="number">{{ profile_user.members.all.count|default:"0" }}</span> <span class="stat-description">Privados</span></div>
         </div>
         {% endif %}
-
         <div class="stat-card">
-            <span class="icon-stat"><i class="ph ph-users icon-black"></i></span>
-            <span class="number">125</span>
-            <span class="stat-description">Seguidores</span>
-        </div>
-        <div class="stat-card">
-            <span class="icon-stat"><i class="ph ph-heart icon-red"></i></span>
-            <span class="number">236</span>
-            <span class="stat-description">Total de likes</span>
+            <span class="icon-black"><i class="ph ph-users"></i></span>
+            <div class="stat-content"><span class="number">0</span> <span class="stat-description">Seguidores</span></div>
         </div>
     </section>
 
     <section class="published-projects">
-        <div class="projects-header">
-            <div class="title-group">
-                <h2>Projetos publicados</h2>
-                <p class="subtitle">
-                    {% if is_owner %}
-                        Seus projetos cadastrados
-                    {% else %}
-                        Projetos de {{ user_name }}
-                    {% endif %}
-                </p>
+        
+        <form method="get" id="filterForm" class="filter-form-wrapper">
+            <div class="projects-header">
+                <div class="title-group">
+                    <h2>Projetos publicados</h2>
+                    <p class="subtitle">{% if is_owner %}Seus projetos cadastrados{% else %}Projetos de {{ profile_user.first_name }}{% endif %}</p>
+                </div>
+                <div class="filters">
+                    <select name="status" class="selector" onchange="this.form.submit()">
+                        <option value="all" {% if current_filters.status == 'all' %}selected{% endif %}>Todos</option>
+                        <option value="completed" {% if current_filters.status == 'completed' %}selected{% endif %}>Concluídos</option>
+                        <option value="in_progress" {% if current_filters.status == 'in_progress' %}selected{% endif %}>Em andamento</option>
+                        <option value="reproved" {% if current_filters.status == 'reproved' %}selected{% endif %}>Reprovados</option>
+                        {% if is_owner %}
+                            <option value="pending_approval" {% if current_filters.status == 'pending_approval' %}selected{% endif %}>Pendentes</option>
+                        {% endif %}
+                    </select>
+                    <select name="sort" class="selector" onchange="this.form.submit()">
+                        <option value="newest" {% if current_filters.sort == 'newest' %}selected{% endif %}>Mais recentes</option>
+                        <option value="oldest" {% if current_filters.sort == 'oldest' %}selected{% endif %}>Mais antigos</option>
+                    </select>
+                </div>
             </div>
-
-            <div class="filters">
-                <select class="selector"><option>Todos</option></select>
-                <select class="selector"><option>Mais recente</option></select>
+            <div class="search-bar">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" name="q" value="{{ current_filters.q }}" placeholder="Busque projetos..." autocomplete="off">
             </div>
+        </form>
+
+        <div class="feed-list" style="margin-top: 10px;">
+            {% for project in projects_list %}
+                
+                <article class="feed-card">
+                    <div class="card-image-box">
+                        {% if project.image %}
+                            <img src="{{ project.image.url }}" alt="Capa do projeto {{ project.title }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" alt="Capa padrão">
+                        {% endif %}
+                        
+                        {% with feedback=project.get_latest_feedback %}
+                        <div class="card-badges-container">
+                            <span class="floating-tag">{{ project.get_type_display }}</span>
+                            
+                            {% if feedback.status == 'rejected' and project.status == 'pending_approval' %}
+                                <span class="status-badge outline-red">Reprovado / Ajustes</span>
+                            {% elif project.status == 'pending_approval' %}
+                                <span class="status-badge outline-yellow">Pendente de aprovação</span>
+                            {% elif project.status == 'in_progress' %}
+                                <span class="status-badge outline-blue">Em Desenvolvimento</span>
+                            {% elif project.status == 'completed' %}
+                                <span class="status-badge outline-green">Concluído</span>
+                            {% endif %}
+                        </div>
+                        {% endwith %}
+                    </div>
+
+                    <div class="card-content">
+                        <div class="author-row">
+                            <div class="avatar-mini">
+                                {% if project.members.first.image %}
+                                     <img src="{{ project.members.first.image }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                {% else %}
+                                    {{ project.members.first.full_name|default:"?"|slice:":2"|upper }}
+                                {% endif %}
+                            </div>
+                            <div class="author-info">
+                                <strong>{{ project.members.first.full_name|default:"Autor não informado" }}</strong>
+                                <span><i class="ph ph-calendar-blank"></i> {{ project.created_at|date:"d/m/Y" }}</span>
+                            </div>
+                        </div>
+
+                        <h2 class="project-title">{{ project.title }}</h2>
+                        <p class="project-desc">{{ project.description|striptags|safe|truncatechars:120 }}</p>
+
+                        <div class="tags-row">
+                            {% for tag in project.tags.all|slice:":3" %}
+                                <span class="tech-tag">{{ tag.name }}</span>
+                            {% empty %}
+                                <span class="tech-tag muted">Sem tags</span>
+                            {% endfor %}
+                        </div>
+
+                        <div class="card-footer">
+                            <div class="members-info"><i class="ph ph-users"></i> {{ project.members.count }} membro(s)</div>
+                            <div class="actions-right">
+                                <div class="stats-icons">
+                                    {% include 'components/cards/project_parts/interaction_btns.html' %}
+                                </div>
+                                <a href="{% url 'project_details' pk=project.id %}" class="btn-details">Ver Detalhes <i class="ph ph-arrow-up-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+            {% empty %}
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    <i class="ph ph-folder-dashed" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>
+                    <p>Nenhum projeto encontrado.</p>
+                </div>
+            {% endfor %}
         </div>
 
-        <div class="search-bar">
-            <i class="ph ph-magnifying-glass search-icon"></i>
-            <input type="text" placeholder="Search projects by title, description, or tags...">
-        </div>
-
-        <div class="feed-list" style="margin-top: 20px;">
-            
-            {% include 'components/cards/feed/project_card.html' %} 
-            
-            {% include 'components/cards/feed/project_card.html' %}
-
-        </div>
     </section>
 
 </div>
 
-{% endwith %} {% endblock content %}
+{% endblock content %}
