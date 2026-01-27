@@ -278,4 +278,6 @@ EMAIL_HOST_USER = 'projetoprisma.if@gmail.com'
 EMAIL_HOST_PASSWORD = 'kpwg cmvg ctxo kdrb'
 
 # DEFAULT_FROM_EMAIL = 'noreply@ifrnprojecthub.com'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

@@ -43,6 +43,7 @@ class Project(models.Model):
         ('pending_approval', 'Pendente de Aprovação'),
         ('in_progress', 'Em Andamento'),
         ('completed', 'Concluído'),
+        ('reproved', 'Reprovado'),
     ]
 
     TYPE_CHOICES = [
@@ -70,8 +71,14 @@ class Project(models.Model):
     link_youtube = models.URLField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
 
+    is_active = models.BooleanField(default=True, verbose_name="Projeto Ativo")
+
     def __str__(self):
         return self.title
+
+    def get_latest_feedback(self):
+        """Retorna o feedback mais recente da solicitação de aprovação"""
+        return self.approval_solicitations.filter(is_active=True).order_by('-created_at').first()
 
     class Meta:
         verbose_name = "Projeto"

@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - Project Hub</title>
+
+    <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+</head>
+
+<body>
+    <div class="main-wrapper">
+
+        <a href="{% url 'profile' %}" class="back-link">
+            <i class="ph ph-arrow-left"></i> Voltar ao perfil
+        </a>
+
+        <div class="page-header">
+
+            <div class="avatar-wrapper">
+                <div class="avatar-circle">NM</div>
+                <div class="avatar-overlay">
+                    <i class="ph ph-camera"></i>
+                </div>
+            </div>
+
+            <div class="header-texts">
+                <div class="title-row">
+                    <i class="ph ph-pencil-simple header-icon"></i>
+                    <h1>Editar Perfil</h1>
+                </div>
+                <p>Atualize suas informações pessoais. Passe o mouse sobre a foto para alterá-la.</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+
+            <div class="card-title">
+                <i class="ph ph-user"></i>
+                <h2>Informações pessoais</h2>
+            </div>
+            <p class="card-subtitle">Preencha os campos abaixos com suas informações</p>
+
+            <form action="#" method="POST" class="profile-form">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" class="form-input" placeholder="Seu nome completo">
+                        <span class="helper-text">Seu nome completo</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Handle (nome de usuário)</label>
+                        <input type="text" class="form-input"  placeholder="@usuario">
+                        <span class="helper-text">Este é o seu identificador único na plataforma</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cidade</label>
+                        <input type="text" class="form-input" placeholder="Sua cidade">
+                        <span class="helper-text">Cidade que atualmente mora</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>GitHub</label>
+                        <div class="input-icon-wrapper">
+                            <i class="ph ph-github-logo"></i>
+                            <input type="text" class="form-input has-icon"
+                                placeholder="Link do GitHub">
+                        </div>
+                        <span class="helper-text">Link para o seu perfil no GitHub</span>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Descrição</label>
+                    <textarea class="form-textarea" placeholder="Conte um pouco sobre você...">Desenvolvedor e estudante — apaixonado por projetos acadêmicos e inovação tecnológica.
+Sempre buscando aprender e compartilhar conhecimento.</textarea>
+                    <span class="helper-text">Uma breve descrição sobre você e seus interesses.</span>
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'profile' %}" class="btn-cancel">Cancelar</a>
+                    <button type="submit" class="btn-confirm">Confirmar alterações</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</body>
+
+</html>
