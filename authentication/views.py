@@ -23,8 +23,11 @@ class PerfilView(LoginRequiredMixin, TemplateView):
     template_name = 'authentication/profile.html'
     login_url = 'login'
     extra_context = {'active_page': 'profile'}
+class SignupView(TemplateView):
+    template_name = 'authentication/signup.html'
 
-
+class EditProfileView(TemplateView):
+    template_name = 'authentication/edit_profile.html'
 class EgressoLoginView(View):
     template_name = 'authentication/login_egresso.html'
     

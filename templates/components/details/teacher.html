@@ -7,12 +7,14 @@
 
     <div class="card-body">
         <ul class="user-list">
+            {% for p in project.orientators.all %}
             <li>
                 <a href="#">
                     <span class="avatar ac">AC</span>
-                    Thiago Henrique <small>ADS</small>
+                    {{ p }} <small>{{ p.course.name }}</small>
                 </a>
             </li>
+            {% endfor %}
         </ul>
     </div>
 </section>

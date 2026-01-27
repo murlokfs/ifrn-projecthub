@@ -5,16 +5,16 @@
             <span class="status-badge outline-blue">Em Desenvolvimento</span>
         </div>
         <button class="btn-more-options" title="Denunciar/Excluir"
-            onclick="openDeleteModal('Project Hub - Armazene seus projetos')">
-            <i class="ph ph-dots-three"></i>
+                onclick="openDeleteModal('Project Hub - Armazene seus projetos')">
+            <i class="ph ph-flag"></i>
         </button>
     </div>
 
     <h3 class="card-title">Project Hub - Armazene seus projetos e trabalhos</h3>
 
-    <p class="card-desc">
-        O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="#">VER MAIS</a>
-    </p>
+        <p class="card-desc">
+            O projeto é uma plataforma digital inspirada na Steam, desenvolvida... <a href="{% url 'project_details_pending' %}">VER MAIS</a>
+        </p>
 
     <div class="card-tags">
         <span class="tag">NOSQL</span>
@@ -39,7 +39,7 @@
     </div>
 
     <div class="card-footer">
-        <button class="btn-cancel">Cancelar</button>
+        <button class="btn-cancel" onclick='window.location.href="{% url "project_details_pending" %}"'>Ver detalhes</button>
         <button class="btn-confirm" onclick="openModal()">Confirmar avaliação</button>
     </div>
 </div>
