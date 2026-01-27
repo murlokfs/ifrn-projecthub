@@ -1,0 +1,41 @@
+<div id="modal-report" class="modal" aria-hidden="true">
+    <div class="modal__overlay" onclick="toggleModal('modal-report')"></div>
+    <div class="modal__content">
+        <header class="modal__header">
+            <h2 class="modal__title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                Denunciar Projeto
+            </h2>
+            <p class="modal__description">Selecione o motivo da denúncia. Nossa equipe irá analisar e tomar as medidas necessárias.</p>
+        </header>
+        
+        <div class="radio-group">
+            <label class="radio-item">
+                <input type="radio" name="report_reason" value="plagio">
+                <div class="radio-item__content">
+                    <span class="radio-label">Plágio</span>
+                    <span class="radio-desc">O projeto copia conteúdo de outros sem autorização</span>
+                </div>
+            </label>
+            <label class="radio-item">
+                <input type="radio" name="report_reason" value="inapropriado">
+                <div class="radio-item__content">
+                    <span class="radio-label">Conteúdo Inapropriado</span>
+                    <span class="radio-desc">Contém linguagem ofensiva ou imagens inadequadas</span>
+                </div>
+            </label>
+            <label class="radio-item">
+                <input type="radio" name="report_reason" value="falso">
+                <div class="radio-item__content">
+                    <span class="radio-label">Informação Falsa</span>
+                    <span class="radio-desc">As informações do projeto são falsas ou enganosas</span>
+                </div>
+            </label>
+        </div>
+
+        <footer class="modal__footer">
+            <button class="btn btn--ghost" onclick="toggleModal('modal-report')">Cancelar</button>
+            <button class="btn btn--destructive" onclick="alert('Denúncia enviada!')">Enviar Denúncia</button>
+        </footer>
+    </div>
+</div>
