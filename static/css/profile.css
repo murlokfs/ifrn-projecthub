@@ -7,6 +7,12 @@ main {
     max-width: 100vw;
 }
 
+.link-edit-profile{
+    text-decoration: none;
+    color: #16a34a;
+}
+
+
 .badges-wrapper {
     display: flex;
     gap: 8px;

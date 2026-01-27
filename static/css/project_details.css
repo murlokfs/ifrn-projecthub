@@ -16,6 +16,21 @@ body {
     box-sizing: border-box; 
 }
 
+.tags_container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    background-color: #ECF9EE;
+    border-radius: 8px;
+    width: fit-content;
+    padding: 4px 8px;
+    height: 24px;
+    color: #50CE67;
+}
+
 /* --- 2. Main Layout --- */
 .page-wrapper {
     max-width: 100%;
@@ -237,6 +252,7 @@ body {
 
 .content-columns {
     display: flex;
+    flex-direction: column;
     gap: 24px;
     flex-wrap: wrap;
 }
@@ -247,8 +263,8 @@ body {
 
 .column-left {
     display: flex;
-    flex-direction: column;
-    max-width: 50%;
+    flex-wrap: wrap;
+    max-width: 100%;
     gap: 24px;
     flex: 2;
 }
@@ -260,6 +276,10 @@ body {
     gap: 24px;
     flex: 1;
     min-width: 275px;
+}
+
+#member-section {
+    width: 100%;
 }
 
 /* --- 6. Cards --- */

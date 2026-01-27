@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+    background-color: #F4F4F6;
+    color: #111827;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.main-wrapper {
+    width: 100%;
+    max-width: 1000px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #111827;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 30px;
+    transition: 0.2s;
+}
+.back-link:hover { color: #50CE67; }
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* Avatar */
+.avatar-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.avatar-circle {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background-color: #bbf7d0;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    border: 4px solid #fff;
+}
+
+.avatar-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 24px;
+    opacity: 0;
+    transition: 0.2s;
+}
+.avatar-wrapper:hover .avatar-overlay { opacity: 1; }
+
+.header-texts { flex: 1; }
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.header-icon { color: #50CE67; font-size: 24px; } /* Lápis verde */
+
+.header-texts h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.header-texts p {
+    color: #6b7280;
+    font-size: 14px;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+
+.form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    border: 1px solid #e5e7eb;
+}
+
+
+.card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+.card-title i { color: #50CE67; font-size: 20px; }
+.card-title h2 { font-size: 18px; font-weight: 600; }
+
+.card-subtitle {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 20px;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    padding: 12px 15px;
+    background-color: #F4F4F6; /* Fundo cinza claro */
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-input:focus {
+    background-color: #fff;
+    border-color: #e5e7eb;
+    box-shadow: 0 0 0 3px rgba(229, 231, 235, 0.5);
+}
+
+
+.input-icon-wrapper { position: relative; }
+.input-icon-wrapper i {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    color: #6b7280; font-size: 18px;
+}
+.form-input.has-icon { padding-left: 45px; width: 100%; }
+
+.form-textarea {
+    width: 100%;
+    height: 120px;
+    padding: 15px;
+    background-color: #F4F4F6;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #374151;
+    outline: none;
+    resize: none;
+    font-family: 'Poppins', sans-serif;
+}
+.form-textarea:focus {
+    background-color: #fff;
+    border-color: #e5e7eb;
+}
+
+/* --- EFEITO DE PLACEHOLDER --- */
+
+/* Faz o texto sumir ao clicar (focar) no input ou textarea */
+.form-input:focus::placeholder,
+.form-textarea:focus::placeholder {
+    color: transparent;
+    opacity: 0; /* Garante compatibilidade com alguns navegadores */
+}
+
+
+.helper-text {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 6px;
+    display: block;
+    text-align: right;
+}
+
+/* --- BOTÕES --- */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #f3f4f6;
+}
+
+.btn-cancel {
+    background-color: #aeb0b3;
+    color: #333;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-confirm {
+    background-color: #50CE67;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(80, 206, 103, 0.2);
+    transition: 0.2s;
+}
+.btn-confirm:hover { background-color: #43b357; }
+
+
+
+@media (max-width: 768px) {
+    .form-row { grid-template-columns: 1fr; gap: 15px; }
+    .header-texts h1 { font-size: 22px; }
+    .form-card { padding: 20px; }
+}

@@ -1,4 +1,4 @@
-{% load static %}
+<!-- {% load static %}
 <nav class="tabs-nav">
 
    {% if request.resolver_match.url_name == 'project_details_pending' %}
@@ -8,6 +8,7 @@
    </a>
    {% else %}
    <a href="{% url 'project_details' %}"
+   <a href="{% url 'project_details' pk=project.id %}"
       class="tab-link {% if request.resolver_match.url_name == 'project_details' %}active{% endif %}">
       Informações Gerais
    </a>
@@ -18,9 +19,12 @@
    {% else %}
    <a href="{% url 'student_comments' %}"
       class="tab-link {% if request.resolver_match.url_name == 'student_comments' %}active{% endif %}">
+   <a href="{% url 'project_comments' pk=project.id %}"
+      class="tab-link {% if request.resolver_match.url_name == 'project_comments' %}active{% endif %}">
       Comentários de usuários
    </a>
    {% endif %}
+
 
    {% if request.resolver_match.url_name == 'project_details_pending' %}
    <span class="tab-link disabled">Avaliações de Professores</span>
@@ -32,4 +36,4 @@
    {% endif %}
 
 
-</nav>
+</nav> -->

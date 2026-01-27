@@ -1,26 +1,24 @@
 from django.db import models
-
-class Institution(models.Model):
-
+from ckeditor.fields import RichTextField
+class Campus(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     cnpj = models.CharField(max_length=20, unique=True, null=False, blank=False)
-    campus = models.CharField(max_length=50, null=False, blank=False)
     acronym = models.CharField(max_length=10, null=False, blank=False)
-    image = models.ImageField(upload_to='institutions/photos/', null=True, blank=True)
+    image = models.ImageField(upload_to='media/campus/photos/', null=True, blank=True)
 
     def __str__(self):
-        return f"{self.acronym} - {self.campus}"
+        return f"{self.name} - {self.acronym}"
 
     class Meta:
-        verbose_name = "Instituição"
-        verbose_name_plural = "Instituições"
+        verbose_name = "Campus"
+        verbose_name_plural = "Campi"
 
 class Course(models.Model):
     name = models.CharField(max_length=100)
-    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='courses')
+    campus = models.ForeignKey(Campus, on_delete=models.CASCADE, related_name='courses', default=None)
 
     def __str__(self):
-        return f"{self.name} - {self.institution.acronym}"
+        return f"{self.name} - {self.campus.acronym}"
 
     class Meta:
         verbose_name = "Curso"
@@ -36,12 +34,16 @@ class Tag(models.Model):
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
 
+def project_image_path(instance, filename):
+    return f'media/projects/{instance.id}/images/{filename}'
+
 class Project(models.Model):
 
     STATUS_CHOICES = [
         ('pending_approval', 'Pendente de Aprovação'),
         ('in_progress', 'Em Andamento'),
         ('completed', 'Concluído'),
+        ('reproved', 'Reprovado'),
     ]
 
     TYPE_CHOICES = [
@@ -51,12 +53,14 @@ class Project(models.Model):
     ]
 
     title = models.CharField(max_length=200, null=False, blank=False)
-    description = models.TextField(null=False, blank=False)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=False, blank=False)
+
+    description = RichTextField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='courses', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_approval')
     is_private = models.BooleanField(default=False)
+    image = models.ImageField(upload_to=project_image_path, null=True, blank=True)
 
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='research')
 
@@ -67,19 +71,32 @@ class Project(models.Model):
     link_youtube = models.URLField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
 
+    is_active = models.BooleanField(default=True, verbose_name="Projeto Ativo")
+
     def __str__(self):
         return self.title
+
+    def get_latest_feedback(self):
+        """Retorna o feedback mais recente da solicitação de aprovação"""
+        return self.approval_solicitations.filter(is_active=True).order_by('-created_at').first()
 
     class Meta:
         verbose_name = "Projeto"
         verbose_name_plural = "Projetos"
 
 class ApprovalSolicitation(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('approved', 'Aprovado'),
+        ('rejected', 'Rejeitado'),
+    ]
+    
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='approval_solicitations')
     message = models.TextField(null=False, blank=False)
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='approval_solicitations')
     created_at = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)
+    # is_approved = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
