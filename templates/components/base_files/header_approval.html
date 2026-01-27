@@ -16,7 +16,7 @@
                 </div>
 
                 <div class="right-nav-group">
-                    <a href="{% url 'profile' %}" class="back-btn">
+                    <a href="{% url 'profile' pk=request.user.pk %}" class="back-btn">
                         <div class="avatar-circle">PM</div>
                     </a>
                 </div>

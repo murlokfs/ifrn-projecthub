@@ -560,6 +560,16 @@ body {
     text-overflow: ellipsis;
 }
 
+.user-name a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+}
+
+.user-name a:hover {
+    color: var(--primary);
+}
+
 .user-role {
     font-size: 0.75rem;
     color: var(--muted);

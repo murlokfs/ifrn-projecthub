@@ -39,7 +39,7 @@
             <div class="member-row">
                 <span class="avatar-mini">
                     {% if member.image %}
-                        <img src="{{ member.image.url }}" class="avatar-image">
+                        <img src="{{ member.image }}" class="avatar-image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" alt="Avatar de {{ member.full_name }}">
                     {% else %}
                         {{ member.full_name|default:"?"|slice:":2"|upper }}
                     {% endif %}
