@@ -63,8 +63,10 @@ body {
 
 .header-right{
     display: flex;
-    justify-content: center;
-    gap: 16px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
 }
 
 
@@ -109,25 +111,50 @@ body {
 /* --- Report Button --- */
 
 .btn-denunciar { /* preserving original class name to avoid template changes */
-    width: 100%;
-    height: 32px;
-    display: flex;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     gap: 8px; 
     background-color: #EC6262; 
     color: #ffffff;
     border: none;
-    border-radius: 12px;
-    padding: 12px 20px; 
-    font-family: 'Inter', sans-serif;
+    border-radius: 999px;
+    padding: 0 16px; 
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: 500; 
     cursor: pointer;
     transition: background-color 0.2s;
+    white-space: nowrap;
+}
+.btn-approve {
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #22c55e;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 0 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-approve .ph {
+    font-size: 18px;
+}
+
+.btn-approve:hover {
+    background-color: #1ea34f;
 }
 
 .btn-denunciar .ph {
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .btn-denunciar:hover {
@@ -166,6 +193,13 @@ body {
 .tab-link:not(.active) {
     background-color: #F4F4F6;
     color: #6b7280;
+}
+
+.tab-link.disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: #F4F4F6;
+    color: #a1a1aa;
 }
 
 /* --- 5. Content Layout (Cards) --- */

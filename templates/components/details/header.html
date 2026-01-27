@@ -14,9 +14,16 @@
     </div>
 
     <div class="header-right">
-        <button class="btn-denunciar">
+        <button class="btn-denunciar" onclick="openDeleteModal('ProjectHub - Plataforma de portfólio')">
             <i class="ph ph-flag"></i>
             <span>Denunciar</span>
         </button>
+
+        {% if show_approval_button %}
+        <button class="btn-approve" onclick="openModal()">
+            <i class="ph ph-check"></i>
+            <span>Aprovar projeto</span>
+        </button>
+        {% endif %}
     </div>
 </header>

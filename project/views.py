@@ -321,6 +321,20 @@ def delete_project(request, pk):
     # Redirect back to my_projects
     return redirect('my_projects')
 
+class DetalheProjetoPendenteProfessorView(TemplateView):
+    template_name = 'project/project_details.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # Temporariamente permitir acesso para todos os usuários
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Habilita o botão de aprovação no header
+        context['show_approval_button'] = True
+        user = getattr(self.request, 'user', None)
+        context['is_teacher'] = bool(user and user.is_authenticated and getattr(user, 'role', None) == 'teacher')
+        return context
 
 @login_required
 def cancel_project_submission(request, pk):

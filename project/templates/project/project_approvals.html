@@ -5,13 +5,18 @@
 
 {%block extra_css %}
 <link rel="stylesheet" href="{% static 'css/aprovacao.css' %}">
+<link rel="stylesheet" href="{% static 'base_files/sidebar.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 
-{% include 'components/base_files/header_approval.html' %}
+<div class="approval-layout">
+    {% include 'components/base_files/sidebar.html' with active_page='project_approval' %}
 
-<div class="main-content">
+    <div class="approval-content">
+        {% include 'components/base_files/header_approval.html' %}
+
+        <div class="main-content">
 
     <div class="tabs-container">
         <button class="tab-btn active">Todos</button>
@@ -39,6 +44,8 @@
         {% include 'components/cards/approval_card.html' %}
         {% include 'components/cards/approval_card.html' %}
 
+    </div>
+        </div>
     </div>
 </div>
 

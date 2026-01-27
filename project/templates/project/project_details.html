@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectHub - Plataforma</title>
     <link rel="stylesheet" href="{% static 'css/project_details.css' %} ">
+    <link rel="stylesheet" href="{% static 'css/aprovacao.css' %}">
     <link rel="stylesheet" href="{% static 'base_files/footer.css' %}?v=20251113_2">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
@@ -36,7 +37,29 @@
 
     </main>
 </div>
+    {% include 'components/modals/modal_approval.html' %}
     {% include 'components/base_files/footer.html' %}
+
+    <script>
+        // Fallback: garante abertura do modal mesmo se houver conflitos de nomes
+        document.addEventListener('DOMContentLoaded', function() {
+            const approveBtn = document.querySelector('.btn-approve');
+            const modal = document.getElementById('evaluationModal');
+            if (approveBtn && modal) {
+                approveBtn.addEventListener('click', function(ev) {
+                    try {
+                        if (typeof openModal === 'function') {
+                            openModal();
+                        } else {
+                            modal.style.display = 'flex';
+                        }
+                    } catch (e) {
+                        modal.style.display = 'flex';
+                    }
+                });
+            }
+        });
+    </script>
 
 </body>
 </html>
