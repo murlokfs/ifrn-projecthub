@@ -123,31 +123,23 @@
         
         <div class="profile-actions">
             {% if is_owner %}
-                <a href="{% url 'edit_profile' %}" class="edit-button link-edit-profile"><i class="ph ph-pencil-simple"></i> Editar Perfil</a>
-            {% else %}
-                 <button class="edit-button">Seguir</button>
+                <a href="{% url 'edit_profile' %}" class="edit-button link-edit-profile">Editar Perfil</a>
             {% endif %}
         </div>
     </header>
 
     <section class="statistics">
         <div class="stat-card">
-            <span class="icon-green"><i class="ph ph-folder-open"></i></span>
+            <span class="icon-yellow"><i class="ph ph-folder-open"></i></span>
             <div class="stat-content"><span class="number">{{ total_projetos }}</span> <span class="stat-description">Total de projetos</span></div>
         </div>
         <div class="stat-card">
-            <span class="icon-blue"><i class="ph ph-eye"></i></span>
-            <div class="stat-content"><span class="number">8</span> <span class="stat-description">Visualizações</span></div>
+            <span class="icon-blue"><i class="ph ph-gear"></i></span>
+            <div class="stat-content"><span class="number">{{ in_progress_projects }}</span> <span class="stat-description">Em desenvolvimento</span></div>
         </div>
-        {% if is_owner %}
         <div class="stat-card">
-            <span class="icon-red"><i class="ph ph-lock-key"></i></span>
-            <div class="stat-content"><span class="number">{{ profile_user.members.all.count|default:"0" }}</span> <span class="stat-description">Privados</span></div>
-        </div>
-        {% endif %}
-        <div class="stat-card">
-            <span class="icon-black"><i class="ph ph-users"></i></span>
-            <div class="stat-content"><span class="number">0</span> <span class="stat-description">Seguidores</span></div>
+            <span class="icon-green"><i class="ph ph-check-circle"></i></span>
+            <div class="stat-content"><span class="number">{{ completed_projects }}</span> <span class="stat-description">Concluídos</span></div>
         </div>
     </section>
 

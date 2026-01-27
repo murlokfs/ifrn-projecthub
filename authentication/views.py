@@ -76,6 +76,8 @@ class PerfilView(LoginRequiredMixin, DetailView):
         context['projects_list'] = projetos
         context['published_projects'] = projetos  # Compatibilidade com template antigo
         context['total_projetos'] = projetos.count()
+        context['in_progress_projects'] = projetos.filter(status='in_progress').count()
+        context['completed_projects'] = projetos.filter(status='completed').count()
         
         context['current_filters'] = {
             'q': query,

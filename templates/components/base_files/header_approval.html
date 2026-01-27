@@ -4,21 +4,24 @@
 
             <div class="top-navigation">
                 <div class="left-nav-group">
+                    <button class="menu-toggle" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false" type="button">
+                        <i class="ph ph-list"></i>
+                    </button>
                     <div class="professor-profile">
                         <div class="shield-icon-box">
                             <i class="ph ph-shield-check"></i>
                         </div>
                         <div class="profile-texts">
-                            <span class="role-label">Painel do Professor</span>
-                            <span class="user-name">Prof. Maria Santos</span>
+                            <span class="role-label">Painel do Docente</span>
+                            <span class="user-name">{{ request.user.full_name }}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="right-nav-group">
-                    <a href="{% url 'profile' pk=request.user.pk %}" class="back-btn">
-                        <div class="avatar-circle">PM</div>
-                    </a>
+                    <button class="back-btn" onclick="openHelpModal()" type="button">
+                        <div class="avatar-circle" style="font-weight: bold; font-size: 1.2rem;">?</div>
+                    </button>
                 </div>
             </div>
 
@@ -58,3 +61,191 @@
 
         </div>
     </header>
+
+    <!-- Modal de Ajuda -->
+    <div id="helpModal" class="modal-overlay" onclick="closeHelpModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2><i class="ph ph-question"></i> Ajuda - Painel de Aprovação</h2>
+                <button class="modal-close" onclick="closeHelpModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h3><i class="ph ph-clipboard-text"></i> Como Aprovar Projetos</h3>
+                    <p>Revise cuidadosamente cada projeto submetido. Verifique se os objetivos, metodologia e resultados esperados estão claramente definidos.</p>
+                </div>
+                <div class="help-section">
+                    <h3><i class="ph ph-shield-check"></i> Critérios de Avaliação</h3>
+                    <ul>
+                        <li>Relevância acadêmica e científica</li>
+                        <li>Viabilidade técnica e metodológica</li>
+                        <li>Conformidade com as diretrizes institucionais</li>
+                        <li>Respeito aos direitos humanos e éticos</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h3><i class="ph ph-warning-circle"></i> Ações Necessárias</h3>
+                    <p>Se um projeto não atender aos critérios ou violar políticas, você pode rejeitá-lo ou solicitar revisões. Projetos que violem direitos humanos devem ser excluídos imediatamente.</p>
+                </div>
+                <div class="help-section">
+                    <h3><i class="ph ph-chat-circle-text"></i> Suporte</h3>
+                    <p>Para dúvidas adicionais, entre em contato com a coordenação acadêmica ou acesse a documentação completa no sistema.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #6b7280;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f3f4f6;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .help-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .help-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .help-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-section p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .help-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0 0 0;
+        }
+
+        .help-section ul li {
+            color: #4b5563;
+            padding: 0.25rem 0 0.25rem 1.5rem;
+            position: relative;
+        }
+
+        .help-section ul li::before {
+            content: "•";
+            position: absolute;
+            left: 0.5rem;
+            color: #50CE67;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: none;
+            font-size: 1.5rem;
+            color: white;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    </style>
+
+    <script>
+        function openHelpModal() {
+            document.getElementById('helpModal').classList.add('active');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('helpModal').classList.remove('active');
+        }
+    </script>
