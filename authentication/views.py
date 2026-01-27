@@ -47,6 +47,8 @@ class EgressoLoginView(View):
             
             if user.check_password(password):
                 auth_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                user.role = 'alumni'
+                user.save()
                 return redirect('index')
             else:
                 messages.error(request, 'Senha incorreta.')

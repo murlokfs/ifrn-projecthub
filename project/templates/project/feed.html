@@ -286,6 +286,9 @@
 
     <aside class="feed-sidebar">
 
+        {% if request.user.role != 'alumni' %}
+        
+
         <div class="sidebar-widget widget-create">
             <div class="widget-create-header">
                 <i class="ph ph-plus-circle"></i>
@@ -294,6 +297,21 @@
             <p>Compartilhe seu trabalho acadêmico e receba feedback da comunidade.</p>
             <a href="{% url 'create_project' %}" class="btn-white-full">Começar Agora</a>
         </div>
+
+        
+        {% else %}
+
+        <div class="sidebar-widget widget-create" style="background-color: gray;">
+            <div class="widget-create-header">
+                <i class="ph ph-user-circle"></i>
+                <h3>Logado como Egresso</h3>
+            </div>
+            <p>Suas possibilidades são limitadas, mas você ainda pode explorar os projetos da comunidade.</p>
+        </div>
+
+
+        {% endif %}
+
 
         <div class="sidebar-widget">
             <div class="widget-title">

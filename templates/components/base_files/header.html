@@ -22,6 +22,14 @@
                 value="{{ request.GET.q }}">
         </form>
 
+        {% if request.user.role != 'alumni' %}
+        
         {% include 'components/buttons/create_project.html' %}
+    
+        {% else %}
+
+        <div></div
+
+        {% endif %}
     </div>
 </header>

@@ -24,12 +24,14 @@
 					<span class="item_description">Meus Projetos</span>
 				</a>
 			</li>
+			{% if request.user.role == 'admin' or request.user.role == 'teacher' %}
 			<li class="side_item {% if active_page == 'project_approval' %}active{% endif %}">
 				<a href="{% url 'project_approval' %}">
 					<i class="fa-solid fa-solidLarge fa-vote-yea">‌</i>
 					<span class="item_description">Aprovações</span>
 				</a>
 			</li>
+			{% endif %}
 			<li class="side_item {% if active_page == 'settings' %}active{% endif %}">
 				<a href="#">
 					<i class="fa-solid fa-gear"></i>
@@ -46,7 +48,11 @@
 	<div id="sidebar_end">
 		<div id="user" class="{% if active_page == 'profile' %}active{% endif %}">
 				<a id="user_btn" class="{% if active_page == 'profile' %}active{% endif %}" href="{% url 'profile' %}">
-					<img src="{{request.user.image}}" alt="imagem do usuário" id="img_user">
+					<img src="{{request.user.image}}"
+					{% if request.user.role == 'alumni' %}
+					style="filter: grayscale(100%);"
+					{% endif %}
+					alt="imagem do usuário" id="img_user">
 					<p id="user_infos">
 						<span class="item_description">
 							<!-- {% firstof user.get_full_name user.username %} -->
