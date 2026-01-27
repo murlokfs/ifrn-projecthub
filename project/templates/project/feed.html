@@ -217,7 +217,7 @@
 
                         <h2 class="project-title">{{ projeto.title }}</h2>
                         <p class="project-desc">
-                            {{ projeto.description|truncatechars:180 }}
+                            {{ projeto.description|striptags|safe|truncatechars:120 }}
                         </p>
 
                         <div class="tags-row">

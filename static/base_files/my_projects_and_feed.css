@@ -627,6 +627,19 @@ main {
     justify-content: center;
 }
 
+.status-badge.outline-red {
+    border: 1px solid #EF4444; /* Vermelho */
+    color: #EF4444;
+    background-color: #FEF2F2; /* Fundo vermelho bem claro */
+}
+    
+/* Mantendo seus estilos de feedback box para garantir */
+.feedback-box.error {
+    border-left-color: #EF4444;
+    background-color: #FEF2F2;
+}
+.feedback-box.error .feedback-header { color: #991B1B; }
+
 /* Keyboard Animation */
 @keyframes fadeIn {
     from {

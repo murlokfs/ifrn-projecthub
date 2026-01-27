@@ -43,6 +43,7 @@ class Project(models.Model):
         ('pending_approval', 'Pendente de Aprovação'),
         ('in_progress', 'Em Andamento'),
         ('completed', 'Concluído'),
+        ('reproved', 'Reprovado'),
     ]
 
     TYPE_CHOICES = [
@@ -69,6 +70,8 @@ class Project(models.Model):
     link_github = models.URLField(null=True, blank=True)
     link_youtube = models.URLField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
+
+    is_active = models.BooleanField(default=True, verbose_name="Projeto Ativo")
 
     def __str__(self):
         return self.title
