@@ -44,11 +44,11 @@
         </div>
     </header>
 
-    {% if project.link_youtube %}
+    {% if project.get_youtube_embed_url %}
     <section class="hero-section">
         <div class="hero-section__container">
             <div class="video-wrapper">
-                <iframe id="project-video" width="853" height="480" src="{{ project.link_youtube }}" title="Vídeo do projeto" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe id="project-video" width="853" height="480" src="{{ project.get_youtube_embed_url }}?rel=0&modestbranding=1&playsinline=1" title="Vídeo do projeto" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
         </div>
     </section>
@@ -310,7 +310,6 @@
 
     {% include 'components/modals/modal_approval.html' %}
     <script>
-        // Garantia adicional: se openModal não existir, cria uma função simples que mostra o overlay
         (function(){
             if (typeof openModal !== 'function') {
                 window.openModal = function(){
@@ -355,12 +354,12 @@
             if (likesStatNumber) {
                 likesStatNumber.textContent = String(count);
             }
-            // Carrega embed do YouTube via JS para evitar erro de configuração
+
             const iframe = document.getElementById('project-video');
             const vid = iframe?.getAttribute('data-video-id');
             if (iframe && vid) {
                 const src = `https://www.youtube.com/embed/${vid}?rel=0&modestbranding=1&playsinline=1`;
-                // Só atualiza se necessário (evita recarregar o player à toa)
+    
                 if (!iframe.getAttribute('src') || !iframe.getAttribute('src')?.includes(`/embed/${vid}`)) {
                     iframe.setAttribute('src', src);
                 }
@@ -389,7 +388,6 @@
                 });
             });
 
-            // Reaproveitar o mesmo modal para denunciar comentários
             const commentReportButtons = document.querySelectorAll('.btn-action--report');
             commentReportButtons.forEach((btn) => {
                 btn.addEventListener('click', function() {

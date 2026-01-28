@@ -27,11 +27,9 @@ body {
   background-color: var(--bg);
   color: var(--foreground);
   line-height: 1.5;
-  /* compensa o header fixo */
   padding-top: var(--header-offset);
 }
 
-/* Evita scroll horizontal causado por elementos absolutos/efeitos de glow */
 html, body {
   max-width: 100%;
   overflow-x: hidden;
@@ -254,7 +252,6 @@ button {
   color: var(--primary);
   font-weight: 500;
   transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, background-size 0.2s ease;
-  /* underline animation */
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
   background-repeat: no-repeat;
@@ -444,10 +441,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 0; /* evita deslocamento por baseline */
+  line-height: 0;
 }
 
-/* garante centralização perfeita do ícone dentro do avatar */
 .add-icon-box {
   width: 100%;
   height: 100%;
@@ -459,8 +455,6 @@ button {
 .add-icon-box svg {
   display: block;
 }
-
-
 
 .app-tabs {
   display: flex;
@@ -501,10 +495,6 @@ button {
   position: relative;
   overflow: hidden;
 }
-
-.gradient-1 { background: linear-gradient(135deg, #8b5cf6, #a855f7, #d946ef); }
-.gradient-2 { background: linear-gradient(135deg, #34d399, #14b8a6, #06b6d4); }
-
 
 .card-cover img {
   width: 100%;
@@ -549,9 +539,6 @@ button {
   font-size: 12px;
   font-weight: 600;
 }
-
-.avatar-1 { background: linear-gradient(135deg, #f472b6, #f43f5e); }
-.avatar-2 { background: linear-gradient(135deg, #60a5fa, #6366f1); }
 
 .user-meta { line-height: 1; }
 .user-name { display: block; font-size: 10px; font-weight: 500; color: #111827; }
@@ -807,28 +794,22 @@ button {
   }
 }
 
-/* Mobile-first ajuste de proporção do mockup
-   Deixa o telefone menos alto e um pouco mais largo em telas pequenas */
 @media (max-width: 640px) {
   .visual-wrapper {
-    /* Mantém dentro de um intervalo confortável em mobile */
     width: clamp(240px, 72vw, 320px);
   }
 
   .phone-body {
-    /* Leve ajuste para compensar a largura maior */
     padding: 8px;
   }
 
   .phone-screen {
-    /* Remove a altura mínima fixa e aplica proporção mais alta */
     width: 100%;
     aspect-ratio: 9 / 19.5;
     min-height: 0;
   }
 
   .app-header {
-    /* Reduz o padding superior para equilibrar a composição */
     padding: 2rem 1rem 0.75rem;
   }
 }

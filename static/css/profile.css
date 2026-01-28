@@ -17,39 +17,37 @@ main {
 .stat-card {
     flex: 1;
     background: white;
-    padding: 20px 24px; /* Mais espaçamento interno */
+    padding: 20px 24px;
     border-radius: 18px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* Sombra mais suave igual ao print */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 160px; /* Altura fixa para ficarem iguais */
-    position: relative; /* Para posicionamento se necessário */
+    height: 160px; 
+    position: relative;
 }
 
-/* Força o ícone a ficar na esquerda (Start) */
 .stat-card .icon-green,
 .stat-card .icon-yellow,
 .stat-card .icon-blue,
 .stat-card .icon-red,
 .stat-card .icon-black {
-    align-self: center; /* Joga o ícone para a esquerda */
-    margin-top: 0; /* Remove margem antiga */
+    align-self: center;
+    margin-top: 0;
     width: 45px;
     height: 45px;
     font-size: 20px;
 }
 
-/* O conteúdo de texto (Número e Label) fica centralizado */
 .stat-content {
     text-align: center;
     width: 100%;
-    margin-top: auto; /* Empurra para baixo se sobrar espaço */
+    margin-top: auto;
     margin-bottom: auto;
 }
 
 .stat-card .number {
-    font-size: 26px; /* Fonte maior igual ao print */
+    font-size: 26px;
     font-weight: 800;
     color: #1F2937;
     display: block;

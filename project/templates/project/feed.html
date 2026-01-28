@@ -4,8 +4,7 @@
 {% block title %}Feed - Project Hub{% endblock title %}
 
 {% block imports %}
-    <link rel="stylesheet" href="{% static 'base_files/my_projects_and_feed.css' %}?v=20251113_2">
-    <link rel="stylesheet" href="{% static 'css/new_feed.css' %}">
+    <link rel="stylesheet" href="{% static 'css/new_feed.css' %}?v=header_fix">
 {% endblock imports %}
 
 {% block content %}
@@ -228,19 +227,17 @@
                             {% endfor %}
                         </div>
 
-                        <div class="card-footer">
-                            <div class="members-info">
-                                <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
-                            </div>
+                        <div class="members-info">
+                            <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
+                        </div>
 
-                            <div class="actions-right">
-                                <div class="stats-icons">
-                                    {% include 'components/cards/project_parts/interaction_btns.html' %}
-                                </div>
-                                <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
-                                    Ver Detalhes <i class="ph ph-arrow-up-right"></i>
-                                </a>
+                        <div class="card-footer">
+                            <div class="stats-icons">
+                                {% include 'components/cards/project_parts/interaction_btns.html' %}
                             </div>
+                            <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
+                                Ver Detalhes <i class="ph ph-arrow-up-right"></i>
+                            </a>
                         </div>
                     </div>
                 </article>

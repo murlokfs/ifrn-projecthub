@@ -13,6 +13,12 @@ body { background-color: #F4F4F6; overflow-x: hidden; }
 .form-container { background: white; flex: 2; width: 100%; max-width: 1300px; padding: 25px; border-radius: 16px; display: flex;
     flex-direction: column; gap: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
 
+/* Evita overflow em widgets nativos (ex.: input[type=file]) */
+input[type="file"] {
+    width: 100%;
+    max-width: 100%;
+}
+
 h1 { font-size: 24px; color: #111827; margin-bottom: 25px; font-weight: 700; }
 
 .form-group { margin-bottom: 20px; width: 100%; }
@@ -325,6 +331,27 @@ input:checked + .slider:before {
 }
 
 @media (max-width: 640px) {
+    .main-container {
+        padding: 12px;
+        gap: 16px;
+    }
+
+    .form-container {
+        padding: 16px;
+        border-radius: 14px;
+        gap: 18px;
+    }
+
+    .helper-text {
+        word-break: break-word;
+    }
+
+    /* CKEditor: evita toolbar estourar horizontalmente no mobile */
+    .cke_top {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .form-row { flex-direction: column; gap: 0; }
     .modal-container { padding: 18px !important; }
     .avatar-sigla { width: 38px !important; height: 38px !important; margin-right: 10px !important; }
