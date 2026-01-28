@@ -1,7 +1,12 @@
 <div class="status_container">    
-    <div class="card status-card status-approved">
-        <h3>Projetos aprovados</h3>
-        <h2>{{ approved_count }}</h2>
+    <div class="card status-card status-reproved">
+        <h3>Projetos reprovados</h3>
+        <h2>{{ reproved_count }}</h2>
+    </div>
+    
+    <div class="card status-card status-pending">
+        <h3>Projetos pendentes</h3>
+        <h2>{{ pending_count }}</h2>
     </div>
 
     <div class="card status-card status-in-progress">
@@ -9,14 +14,9 @@
         <h2>{{ in_progress_count|default:0 }}</h2>
     </div>
     
-    <div class="card status-card status-pending">
-        <h3>Projetos pendentes</h3>
-        <h2>{{ pending_count }}</h2>
-    </div>
-    
-    <div class="card status-card status-reproved">
-        <h3>Projetos reprovados</h3>
-        <h2>{{ reproved_count }}</h2>
+    <div class="card status-card status-approved">
+        <h3>Projetos concluídos</h3>
+        <h2>{{ completed_count }}</h2>
     </div>
 </div>
 

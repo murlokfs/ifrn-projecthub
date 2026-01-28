@@ -1,5 +1,5 @@
 <div class="form-container">
-    <h2 class="form-title">Cadastrando Projeto</h2>
+    <h2 class="form-title">{% if object %}Editando Projeto{% else %}Cadastrando Projeto{% endif %}</h2>
 
     <form method="post" enctype="multipart/form-data" style="width: 100%;">
         {% csrf_token %}
@@ -63,7 +63,9 @@
             </button>
             <div id="membersList" class="chips-container"></div>
             <select name="members" id="id_members" multiple hidden></select>
+            {% comment %} {% if object %}
             <div id="user-data" data-id="{{ request.user.id }}" data-name="{{ request.user.full_name }}"></div>
+            {% endif %} {% endcomment %}
         </div>
 
         <div class="form-group">
@@ -142,3 +144,113 @@
         </div>
     </div>
 </div>
+
+{% if object %}
+<script>
+    // Script para pré-preencher os dados quando estiver editando
+    document.addEventListener("DOMContentLoaded", () => {
+        // Função auxiliar para remover chips (compatibilidade)
+        window.removeChip = function(element, id, type) {
+            const selectId = type === 'tags' ? 'id_tags' : (type === 'orientators' ? 'id_orientators' : 'id_members');
+            const hiddenSelect = document.getElementById(selectId);
+            if (hiddenSelect) {
+                for (let i = 0; i < hiddenSelect.options.length; i++) {
+                    if (hiddenSelect.options[i].value == id) { 
+                        hiddenSelect.remove(i); 
+                        break; 
+                    }
+                }
+            }
+            if (element && element.closest('.chip-item')) {
+                element.closest('.chip-item').remove();
+            }
+            // Atualizar o botão de publicar (aguarda a função estar disponível)
+            setTimeout(() => {
+                if (typeof window.updatePublishButton === 'function') {
+                    window.updatePublishButton();
+                }
+            }, 0);
+        };
+
+        // Aguardar o carregamento completo do script principal
+        setTimeout(() => {
+            // Preencher orientadores
+            {% if object.orientators.all %}
+            const orientatorsList = document.getElementById('orientators-list');
+            const orientatorsSelect = document.getElementById('id_orientators');
+            {% for orientator in object.orientators.all %}
+                const opt{{ forloop.counter }} = new Option('{{ orientator.full_name }}', '{{ orientator.id }}', true, true);
+                orientatorsSelect.add(opt{{ forloop.counter }});
+                
+                const chip{{ forloop.counter }} = document.createElement('div');
+                chip{{ forloop.counter }}.className = 'chip-item';
+                chip{{ forloop.counter }}.dataset.id = '{{ orientator.id }}';
+                chip{{ forloop.counter }}.innerHTML = `
+                    {{ orientator.full_name }}
+                    <button type="button" class="chip-remove" onclick="removeChip(this, '{{ orientator.id }}', 'orientators')">×</button>
+                `;
+                orientatorsList.appendChild(chip{{ forloop.counter }});
+            {% endfor %}
+            {% endif %}
+
+            // Preencher membros
+            {% if object.members.all %}
+            const membersList = document.getElementById('membersList');
+            const membersSelect = document.getElementById('id_members');
+            {% for member in object.members.all %}
+                const mem{{ forloop.counter }} = new Option('{{ member.full_name }}', '{{ member.id }}', true, true);
+                membersSelect.add(mem{{ forloop.counter }});
+                
+                const chipMem{{ forloop.counter }} = document.createElement('div');
+                chipMem{{ forloop.counter }}.className = 'chip-item';
+                chipMem{{ forloop.counter }}.dataset.id = '{{ member.id }}';
+                {% if member.id == request.user.id %}
+                chipMem{{ forloop.counter }}.classList.add('owner-chip');
+                chipMem{{ forloop.counter }}.innerHTML = `{{ member.full_name }} (Você)`;
+                {% else %}
+                chipMem{{ forloop.counter }}.innerHTML = `
+                    {{ member.full_name }}
+                    <button type="button" class="chip-remove" onclick="removeChip(this, '{{ member.id }}', 'members')">×</button>
+                `;
+                {% endif %}
+                membersList.appendChild(chipMem{{ forloop.counter }});
+            {% endfor %}
+            {% endif %}
+
+            // Preencher tags
+            {% if object.tags.all %}
+            const tagsList = document.getElementById('tagsList');
+            const tagsSelect = document.getElementById('id_tags');
+            {% for tag in object.tags.all %}
+                const tag{{ forloop.counter }} = new Option('{{ tag.name }}', '{{ tag.id }}', true, true);
+                tagsSelect.add(tag{{ forloop.counter }});
+                
+                const chipTag{{ forloop.counter }} = document.createElement('div');
+                chipTag{{ forloop.counter }}.className = 'chip-item tag-chip';
+                chipTag{{ forloop.counter }}.dataset.id = '{{ tag.id }}';
+                chipTag{{ forloop.counter }}.innerHTML = `
+                    {{ tag.name }}
+                    <button type="button" class="chip-remove" onclick="removeChip(this, '{{ tag.id }}', 'tags')">×</button>
+                `;
+                tagsList.appendChild(chipTag{{ forloop.counter }});
+            {% endfor %}
+            {% endif %}
+
+            // Preencher preview do banner se existir
+            {% if object.image %}
+            const bannerPreviewContainer = document.getElementById('banner-preview-container');
+            const bannerPreviewImg = document.getElementById('banner-preview-img');
+            if (bannerPreviewContainer && bannerPreviewImg) {
+                bannerPreviewImg.src = '{{ object.image.url }}';
+                bannerPreviewContainer.style.display = 'block';
+            }
+            {% endif %}
+
+            // Atualizar o botão de publicar
+            if (typeof window.updatePublishButton === 'function') {
+                window.updatePublishButton();
+            }
+        }, 100); // Aguarda 100ms para garantir que o script principal foi carregado
+    });
+</script>
+{% endif %}

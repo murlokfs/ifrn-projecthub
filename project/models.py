@@ -91,12 +91,19 @@ class ApprovalSolicitation(models.Model):
         ('rejected', 'Rejeitado'),
     ]
     
+    TYPE_CHOICES = [
+        ('creation', 'Criação de Projeto'),
+        ('correction', 'Correção de Projeto'),
+    ]
+        
+    
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='approval_solicitations')
     message = models.TextField(null=False, blank=False)
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='approval_solicitations')
     created_at = models.DateTimeField(auto_now_add=True)
     # is_approved = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='creation')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
