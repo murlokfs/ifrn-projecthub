@@ -5,6 +5,49 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputYoutube = document.querySelector('input[name="link_youtube"]');
     const publishBtn = document.querySelector('.publish_btn.green');
     const projectForm = document.querySelector('form');
+
+    // --- Auto-preenchimento do Tipo de Projeto (vindo do modal anterior) ---
+    const typeSelect = document.querySelector('select[name="type"]');
+    const isEditing = document.body && document.body.dataset && document.body.dataset.isEditing === '1';
+
+    if (!isEditing && typeSelect) {
+        const STORAGE_KEY = 'projecthub_selected_project_type';
+        let candidateType = null;
+
+        try {
+            const params = new URLSearchParams(window.location.search);
+            candidateType = params.get('type');
+        } catch (e) {
+            // ignore
+        }
+
+        if (!candidateType) {
+            try {
+                candidateType = sessionStorage.getItem(STORAGE_KEY);
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        const currentValue = typeSelect.value;
+        const hasOption = (val) => {
+            if (!val) return false;
+            return Array.from(typeSelect.options).some(opt => opt.value === val);
+        };
+
+        // Só sobrescreve se estiver vazio ou no default (research)
+        if (candidateType && hasOption(candidateType) && (!currentValue || currentValue === 'research')) {
+            typeSelect.value = candidateType;
+            typeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Limpa o storage para não "vazar" seleção para outro cadastro
+        try {
+            sessionStorage.removeItem(STORAGE_KEY);
+        } catch (e) {
+            // ignore
+        }
+    }
     
     // --- Elementos de Preview (Cards) ---
     const cardTitle = document.getElementById('cardTitle');

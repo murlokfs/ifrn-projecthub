@@ -53,19 +53,35 @@
             {% endfor %}
         </div>
 
-        <div class="card-footer">
+        {% if variant == 'profile' %}
             <div class="members-info">
                 <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
             </div>
 
-            <div class="actions-right">
+            <div class="card-footer">
                 <div class="stats-icons">
                     {% include 'components/cards/project_parts/interaction_btns.html' %}
                 </div>
+
                 <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
                     Ver Detalhes <i class="ph ph-arrow-up-right"></i>
                 </a>
             </div>
-        </div>
+        {% else %}
+            <div class="card-footer">
+                <div class="members-info">
+                    <i class="ph ph-users"></i> {{ projeto.members.count }} membro(s)
+                </div>
+
+                <div class="actions-right">
+                    <div class="stats-icons">
+                        {% include 'components/cards/project_parts/interaction_btns.html' %}
+                    </div>
+                    <a href="{% url 'project_details' pk=projeto.id %}" class="btn-details">
+                        Ver Detalhes <i class="ph ph-arrow-up-right"></i>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
     </div>
 </article>
