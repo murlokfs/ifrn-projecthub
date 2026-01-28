@@ -24,10 +24,10 @@ def automacao_aprovar_projeto(sender, instance, created, **kwargs):
         for orientador in orientadores:
             send_project_solicitation_email.delay(
                 orientator_email=orientador.email,
-                orientator_name=orientador.get_full_name() or orientador.username,
+                orientator_name=orientador.full_name or orientador.username,
                 project_title=projeto.title,
                 project_type=projeto.type,
-                student_name=instance.user.get_full_name() or instance.user.username,
+                student_name=instance.user.full_name or instance.user.username,
                 solicitation_message=instance.message,
                 solicitation_date=data_formatada
             )
