@@ -204,15 +204,25 @@
                     <div class="card-content">
                         <div class="author-row">
                             <div class="avatar-mini">
-                                {{ projeto.members.first.full_name|default:"?"|slice:":2"|upper }}
+                                {% with autor=projeto.members.first %}
+                                    {% if autor and autor.image %}
+                                        <img src="{{ autor.image }}" class="avatar-image">
+                                    {% else %}
+                                        {{ autor.full_name|default:"?"|slice:":2"|upper }}
+                                    {% endif %}
+                                {% endwith %}
                             </div>
+
                             <div class="author-info">
-                                <strong>{{ projeto.members.first.full_name|default:"Autor não informado" }}</strong>
+                                <strong>
+                                    {{ projeto.members.first.full_name|default:"Autor não informado" }}
+                                </strong>
                                 <span>
-                                    <i class="ph ph-calendar-blank"></i> {{ projeto.created_at|date:"d/m/Y" }}
-                                </span>
-                            </div>
+                                <i class="ph ph-calendar-blank"></i>
+                                {{ projeto.created_at|date:"d/m/Y" }}
+                            </span>
                         </div>
+                    </div>
 
                         <h2 class="project-title">{{ projeto.title }}</h2>
                         <p class="project-desc">
