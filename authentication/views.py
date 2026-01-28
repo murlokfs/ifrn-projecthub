@@ -14,6 +14,10 @@ from project.models import Project
 class LoginView(TemplateView):
     template_name = 'authentication/login.html'
 
+def get_token_or_redirect(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+    return redirect(reverse_lazy('social:begin', args=['suap']))
 
 class LogoutView(LoginRequiredMixin, View):
     login_url = 'login'

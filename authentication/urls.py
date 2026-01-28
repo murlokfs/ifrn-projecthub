@@ -9,6 +9,7 @@ urlpatterns = [
     path('profile/<int:pk>/', PerfilView.as_view(), name='profile'),
 
     path('login/', LoginView.as_view(), name='login_page'),
+    path('login/redirect/', get_token_or_redirect, name='login_redirect'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/egresso/', EgressoLoginView.as_view(), name='signup'),
