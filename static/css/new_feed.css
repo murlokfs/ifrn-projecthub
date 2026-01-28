@@ -21,6 +21,25 @@
 .feed-main-column {
     padding: 30px !important;
     padding-top: 0 !important;
+    /* O template base estiliza toda tag <main> com align-items:center.
+       Nesta página existe um <main> dentro de outro <main>, então precisamos
+       forçar o comportamento de "stretch" para evitar cards com largura pelo conteúdo. */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+}
+
+.feed-header-section,
+.feed-list {
+    width: 100%;
+    min-width: 0;
+}
+
+.feed-card {
+    align-self: stretch;
+    max-width: 100%;
 }
 
 /* --- LAYOUT PRINCIPAL --- */
