@@ -133,7 +133,7 @@ class MeusProjetosView(ListView):
             'approval_solicitations'
         ).annotate(
             comments_count=Count('comments')
-        ).order_by('-created_at')
+        ).order_by('-created_at').distinct()
 
         query = self.request.GET.get('q')
         if query:
@@ -174,7 +174,7 @@ class MeusProjetosView(ListView):
             user_projects = Project.objects.filter(
                 Q(orientators=self.request.user) | Q(members=self.request.user),
                 is_active=True
-            ).prefetch_related('approval_solicitations')
+            ).prefetch_related('approval_solicitations').distinct()
             
             reproved_count = user_projects.filter(status='reproved').count()
             pending_count = user_projects.filter(status='pending_approval').count()

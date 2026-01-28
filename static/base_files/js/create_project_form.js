@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         debounceTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`/api/search-entities/?type=${currentType}&q=${searchInput.value}`);
+                const response = await fetch(`/projects/api/search-entities/?type=${currentType}&q=${searchInput.value}`);
                 const data = await response.json();
                 renderModalResults(data);
             } catch (error) { console.error("Erro na busca:", error); }

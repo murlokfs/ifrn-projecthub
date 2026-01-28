@@ -389,6 +389,7 @@ body {
     background-color: white; width: 100%; max-width: 700px;
     border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     animation: fadeIn 0.3s ease; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh;
+    overflow-y: auto; /* Ativa a rolagem vertical  Importante*/
 }
 
 .btn-secondary {
@@ -424,7 +425,7 @@ body {
 .header-texts p { font-size: 14px; color: #6b7280; }
 .btn-close { background: none; border: none; cursor: pointer; font-size: 20px; color: #9ca3af; }
 
-.modal-body { padding: 30px; overflow-y: auto; }
+.modal-body { padding: 30px; overflow-y: auto;flex-grow: 1; }
 
 .project-summary-box { border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
 .project-summary-box h3 { font-size: 16px; font-weight: 700; color: #111827; margin-bottom: 8px; }
