@@ -283,13 +283,11 @@ body {
     margin-top: 1rem;
 }
 
-/* Alinhado ao estilo do feed */
 .tags-row {
     display: flex;
     gap: 8px;
 }
 
-/* Tag flutuante (Projeto Integrador) */
 .floating-tag {
     background-color: var(--primary);
     color: #FFFFFF;
@@ -302,7 +300,6 @@ body {
     align-items: center;
 }
 
-/* Status badges com contorno */
 .status-badge {
     padding: 5px 15px;
     border-radius: 20px;
@@ -560,6 +557,16 @@ body {
     text-overflow: ellipsis;
 }
 
+.user-name a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.2s;
+}
+
+.user-name a:hover {
+    color: var(--primary);
+}
+
 .user-role {
     font-size: 0.75rem;
     color: var(--muted);
@@ -665,7 +672,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: 100;
-    display: none; /* Hidden by default */
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 1rem;
@@ -785,7 +792,6 @@ body {
         padding: 0.75rem;
     }
 
-    /* Aproveita mais largura no mobile */
     .hero-section__container {
         padding-left: 0.75rem;
         padding-right: 0.75rem;

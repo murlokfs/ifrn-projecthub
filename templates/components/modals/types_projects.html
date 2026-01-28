@@ -41,13 +41,14 @@
 
 <style>
 
+body.modal-open {
+    overflow: hidden;
+}
+
 .modal-backdrop {
     position: fixed;
+    inset: 0;
     display: flex;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
     background-color: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center; 
@@ -55,9 +56,8 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease;
-    overflow-y: auto; 
-    -webkit-overflow-scrolling: touch;
-    padding: 20px 0; 
+    overflow: hidden;
+    padding: calc(16px + env(safe-area-inset-top)) 10px calc(16px + env(safe-area-inset-bottom));
 }
 
 .modal-backdrop.visible {
@@ -67,14 +67,16 @@
 
 .modal {
     background-color: white;
-    width: 75%;
+    width: min(92vw, 1100px);
     max-width: 1100px;
     border-radius: 20px;
     padding: 30px;
     gap: 30px;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+    overflow: hidden;
 }
 
 .header_modal {
@@ -100,6 +102,17 @@
     gap: 15px;
     align-items: center;
     justify-content: center;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.types_container::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 .type {
@@ -115,6 +128,7 @@
     padding: 20px;
     cursor: pointer;
     position: relative;
+    min-width: 0;
 }
 
 .type .icon {
@@ -131,11 +145,22 @@
     font-weight: bold;
     font-size: 18px;
     color: #17171C;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.2;
+    padding-right: 40px;
+    hyphens: auto;
 }
 
 .type .description {
     font-size: 14px;
     color: #464444;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.35;
+    hyphens: auto;
 }
 
 .type.active {
@@ -145,7 +170,9 @@
 .btns {
     display: flex;
     justify-content: flex-end;
-    gap: 30px;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: auto;
 }
 
 .btns button {
@@ -157,25 +184,64 @@
 
     .modal-backdrop {
         align-items: flex-start;
-        padding: 24px 8px;
+        padding: calc(12px + env(safe-area-inset-top)) 10px calc(12px + env(safe-area-inset-bottom));
     }
 
     .modal {
-        width: 94%;
+        width: 100%;
         max-width: none;
-        padding: 18px;
+        padding: 16px;
         border-radius: 16px;
-        max-height: 250vh;
-        min-height: 170vh;
+        max-height: calc(100vh - 32px);
+        max-height: calc(100dvh - 32px);
+        gap: 16px;
+    }
+
+    .header_modal .title {
+        font-size: 20px;
+    }
+
+    .header_modal .show_choices {
+        font-size: 13px;
+        line-height: 1.35;
     }
 
     .types_container {
         flex-direction: column;
         gap: 20px;
+        justify-content: flex-start;
     }
 
     .type {
         width: 100%;
+        min-height: 0;
+        padding: 16px;
+        border-radius: 22px;
+    }
+
+    .type .name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    .type .description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        overflow: hidden;
+    }
+
+    .btns {
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .btns button,
+    .btns a {
+        flex: 1 1 0;
+        min-width: 0;
     }
 }
 
@@ -198,8 +264,8 @@
     .modal {
         width: 94%;
         padding: 18px;
-        max-height: 170vh;
-        min-height: 120vh;
+        max-height: calc(100vh - 48px);
+        max-height: calc(100dvh - 48px);
     }
 
     .type {
@@ -217,10 +283,12 @@
 
     function openModal() {
         modalBackdrop.classList.add('visible');
+        if (body) body.classList.add('modal-open');
     }
 
     function closeModal() {
         modalBackdrop.classList.remove('visible');
+        if (body) body.classList.remove('modal-open');
     }
 
     if (cancel) {

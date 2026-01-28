@@ -1,79 +1,78 @@
 <div id="evaluationModal" class="modal-overlay" style="display: none;">
         <div class="modal-container">
-
-            <div class="modal-header">
-                <div class="header-texts">
-                    <h2>Avaliar Projeto</h2>
-                    <p>Revise o projeto e forneça seu feedback ao aluno</p>
-                </div>
-                <button class="btn-close" onclick="closeModal()">
-                    <i class="ph ph-x"></i>
-                </button>
-            </div>
-
-            <div class="modal-body">
-
-                <div class="project-summary-box">
-                    <h3>Project Hub - Armazene seus projetos</h3>
-                    <div class="subtitle-row">
-                        <i class="ph-fill ph-graduation-cap"></i>
-                        <span>Academic Hub — Plataforma de Projetos</span>
+            <form id="evaluationForm" method="post" action="">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <div class="header-texts">
+                        <h2>Avaliar Projeto</h2>
+                        <p>Revise o projeto e forneça seu feedback ao aluno</p>
                     </div>
-                    <div class="tags-row mini-tags">
-                        <span class="tag">NOSQL</span>
-                        <span class="tag">NOSQL</span>
-                        <span class="tag">NOSQL</span>
-                    </div>
+                    <button type="button" class="btn-close" onclick="closeModal()">
+                        <i class="ph ph-x"></i>
+                    </button>
                 </div>
 
-                <div class="form-section">
-                    <label class="section-label">
-                        <i class="ph ph-warning-circle"></i> Decisão *
-                    </label>
+                <div class="modal-body">
 
-                    <div class="decision-options">
-                        <input type="radio" name="decision" id="opt-approve" value="approve" class="hidden-radio">
-                        <label for="opt-approve" class="option-card option-approve">
-                            <div class="radio-circle">
-                                <div class="radio-dot"></div>
-                            </div>
-                            <div class="option-icon-box success"><i class="ph ph-check"></i></div>
-                            <div class="option-texts">
-                                <strong>Aprovar Projeto</strong>
-                                <span>O projeto será publicado na plataforma</span>
-                            </div>
+                    <div class="project-summary-box">
+                        <h3 id="modalProjectTitle">Título do Projeto</h3>
+                        <div class="subtitle-row">
+                            <i class="ph-fill ph-graduation-cap"></i>
+                            <span id="modalProjectType">Tipo do Projeto</span>
+                        </div>
+                        <div class="tags-row mini-tags" id="modalProjectTags">
+                            <!-- Tags serão preenchidas dinamicamente -->
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="section-label">
+                            <i class="ph ph-warning-circle"></i> Decisão *
                         </label>
 
-                        <input type="radio" name="decision" id="opt-reject" value="reject" class="hidden-radio">
-                        <label for="opt-reject" class="option-card option-reject">
-                            <div class="radio-circle">
-                                <div class="radio-dot"></div>
-                            </div>
-                            <div class="option-icon-box danger"><i class="ph ph-x"></i></div>
-                            <div class="option-texts">
-                                <strong>Reprovar Projeto</strong>
-                                <span>O projeto não será publicado</span>
-                            </div>
-                        </label>
+                        <div class="decision-options">
+                            <input type="radio" name="decision" id="opt-approve" value="approve" class="hidden-radio" required>
+                            <label for="opt-approve" class="option-card option-approve">
+                                <div class="radio-circle">
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <div class="option-icon-box success"><i class="ph ph-check"></i></div>
+                                <div class="option-texts">
+                                    <strong>Aprovar Projeto</strong>
+                                    <span>O projeto será publicado na plataforma</span>
+                                </div>
+                            </label>
+
+                            <input type="radio" name="decision" id="opt-reject" value="reject" class="hidden-radio" required>
+                            <label for="opt-reject" class="option-card option-reject">
+                                <div class="radio-circle">
+                                    <div class="radio-dot"></div>
+                                </div>
+                                <div class="option-icon-box danger"><i class="ph ph-x"></i></div>
+                                <div class="option-texts">
+                                    <strong>Reprovar Projeto</strong>
+                                    <span>O projeto não será publicado</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
+
+                    <div class="form-section">
+                        <label class="section-label">
+                            <i class="ph ph-warning-circle"></i> Feedback para o aluno *
+                        </label>
+                        <textarea name="feedback" class="feedback-input" required
+                            placeholder="Explique os pontos positivos e melhorias..."></textarea>
+                        <p class="helper-text">O aluno poderá visualizar este feedback</p>
+                    </div>
+
                 </div>
 
-                <div class="form-section">
-                    <label class="section-label">
-                        <i class="ph ph-warning-circle"></i> Feedback para o aluno *
-                    </label>
-                    <textarea class="feedback-input"
-                        placeholder="Explique os pontos positivos e melhorias..."></textarea>
-                    <p class="helper-text">O aluno poderá visualizar este feedback</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Confirmar avaliação</button>
                 </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
-                <button class="btn-primary" onclick="submitEvaluation()">Confirmar avaliação</button>
-            </div>
-
+            </form>
         </div>
     </div>
 
@@ -83,7 +82,7 @@
     // ==========================
     // 1. MODAL DE AVALIAÇÃO
     // ==========================
-    function openModal() {
+    function openModal(projectId, projectTitle, projectType, projectTags) {
         const input = document.querySelector('.feedback-input');
         if (input) input.classList.remove('input-error');
 
@@ -94,6 +93,38 @@
         // Limpa o texto
         if (input) input.value = '';
 
+        // Preenche informações do projeto no modal
+        const titleElement = document.getElementById('modalProjectTitle');
+        const typeElement = document.getElementById('modalProjectType');
+        const tagsElement = document.getElementById('modalProjectTags');
+        const form = document.getElementById('evaluationForm');
+
+        if (titleElement) titleElement.textContent = projectTitle || 'Título do Projeto';
+        if (typeElement) typeElement.textContent = projectType || 'Tipo do Projeto';
+        
+        // Preenche tags
+        if (tagsElement) {
+            tagsElement.innerHTML = '';
+            if (projectTags && projectTags.length > 0) {
+                projectTags.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'tag';
+                    tagSpan.textContent = tag;
+                    tagsElement.appendChild(tagSpan);
+                });
+            } else {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'tag no-tags';
+                tagSpan.textContent = 'Sem tags';
+                tagsElement.appendChild(tagSpan);
+            }
+        }
+
+        // Define o action do formulário
+        if (form && projectId) {
+            form.action = `/projects/evaluate/${projectId}/`;
+        }
+
         const modal = document.getElementById('evaluationModal');
         if(modal) modal.style.display = 'flex';
     }
@@ -101,39 +132,6 @@
     function closeModal() {
         const modal = document.getElementById('evaluationModal');
         if(modal) modal.style.display = 'none';
-    }
-
-    function submitEvaluation() {
-        const feedbackInput = document.querySelector('.feedback-input');
-        const decisionInputs = document.querySelectorAll('input[name="decision"]');
-
-        let decisionSelected = false;
-
-        // Verifica radio selecionado
-        decisionInputs.forEach(input => {
-            if (input.checked) decisionSelected = true;
-        });
-
-        const feedbackText = feedbackInput.value.trim();
-
-        // Validação
-        if (!decisionSelected) {
-            alert("Por favor, selecione uma decisão (Aprovar ou Reprovar).");
-            return;
-        }
-
-        if (feedbackText === "") {
-            alert("O campo de feedback é obrigatório.");
-            feedbackInput.classList.add('input-error');
-            feedbackInput.focus();
-            return;
-        }
-
-        // Sucesso
-        console.log("Enviando avaliação...");
-        // AQUI VOCÊ DEVE ADICIONAR A LÓGICA DE ENVIO DO FEEDBACK PARA O DJANGO DEPOIS
-        alert("Avaliação registrada com sucesso!");
-        closeModal();
     }
 
 
@@ -186,6 +184,56 @@
         }
     }
 
+    // ==========================
+    // 3. MODAL DE CONCLUSÃO
+    // ==========================
+    let projectToCompleteId = null;
+
+    function openCompleteModal(projectId, projectTitle) {
+        projectToCompleteId = projectId;
+        
+        const titleElement = document.getElementById('completeProjectName');
+        if (titleElement) {
+            titleElement.textContent = projectTitle || 'Nome do Projeto';
+        }
+        
+        const modal = document.getElementById('completeModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeCompleteModal() {
+        const modal = document.getElementById('completeModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        projectToCompleteId = null;
+    }
+
+    function confirmComplete() {
+        if (projectToCompleteId) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/projects/complete/${projectToCompleteId}/`;
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (csrfToken) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'csrfmiddlewaretoken';
+                input.value = csrfToken.value;
+                form.appendChild(input);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            console.error("Erro: Nenhum ID de projeto encontrado para conclusão.");
+            closeCompleteModal();
+        }
+    }
+
 
     // --- EVENTOS DE CARREGAMENTO & FECHAMENTO GERAL ---
     document.addEventListener("DOMContentLoaded", () => {
@@ -205,12 +253,16 @@
     window.onclick = function(event) {
         const modalDelete = document.getElementById('deleteModal');
         const modalEval = document.getElementById('evaluationModal');
+        const modalComplete = document.getElementById('completeModal');
 
         if (event.target == modalDelete) {
             closeDeleteModal();
         }
         if (event.target == modalEval) {
             closeModal();
+        }
+        if (event.target == modalComplete) {
+            closeCompleteModal();
         }
     }
 </script>
@@ -238,5 +290,42 @@
                 <button class="btn-danger" onclick="confirmDelete()">Confirmar Exclusão</button>
             </div>
 
+        </div>
+    </div>
+
+    <div id="completeModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="header-texts">
+                    <h2><i class="ph ph-check-circle" style="margin-right: 8px;"></i>Concluir Projeto</h2>
+                    <p>Marque este projeto como concluído</p>
+                </div>
+                <button type="button" class="btn-close" onclick="closeCompleteModal()">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="complete-info">
+                    <div class="info-icon" style="text-align: center; margin-bottom: 20px;">
+                        <i class="ph ph-check-circle" style="font-size: 64px; color: #10b981;"></i>
+                    </div>
+                    
+                    <p style="text-align: center; margin-bottom: 20px; font-size: 16px;">
+                        Você está prestes a marcar o projeto <strong id="completeProjectName">Nome do Projeto</strong> como <strong>Concluído</strong>.
+                    </p>
+
+                    <p style="text-align: center; color: #666; font-size: 14px;">
+                        Esta ação indicará que o projeto foi finalizado com sucesso e estará visível aos alunos como concluído.
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeCompleteModal()">Cancelar</button>
+                <button type="button" class="btn-primary" onclick="confirmComplete()" style="background-color: #10b981; border-color: #10b981;">
+                    <i class="ph ph-check" style="margin-right: 8px;"></i>Confirmar Conclusão
+                </button>
+            </div>
         </div>
     </div>

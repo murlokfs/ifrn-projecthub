@@ -10,94 +10,114 @@
 
 <style>
     .base_container {
-        display: flex;
+        display: inline-flex;
         justify-content: center;
         align-items: center;
-        padding: 18px;
-        border: none;
-        height: 25px;
-        border-radius: 10px;
+        gap: 8px;
+        padding: 8px 14px;
+        min-height: 36px;
+        border-radius: 12px;
+        border: 1px solid transparent;
         color: #fff;
-        font-weight: 500;
+        font-weight: 600;
+        font-size: 13px;
+        line-height: 1;
         cursor: pointer;
+        user-select: none;
+        white-space: nowrap;
+        text-decoration: none;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .15s ease, filter .15s ease;
     }
 
-    a {
-        text-decoration: none;
+    .base_container:hover {
+        filter: brightness(0.97);
+    }
+
+    .base_container:active {
+        transform: scale(.98);
+    }
+
+    .base_container:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.10);
     }
 
     .cancel, .cancel-btn {
         background-color: #F5474A;
     }
 
+    .cancel:focus-visible, .cancel-btn:focus-visible {
+        box-shadow: 0 0 0 3px rgba(245, 71, 74, 0.22);
+    }
+
     .green {
         background-color: #50CE67;
     }
 
-    .goto_my_projects {
-        width: 90%;
+    .green:focus-visible {
+        box-shadow: 0 0 0 3px rgba(80, 206, 103, 0.22);
     }
 
-    .publish_btn {
+    /* Botões em modais (modal_base.html) */
+    .modal_status .btns .base_container {
         width: 90%;
     }
 
     .close_publish_modal {
-        width: 90%;
         color: #4B4B4D;
         background-color: #CACACA;
     }
 
     @media screen and (max-width: 768px) {
         .base_container {
-            padding: 15px 10px;
+            padding: 8px 12px;
+            min-height: 34px;
         }
     }
 
     @media screen and (max-width: 520px) {
-        .publish_btn,
-        .create_project,
-        #cancel {
-            width: 36px;
-            height: 36px;
+        /* Header de criação de projeto: botões compactos no mobile */
+        #buttons_container .publish_btn,
+        #buttons_container #cancel {
+            width: 34px;
+            height: 34px;
+            min-height: 34px;
             padding: 0;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 0;
+            line-height: 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            position: relative;
         }
 
-        .publish_btn::before,
-        #cancel::before {
+        #buttons_container .publish_btn::before,
+        #buttons_container #cancel::before {
             font-size: 16px;
             line-height: 1;
+            display: block;
             color: #fff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        .publish_btn::before {
+        #buttons_container .publish_btn::before {
             content: "✓";
         }
 
-        #cancel::before {
+        #buttons_container #cancel::before {
             content: "✕";
-        }
-
-        .publish_btn:hover,
-        #cancel:hover {
-            filter: brightness(0.95);
-        }
-
-        .publish_btn:active,
-        #cancel:active {
-            transform: scale(0.97);
         }
     }
 
     @media screen and (max-width: 340px) {
-        .publish_btn,
-        .cancel {
+        #buttons_container .publish_btn,
+        #buttons_container #cancel {
             width: 32px;
             height: 32px;
         }

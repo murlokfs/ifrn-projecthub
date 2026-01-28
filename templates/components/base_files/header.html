@@ -18,7 +18,7 @@
         {% endif %}
         <form method="get" action="{% url 'index' %}" id="search_container">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" name="q" placeholder="Busque por projetos, perfis ou tags..."
+            <input id="search_input" type="text" name="q" placeholder="Busque por projetos, perfis ou tags..."
                 value="{{ request.GET.q }}">
         </form>
 

@@ -1,5 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+import re
 class Campus(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     cnpj = models.CharField(max_length=20, unique=True, null=False, blank=False)
@@ -80,6 +81,17 @@ class Project(models.Model):
         """Retorna o feedback mais recente da solicitação de aprovação"""
         return self.approval_solicitations.filter(is_active=True).order_by('-created_at').first()
 
+    def get_youtube_embed_url(self):
+        if not self.link_youtube:
+            return None
+        url = self.link_youtube.strip()
+        reg = r'^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))((?:[\w-]{11}))(?:\S+)?$'
+        m = re.search(reg, url)
+        if m:
+            video_id = m.group(1)
+            return f'https://www.youtube-nocookie.com/embed/{video_id}'
+        return url
+
     class Meta:
         verbose_name = "Projeto"
         verbose_name_plural = "Projetos"
@@ -91,12 +103,19 @@ class ApprovalSolicitation(models.Model):
         ('rejected', 'Rejeitado'),
     ]
     
+    TYPE_CHOICES = [
+        ('creation', 'Criação de Projeto'),
+        ('correction', 'Correção de Projeto'),
+    ]
+        
+    
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='approval_solicitations')
     message = models.TextField(null=False, blank=False)
     user = models.ForeignKey('authentication.User', on_delete=models.CASCADE, related_name='approval_solicitations')
     created_at = models.DateTimeField(auto_now_add=True)
     # is_approved = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='creation')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
