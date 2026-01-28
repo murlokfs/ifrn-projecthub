@@ -37,15 +37,15 @@
                 <div class="hero-stats-group">
                     <div class="stat-glass-card">
                         <span class="stat-label">PENDENTES</span>
-                        <span class="stat-value">2</span>
+                        <span class="stat-value">{{ pending_count }}</span>
                     </div>
                     <div class="stat-glass-card">
                         <span class="stat-label">Concluídos</span>
-                        <span class="stat-value">1</span>
+                        <span class="stat-value">{{ completed_count }}</span>
                     </div>
                     <div class="stat-glass-card">
                         <span class="stat-label">Em Desenvolvimento</span>
-                        <span class="stat-value">1</span>
+                        <span class="stat-value">{{ in_progress_count }}</span>
                     </div>
                 </div>
             </div>

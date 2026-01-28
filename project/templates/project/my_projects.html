@@ -96,8 +96,8 @@ Meus projetos
         <div class="card-header">
             <div class="badges-wrapper">
                 
-                {% if ultimo_feedback.status == 'rejected' and projeto.status == 'pending_approval' %}
-                    <span class="status-badge outline-red">Reprovado / Ajustes</span>
+                {% if projeto.status == 'reproved' %}
+                    <span class="status-badge outline-red">Reprovado</span>
                 
                 {% elif projeto.status == 'pending_approval' %}
                     <span class="status-badge outline-yellow">Pendente de aprovação</span>
@@ -171,7 +171,7 @@ Meus projetos
                         <i class="ph ph-warning-circle"></i> <span>PRECISA DE AJUSTES</span>
                     </div>
                     <p class="feedback-message">"{{ ultimo_feedback.message }}"</p>
-                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}</div>
+                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m" }}</div>
                 </div>
 
             {% elif ultimo_feedback.status == 'approved' %}
@@ -180,7 +180,7 @@ Meus projetos
                         <i class="ph ph-check-circle"></i> <span>APROVADO</span>
                     </div>
                     <p class="feedback-message">"{{ ultimo_feedback.message }}"</p>
-                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}</div>
+                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m" }}</div>
                 </div>
             {% endif %}
         
@@ -207,7 +207,9 @@ Meus projetos
 
         <div class="card-footer">
             <a href="{% url 'project_details' pk=projeto.id %}" class="btn-cancel link-button">Ver Detalhes</a>
-            <a href="{% url 'project_details' pk=projeto.id %}#editar" class="btn-confirm link-button">Editar</a>
+            {% if request.user in projeto.members.all %}
+                <a href="{% url 'edit_project' pk=projeto.id %}" class="btn-confirm link-button"><i class="ph ph-pencil" style="margin-right: 6px;"></i>Editar</a>
+            {% endif %}
         </div>
     </div>
     
