@@ -12,7 +12,7 @@
         <div class="icon">
             <img src="{% static 'img/project_parts/comment.svg' %}" alt="">
         </div>
-        <div class="count">13</div>
+        <div class="count">{{ projeto.comments_count|default:0 }}</div>
     </div>
 </div>
 

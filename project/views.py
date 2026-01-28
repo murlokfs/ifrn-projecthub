@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from .models import Project, Tag,ApprovalSolicitation
@@ -56,6 +56,8 @@ class FeedView(ListView):
             #approval_solicitations__status='approved'
         ).prefetch_related(
             'tags', 'members'
+        ).annotate(
+            comments_count=Count('comments')
         ).distinct() # O distinct é importante para não duplicar o projeto se tiver mais de uma aprovação
 
         tab = self.request.GET.get('tab', 'trending') # Padrão é 'Em alta'
@@ -132,6 +134,8 @@ class MeusProjetosView(ListView):
                 'tags', 
                 'members', 
                 'approval_solicitations'
+            ).annotate(
+                comments_count=Count('comments')
             ).order_by('-created_at')
         
 
@@ -216,6 +220,16 @@ class DetalhesProjetosView(DetailView):
             Project.objects.select_related('course')
             .prefetch_related('tags', 'members', 'orientators')
         )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .models import Comment
+        context['comments'] = Comment.objects.filter(
+            project=self.object, 
+            parent__isnull=True
+        ).select_related('user').prefetch_related('likes').order_by('-created_at')
+        context['comments_count'] = context['comments'].count()
+        return context
 
 class ComentariosAlunosView(DetailView):
     model = Project
@@ -383,7 +397,9 @@ class ProjetosAprovacaoView(ListView):
 
     def get_queryset(self):
         queryset = (
-            Project.objects.filter(is_active=True, orientators=self.request.user.id).distinct()
+            Project.objects.filter(is_active=True, orientators=self.request.user.id).annotate(
+                comments_count=Count('comments')
+            ).distinct()
         )
 
         # 🔍 Busca
@@ -594,3 +610,85 @@ def delete_project(request, pk):
     else:
         messages.error(request, "Você não tem permissão para realizar essa ação.")
         return redirect('my_projects')
+
+
+@login_required
+def add_comment(request, pk):
+    """Adicionar comentário a um projeto"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    project = get_object_or_404(Project, pk=pk)
+    content = request.POST.get('content', '').strip()
+    
+    if not content:
+        return JsonResponse({'success': False, 'error': 'Comentário não pode estar vazio'}, status=400)
+    
+    from .models import Comment
+    comment = Comment.objects.create(
+        project=project,
+        user=request.user,
+        content=content
+    )
+    
+    # Retorna os dados do comentário para adicionar dinamicamente
+    return JsonResponse({
+        'success': True,
+        'comment': {
+            'id': comment.id,
+            'content': comment.content,
+            'created_at': comment.created_at.strftime('%d/%m/%Y'),
+            'user': {
+                'id': comment.user.id,
+                'full_name': comment.user.full_name or comment.user.username,
+                'username': comment.user.username,
+                'image': comment.user.image.url if comment.user.image else None,
+            },
+            'likes_count': comment.likes.count(),
+        }
+    })
+
+
+@login_required
+def toggle_like_comment(request, pk):
+    """Curtir ou descurtir um comentário"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    from .models import Comment
+    comment = get_object_or_404(Comment, pk=pk)
+    user = request.user
+    
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+        liked = False
+    else:
+        comment.likes.add(user)
+        liked = True
+    
+    return JsonResponse({
+        'success': True,
+        'liked': liked,
+        'likes_count': comment.likes.count()
+    })
+
+
+@login_required
+def delete_comment(request, pk):
+    """Deletar um comentário (apenas o autor pode deletar)"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    from .models import Comment
+    comment = get_object_or_404(Comment, pk=pk)
+    
+    # Verifica se o usuário é o autor do comentário
+    if comment.user != request.user:
+        return JsonResponse({'success': False, 'error': 'Você não tem permissão para deletar este comentário'}, status=403)
+    
+    comment.delete()
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'Comentário deletado com sucesso'
+    })
