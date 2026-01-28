@@ -197,7 +197,7 @@ Meus projetos
         <div class="card-meta card-meta-flex">
             <span>Criado em: {{ projeto.created_at|date:"d/m/Y" }}</span>
 
-            {% if request.user.role != 'alumni' %}
+            {% if request.user.role != 'alumni' and request.user.role != 'teacher' %}
             
             {% if projeto.status == 'pending_approval' and ultimo_feedback.status != 'rejected' %}
                 <button class="btn-cancel-submission" title="Cancelar pedido de avaliação"
