@@ -62,14 +62,23 @@ body {
 }
 
 .left-panel .logo img {
-    width: 45px;
-    height: 45px;
+    width: 90px;
+    height: 85px;
 }
 
 .left-panel .logo h1 {
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 600;
     margin: 0;
+}
+
+/* Marca: PRISMA */
+.left-panel .brand-name {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #fff;
 }
 
 .left-panel .illustration img {
