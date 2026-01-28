@@ -4,10 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProjectHub - Plataforma de Portfólio</title>
+    <title>PRISMA - Plataforma de Portfólio</title>
+    <link rel="icon" href="{% static 'img/NewFavicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/NewFavicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'base_files/footer.css' %}?v=20251113_2">
     <link rel="stylesheet" href="{% static 'css/aprovacao.css' %}">
     <link rel="stylesheet" href="{% static 'css/project_details.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
 
@@ -550,5 +554,6 @@
             });
         })();
     </script>
+    {% include 'components/base_files/footer.html' %}
 </body>
 </html>

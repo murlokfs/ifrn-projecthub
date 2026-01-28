@@ -7,13 +7,15 @@ body {
     color: #111827;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column; /* Garante footer abaixo do conteúdo */
+    align-items: stretch;    /* Permite filhos ocuparem toda a largura */
     padding: 40px 20px;
 }
 
 .main-wrapper {
     width: 100%;
     max-width: 1000px;
+    margin: 0 auto 32px auto; /* Centraliza e dá espaço antes do footer */
 }
 
 .back-link {

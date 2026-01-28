@@ -33,6 +33,15 @@
     margin: 0;
 }
 
+/* Marca: PRISMA (aplicar via <span class="brand-name">) */
+.header-content .brand-name {
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: inline-block;
+    color: #50CE67;
+}
+
 .menu-toggle {
     display: none;
     align-items: center;
