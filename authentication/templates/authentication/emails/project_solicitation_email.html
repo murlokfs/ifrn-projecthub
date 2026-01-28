@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem-vindo ao IFRN ProjectHub</title>
+    <title>Nova Solicitação de Orientação - PRISMA</title>
     <style>
         body {
             margin: 0;
@@ -67,13 +67,30 @@
             color: #0f172a;
             letter-spacing: 0.2px;
         }
-        .block ul {
-            margin: 0;
-            padding-left: 18px;
-        }
-        .block li {
+        .block p {
             margin: 8px 0;
             color: #1f2937;
+        }
+        .block .label {
+            font-weight: 600;
+            color: #374151;
+        }
+        .project-info {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 18px 0;
+        }
+        .project-info h3 {
+            margin: 0 0 12px 0;
+            font-size: 17px;
+            color: #166534;
+            letter-spacing: 0.2px;
+        }
+        .project-info p {
+            margin: 8px 0;
+            color: #166534;
         }
         .cta-button {
             display: inline-block;
@@ -98,38 +115,61 @@
             color: #6b7280;
             border-top: 1px solid #e5e7eb;
         }
+        .alert {
+            background-color: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            color: #78350f;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="brand-bar"></div>
         <div class="header">
-            <h1>Bem-vindo ao PRISMA</h1>
-            <p>Um espaço único para publicar, descobrir e colaborar em projetos do IFRN.</p>
+            <h1>Nova Solicitação de Orientação</h1>
+            <p>Um estudante vinculou você como orientador em um projeto.</p>
         </div>
 
         <div class="content">
-            <h2>Olá, {{ user_name }}!</h2>
-            <p class="lead">Sua conta no <strong>{{ site_name }}</strong> foi criada com sucesso. Agora você faz parte de uma rede de estudantes, professores e egressos conectados por projetos e ideias.</p>
+            <h2>Olá, {{ orientator_name }}!</h2>
+            <p class="lead">Você foi vinculado(a) como <strong>orientador(a)</strong> em uma nova solicitação de projeto no <strong>{{ site_name }}</strong>.</p>
+
+            <div class="project-info">
+                <h3>📚 Informações do Projeto</h3>
+                <p><span class="label">Título:</span> {{ project_title }}</p>
+                <p><span class="label">Tipo:</span> {{ project_type }}</p>
+                <p><span class="label">Solicitante:</span> {{ student_name }}</p>
+                <p><span class="label">Data da Solicitação:</span> {{ solicitation_date }}</p>
+            </div>
 
             <div class="block">
-                <h3>O que você pode fazer agora:</h3>
-                <ul>
-                    <li>Publicar projetos acadêmicos ou pessoais com materiais e links.</li>
-                    <li>Descobrir iniciativas de colegas e professores para se inspirar.</li>
-                    <li>Colaborar com equipes, trocar feedbacks e evoluir juntos.</li>
-                    <li>Construir um portfólio sólido para oportunidades futuras.</li>
-                </ul>
+                <h3>📝 Mensagem da Solicitação</h3>
+                <p>{{ solicitation_message }}</p>
             </div>
 
-            <p class="lead">Comece personalizando seu perfil e compartilhe seu primeiro projeto com a comunidade.</p>
+            <div class="alert">
+                <strong>⏱️ Ação necessária:</strong> Este projeto aguarda sua análise e aprovação para que o estudante possa continuar.
+            </div>
+
+            <div class="block">
+                <h3>O que você pode fazer:</h3>
+                <p><span class="label">✅ Aprovar:</span> Autorizar o início do projeto e permitir que seja publicado na plataforma.</p>
+                <p><span class="label">📋 Solicitar Correções:</span> Pedir ajustes ou melhorias antes da aprovação.</p>
+                <p><span class="label">❌ Reprovar:</span> Negar a solicitação com feedback para o estudante.</p>
+            </div>
+
+            <p class="lead">Acesse a área de aprovações para analisar a solicitação completa e tomar sua decisão.</p>
 
             <div class="cta-wrapper">
-                <a href="http://13.222.40.138/profile/{{ user_id }}" style="text-decoration: none;" class="cta-button">Acessar meu perfil</a>
+                <a href="http://13.222.40.138/project-approval/" style="text-decoration: none;" class="cta-button">Analisar Solicitação</a>
             </div>
 
-            <p class="lead" style="margin-top: 8px; font-size: 14px; color: #4b5563;">Se precisar de ajuda, nossa equipe está por aqui para apoiar.</p>
-            <p class="lead" style="margin-top: 6px; font-size: 14px; color: #1f2937;">Bons projetos!</p>
+            <p class="lead" style="margin-top: 8px; font-size: 14px; color: #4b5563;">Se tiver dúvidas ou precisar de suporte, entre em contato com a coordenação.</p>
+            <p class="lead" style="margin-top: 6px; font-size: 14px; color: #1f2937;">Obrigado por contribuir com a formação de nossos estudantes!</p>
         </div>
 
         <div class="footer">

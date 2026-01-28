@@ -1,6 +1,6 @@
 from django.urls import path
 from project import views
-from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView, DetalheProjetoPendenteProfessorView, FeedView,SearchView,MeusProjetosView, delete_project, cancel_project_submission, evaluate_project, complete_project, EditarProjetoView
+from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView, DetalheProjetoPendenteProfessorView, FeedView,SearchView,MeusProjetosView, delete_project, cancel_project_submission, evaluate_project, complete_project, EditarProjetoView, deactivate_project_ajax, report_project, add_comment, toggle_like_comment, delete_comment
 
 urlpatterns = [
 
@@ -17,8 +17,13 @@ urlpatterns = [
     path('projects/', MeusProjetosView.as_view(), name='my_projects'),
     path('search/', SearchView.as_view(), name='search'),
     path('projects/delete/<int:pk>/', delete_project, name='delete_project'),
+    path('projects/deactivate/<int:pk>/', deactivate_project_ajax, name='deactivate_project'),
+    path('projects/report/<int:pk>/', report_project, name='report_project'),
     path('projects/evaluate/<int:pk>/', evaluate_project, name='evaluate_project'),
     path('projects/complete/<int:pk>/', complete_project, name='complete_project'),
     path('cancel-submission/<int:pk>/', cancel_project_submission, name='cancel_submission'),
     path('api/search-entities/', views.search_entities, name='search_entities'),
+    path('project/<int:pk>/comment/add/', add_comment, name='add_comment'),
+    path('comment/<int:pk>/toggle-like/', toggle_like_comment, name='toggle_like_comment'),
+    path('comment/<int:pk>/delete/', delete_comment, name='delete_comment'),
 ]

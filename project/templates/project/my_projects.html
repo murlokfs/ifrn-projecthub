@@ -197,18 +197,25 @@ Meus projetos
         <div class="card-meta card-meta-flex">
             <span>Criado em: {{ projeto.created_at|date:"d/m/Y" }}</span>
 
+            {% if request.user.role != 'alumni' and request.user.role != 'teacher' %}
+            
             {% if projeto.status == 'pending_approval' and ultimo_feedback.status != 'rejected' %}
                 <button class="btn-cancel-submission" title="Cancelar pedido de avaliação"
                     onclick="cancelarEnvio('{{ projeto.id }}')">
                     <i class="ph ph-arrow-u-up-left"></i> Cancelar
                 </button>
             {% endif %}
+            
+            {% endif %}
         </div>
 
         <div class="card-footer">
             <a href="{% url 'project_details' pk=projeto.id %}" class="btn-cancel link-button">Ver Detalhes</a>
+            
             {% if request.user in projeto.members.all %}
+            {% if request.user.role != 'alumni' %}
                 <a href="{% url 'edit_project' pk=projeto.id %}" class="btn-confirm link-button"><i class="ph ph-pencil" style="margin-right: 6px;"></i>Editar</a>
+            {% endif %}
             {% endif %}
         </div>
     </div>

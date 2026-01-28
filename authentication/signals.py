@@ -17,5 +17,6 @@ def user_post_save(sender, instance, created, **kwargs):
         # Dispara a tarefa assíncrona para enviar o email
         send_welcome_email.delay(
             user_email=instance.email_personal,
-            user_name=instance.full_name or instance.username
+            user_name=instance.full_name or instance.username,
+            user_id=instance.id
         )

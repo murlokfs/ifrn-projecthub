@@ -10,6 +10,34 @@
 
 {% block content %}
 
+<style>
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+</style>
+
 <div class="approval-layout">
     {% include 'components/base_files/sidebar.html' with active_page='project_approval' %}
 
@@ -19,11 +47,7 @@
         {% if messages %}
             <div class="messages-container" style="padding: 20px; max-width: 1200px; margin: 0 auto;">
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }}" style="padding: 12px 20px; margin-bottom: 10px; border-radius: 8px; 
-                        {% if message.tags == 'success' %}background: #d4edda; color: #155724; border: 1px solid #c3e6cb;
-                        {% elif message.tags == 'error' %}background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
-                        {% elif message.tags == 'warning' %}background: #fff3cd; color: #856404; border: 1px solid #ffeaa7;
-                        {% else %}background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb;{% endif %}">
+                    <div class="alert alert-{{ message.tags }}">
                         {{ message }}
                     </div>
                 {% endfor %}
@@ -102,10 +126,66 @@
     </div>
 </div>
 
+<!-- Modal de Delete -->
+<div id="deleteModal" class="modal-overlay">
+    <div class="modal-container delete-theme">
+        <div class="modal-body delete-body">
+            <div class="delete-header">
+                <i class="ph ph-warning"></i>
+                <h2>Arquivar Projeto</h2>
+            </div>
+            <p class="delete-desc">
+                Você está prestes a arquivar o projeto <strong id="deleteProjectName">"Nome do Projeto"</strong>.
+            </p>
+            <p class="delete-warning">O projeto será desativado e não aparecerá na listagem, mas permanecerá salvo no banco de dados.</p>
+        </div>
+        <div class="modal-footer delete-footer">
+            <button class="btn-secondary" onclick="closeDeleteModal()">Cancelar</button>
+            <button class="btn-danger" onclick="confirmDelete()">Confirmar Arquivamento</button>
+        </div>
+    </div>
+</div>
+
 {% include 'components/modals/modal_approval.html' %}
 
 <script>
-    // Auto-fechar mensagens após 5 segundos
+    // ========== Delete Modal Functions ==========
+    let projectToDeleteId = null;
+
+    function openDeleteModal(projectId, projectName) {
+        projectToDeleteId = projectId;
+
+        const nameElement = document.getElementById('deleteProjectName');
+        if (nameElement) {
+            nameElement.innerText = `"${projectName}"`;
+        }
+
+        const modal = document.getElementById('deleteModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+        projectToDeleteId = null; 
+    }
+
+    function confirmDelete() {
+        if (projectToDeleteId) {
+            let url = "{% url 'delete_project' pk=0 %}".replace('0', projectToDeleteId);
+            window.location.href = url;
+        }
+    }
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            closeDeleteModal();
+        }
+    }
+
+    // ========== Auto-close alerts ==========
     document.addEventListener('DOMContentLoaded', function() {
         const alerts = document.querySelectorAll('.alert');
         alerts.forEach(alert => {

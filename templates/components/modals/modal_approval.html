@@ -185,6 +185,96 @@
     }
 
     // ==========================
+    // 2.5 MODAL DE DEATIVAÇÃO (Soft Delete via AJAX)
+    // ==========================
+    let projectToDeactivateId = null;
+
+    function openDeactivateModal(projectId, projectName) {
+        projectToDeactivateId = projectId;
+        
+        const nameElement = document.getElementById('deactivateProjectName');
+        if (nameElement) {
+            nameElement.innerText = `"${projectName || 'Nome do Projeto'}"`;
+        }
+        
+        const modal = document.getElementById('deactivateModal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    function closeDeactivateModal() {
+        const modal = document.getElementById('deactivateModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        projectToDeactivateId = null;
+    }
+
+    function confirmDeactivate() {
+        if (!projectToDeactivateId) {
+            console.error("Erro: Nenhum ID de projeto encontrado para deativação.");
+            closeDeactivateModal();
+            return;
+        }
+
+        // Envia requisição POST via AJAX
+        fetch(`/projects/deactivate/${projectToDeactivateId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Mostra mensagem de sucesso
+                alert(data.message || 'Projeto desativado com sucesso!');
+                
+                // Remove o card do DOM
+                const card = document.querySelector(`[data-project-id="${projectToDeactivateId}"]`);
+                if (card) {
+                    card.style.opacity = '0.5';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+                
+                // Fecha o modal
+                closeDeactivateModal();
+                
+                // Recarrega a página após 1 segundo
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                alert('Erro: ' + (data.message || 'Não foi possível desativar o projeto'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            alert('Erro ao tentar desativar o projeto. Tente novamente.');
+        });
+    }
+
+    // Função auxiliar para obter CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // ==========================
     // 3. MODAL DE CONCLUSÃO
     // ==========================
     let projectToCompleteId = null;
@@ -252,11 +342,15 @@
     // Fecha os modais se clicar fora deles (Overlay)
     window.onclick = function(event) {
         const modalDelete = document.getElementById('deleteModal');
+        const modalDeactivate = document.getElementById('deactivateModal');
         const modalEval = document.getElementById('evaluationModal');
         const modalComplete = document.getElementById('completeModal');
 
         if (event.target == modalDelete) {
             closeDeleteModal();
+        }
+        if (event.target == modalDeactivate) {
+            closeDeactivateModal();
         }
         if (event.target == modalEval) {
             closeModal();
@@ -292,6 +386,35 @@
 
         </div>
     </div>
+
+    <!-- Modal de Deativação (Soft Delete) -->
+    <div id="deactivateModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container delete-theme">
+            <div class="modal-body delete-body">
+                <div class="delete-header">
+                    <i class="ph ph-archive"></i>
+                    <h2>Desativar Projeto</h2>
+                </div>
+
+                <p class="delete-desc">
+                    Você está prestes a desativar o projeto <strong id="deactivateProjectName">"Nome do Projeto"</strong>.
+                </p>
+
+                <p class="delete-warning" style="color: #666; background-color: #f0f4f8; padding: 12px; border-radius: 6px; border-left: 4px solid #3b82f6;">
+                    <i class="ph ph-info" style="margin-right: 8px;"></i>
+                    O projeto será ocultado da plataforma, mas os dados serão preservados no banco de dados para qualquer eventualidade.
+                </p>
+            </div>
+
+            <div class="modal-footer delete-footer">
+                <button class="btn-secondary" onclick="closeDeactivateModal()">Cancelar</button>
+                <button class="btn-primary" onclick="confirmDeactivate()" style="background-color: #f59e0b; border-color: #f59e0b;">
+                    <i class="ph ph-check" style="margin-right: 6px;"></i>Confirmar Deativação
+                </button>
+            </div>
+        </div>
+    </div>
+
 
     <div id="completeModal" class="modal-overlay" style="display: none;">
         <div class="modal-container">

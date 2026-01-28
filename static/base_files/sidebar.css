@@ -291,6 +291,10 @@ body.dark-mode #user {
 		z-index: 1100;
 	}
 
+	#sidebar_end {
+		margin-bottom: 50px;
+	}
+
 	#sidebar.mobile-open {
 		transform: translateX(0);
 	}

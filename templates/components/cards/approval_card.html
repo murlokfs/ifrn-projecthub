@@ -1,4 +1,4 @@
-<div class="project-card">
+<div class="project-card" data-project-id="{{ projeto.id }}">
     <div class="card-header">
         <div class="badges-wrapper">
             {% if projeto.status == 'reproved' %}
@@ -12,10 +12,14 @@
             {% endif %}
             <span class="floating-tag">{{ projeto.get_type_display }}</span>
         </div>
-        <button class="btn-more-options" title="Denunciar/Excluir"
-                onclick="openDeleteModal('{{ projeto.id }}', '{{ projeto.title|escapejs }}')">
-            <i class="ph ph-flag"></i>
-        </button>
+        {% if request.user.role == 'teacher' %}
+        {% if projeto.status == 'pending_approval' or projeto.status == 'reproved' %}
+            <button class="btn-more-options" title="Cancelar/Desativar Projeto"
+                    onclick="openDeactivateModal('{{ projeto.id }}', '{{ projeto.title|escapejs }}')">
+                <i class="ph ph-trash"></i>
+            </button>
+        {% endif %}
+        {% endif %}
     </div>
 
     <h3 class="card-title">{{ projeto.title }}</h3>

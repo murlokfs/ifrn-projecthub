@@ -176,7 +176,7 @@
 
         <div class="feed-list" style="margin-top: 20px;">
             {% for project in projects_list %}
-                {% include 'components/cards/feed/project_card.html' with projeto=project %}
+                {% include 'components/cards/feed/project_card.html' with projeto=project variant='profile' %}
             {% empty %}
                 <div style="text-align: center; padding: 40px; color: #666;">
                     <i class="ph ph-folder-dashed" style="font-size: 32px; margin-bottom: 10px; opacity: 0.5;"></i>

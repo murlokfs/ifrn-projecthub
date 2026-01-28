@@ -11,19 +11,19 @@
         </div>
 
         <div class="types_container">   
-            <div class="type integrative_project">
+            <div class="type integrative_project" data-project-type="integrator">
                 <div class="icon"><img src="{% static 'img/types_of_projects/book-open-text.svg' %}" alt=""></div>
                 {% include 'components/icons/check.html' with distance=True %}
                 <div class="name">Projeto Integrador</div>
                 <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
             </div>
-            <div class="type tcc">
+            <div class="type tcc" data-project-type="thesis">
                 <div class="icon"><img src="{% static 'img/types_of_projects/graduation-cap(1).svg' %}" alt=""></div>
                 {% include 'components/icons/check.html' with distance=True %}
                 <div class="name">Trabalho de Conclusão de Curso (TCC)</div>
                 <div class="description">Projeto interdisciplinar que conecta diferentes disciplinas e é desenvolvido em equipe durante o curso.</div>
             </div>
-            <div class="type scientific">
+            <div class="type scientific" data-project-type="research">
                 <div class="icon"><img src="{% static 'img/types_of_projects/flask-fill.svg' %}" alt=""></div>
                 {% include 'components/icons/check.html' with distance=True %}
                 <div class="name">Projeto de pesquisa</div>
@@ -179,6 +179,12 @@ body.modal-open {
     cursor: pointer;
 }
 
+/* Evita navegar sem selecionar um tipo */
+.btns .base_container.disabled {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
 
 @media screen and (max-width: 700px) {
 
@@ -280,6 +286,21 @@ body.modal-open {
     const types = modalBackdrop.querySelectorAll('.type');
     const body = document.querySelector('body');
     const cancel = modalBackdrop.querySelector('.cancel'); // botão cancelar
+    const continueLink = modalBackdrop.querySelector('a.green');
+
+    const STORAGE_KEY = 'projecthub_selected_project_type';
+    let selectedProjectType = null;
+
+    function setContinueEnabled(enabled) {
+        if (!continueLink) return;
+        if (enabled) {
+            continueLink.classList.remove('disabled');
+            continueLink.setAttribute('aria-disabled', 'false');
+        } else {
+            continueLink.classList.add('disabled');
+            continueLink.setAttribute('aria-disabled', 'true');
+        }
+    }
 
     function openModal() {
         modalBackdrop.classList.add('visible');
@@ -294,6 +315,9 @@ body.modal-open {
     if (cancel) {
         cancel.addEventListener('click', closeModal);
     }
+
+    // Começa desabilitado até selecionar um tipo
+    setContinueEnabled(false);
 
     modalBackdrop.addEventListener('click', (e) => {
         if (e.target === modalBackdrop) {
@@ -318,8 +342,39 @@ body.modal-open {
             if (!isActive) {
                 type.classList.add('active');
                 if (checkCircle) checkCircle.style.display = 'flex';
+
+                selectedProjectType = type.dataset.projectType || null;
+                setContinueEnabled(!!selectedProjectType);
             }
         });
     });
+
+    if (continueLink) {
+        continueLink.addEventListener('click', (e) => {
+            // Se por algum motivo estiver habilitado sem valor, bloqueia
+            if (!selectedProjectType) {
+                e.preventDefault();
+                setContinueEnabled(false);
+                return;
+            }
+
+            // Persiste na sessão (para o formulário ler ao carregar)
+            try {
+                sessionStorage.setItem(STORAGE_KEY, selectedProjectType);
+            } catch (err) {
+                // Se storage estiver bloqueado, seguimos só com querystring
+            }
+
+            // Garante que a navegação leve o tipo na URL
+            try {
+                const href = continueLink.getAttribute('href') || '';
+                const url = new URL(href, window.location.origin);
+                url.searchParams.set('type', selectedProjectType);
+                continueLink.setAttribute('href', url.toString());
+            } catch (err) {
+                // fallback: deixa como está
+            }
+        });
+    }
 
 </script>

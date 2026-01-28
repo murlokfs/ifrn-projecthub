@@ -2,10 +2,10 @@ from django.http import JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Project, Tag,ApprovalSolicitation
+from .models import Project, Tag, ApprovalSolicitation, ReportProject
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
 import re
@@ -25,7 +25,8 @@ class SearchView(View):
             Q(description__icontains=query) |
             Q(tags__name__icontains=query) |
             Q(members__full_name__icontains=query) |
-            Q(members__username__icontains=query)
+            Q(members__username__icontains=query),
+            is_active=True
         ).distinct()
 
         data = [
@@ -42,6 +43,7 @@ class SearchView(View):
         ]
 
         return JsonResponse(data, safe=False)
+
 class FeedView(ListView):
     model = Project
     template_name = 'project/feed.html'
@@ -53,20 +55,18 @@ class FeedView(ListView):
             is_private=False,
             is_active=True,
             status__in=['in_progress', 'completed']
-            #approval_solicitations__status='approved'
         ).prefetch_related(
             'tags', 'members'
-        ).distinct() # O distinct é importante para não duplicar o projeto se tiver mais de uma aprovação
+        ).annotate(
+            comments_count=Count('comments')
+        ).distinct()
 
-        tab = self.request.GET.get('tab', 'trending') # Padrão é 'Em alta'
+        tab = self.request.GET.get('tab', 'trending')
         if tab == 'my_campus' and self.request.user.is_authenticated:
-            # Verifica se o usuário tem um curso vinculado
             if hasattr(self.request.user, 'course') and self.request.user.course:
                 user_institution = self.request.user.course.institution
-                # Filtra projetos da MESMA instituição do usuário
                 queryset = queryset.filter(course__institution=user_institution)
 
-        # 🔍 BUSCA GLOBAL (HEADER)
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
@@ -89,7 +89,7 @@ class FeedView(ListView):
         if tag_id and tag_id != 'all':
             queryset = queryset.filter(tags__id=tag_id)
 
-        sort_by = self.request.GET.get('sort', 'newest')  # Padrão: mais recentes
+        sort_by = self.request.GET.get('sort', 'newest')
         if sort_by == 'oldest':
             queryset = queryset.order_by('created_at')
         else:
@@ -99,22 +99,20 @@ class FeedView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context['tags'] = Tag.objects.all()
         context['filters'] = self.request.GET
         context['search_query'] = self.request.GET.get('q', '')
         context['active_page'] = 'feed'
         context['current_tab'] = self.request.GET.get('tab', 'trending')
         context['sort_by'] = self.request.GET.get('sort', 'newest')
-
         return context
 
     def status_css_class(self):
         return {
-        'pending_approval': 'outline-yellow',
-        'in_progress': 'outline-blue',
-        'completed': 'outline-green',
-    }.get(self.status, '')
+            'pending_approval': 'outline-yellow',
+            'in_progress': 'outline-blue',
+            'completed': 'outline-green',
+        }.get(self.status, '')
 
 class MeusProjetosView(ListView):
     model = Project
@@ -126,14 +124,16 @@ class MeusProjetosView(ListView):
         if not self.request.user.is_authenticated:
             return Project.objects.none()
 
-        queryset = Project.objects.filter(Q(orientators=self.request.user) | Q(members=self.request.user), is_active=True)\
-            .select_related('course')\
-            .prefetch_related(
-                'tags', 
-                'members', 
-                'approval_solicitations'
-            ).order_by('-created_at')
-        
+        queryset = Project.objects.filter(
+            Q(orientators=self.request.user) | Q(members=self.request.user),
+            is_active=True
+        ).select_related('course').prefetch_related(
+            'tags', 
+            'members', 
+            'approval_solicitations'
+        ).annotate(
+            comments_count=Count('comments')
+        ).order_by('-created_at')
 
         query = self.request.GET.get('q')
         if query:
@@ -147,24 +147,18 @@ class MeusProjetosView(ListView):
         
         if status_filter == 'approved':
             queryset = queryset.filter(
-                Q(status='in_progress')
-                | Q(status='completed')
-                | Q(approval_solicitations__status='approved')
+                Q(status='in_progress') |
+                Q(status='completed') |
+                Q(approval_solicitations__status='approved')
             ).distinct()
-        
         elif status_filter in {'pending', 'pendant', 'pending_approval'}:
             queryset = queryset.filter(status='pending_approval').exclude(
                 approval_solicitations__status='rejected'
             ).distinct()
-        
         elif status_filter == 'reproved':
-            queryset = queryset.filter(
-                status='reproved',
-            )
-        
+            queryset = queryset.filter(status='reproved')
         elif status_filter == 'in_progress':
             queryset = queryset.filter(status='in_progress')
-        
         elif status_filter == 'completed':
             queryset = queryset.filter(status='completed')
 
@@ -177,32 +171,22 @@ class MeusProjetosView(ListView):
         context['search_query'] = self.request.GET.get('q', '')
         
         if self.request.user.is_authenticated:
-            user_projects = Project.objects.filter(Q(orientators=self.request.user) | Q(members=self.request.user)).prefetch_related('approval_solicitations')
-            reproved_count =user_projects.filter(
-                status='reproved',
-            ).count()
+            user_projects = Project.objects.filter(
+                Q(orientators=self.request.user) | Q(members=self.request.user),
+                is_active=True
+            ).prefetch_related('approval_solicitations')
             
-            # Pendentes: pending_approval E que NÃO estão em reprovados
-            pending_count = user_projects.filter(
-                status='pending_approval'
-            ).count()
-            
-            # Aprovados: in_progress, completed OU com approval_solicitations.status='approved'
-            # E que NÃO estão em reprovados
-            # approved_count = user_projects.filter(
-            #     Q(status='in_progress') | 
-            #     Q(status='completed') |
-            #     Q(approval_solicitations__status='approved')
-            # ).distinct().count()
-
+            reproved_count = user_projects.filter(status='reproved').count()
+            pending_count = user_projects.filter(status='pending_approval').count()
             in_progress_count = user_projects.filter(status='in_progress').count()
             completed_count = user_projects.filter(status='completed').count()
+            all_count = user_projects.count()
             
-            # context['approved_count'] = approved_count
             context['pending_count'] = pending_count
             context['reproved_count'] = reproved_count
             context['in_progress_count'] = in_progress_count
             context['completed_count'] = completed_count
+            context['all_count'] = all_count
         
         return context
 
@@ -213,40 +197,57 @@ class DetalhesProjetosView(DetailView):
 
     def get_queryset(self):
         return (
-            Project.objects.select_related('course')
+            Project.objects.filter(is_active=True)
+            .select_related('course')
             .prefetch_related('tags', 'members', 'orientators')
         )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from .models import Comment
+        context['comments'] = Comment.objects.filter(
+            project=self.object, 
+            parent__isnull=True
+        ).select_related('user').prefetch_related('likes').order_by('-created_at')
+        context['comments_count'] = context['comments'].count()
+        return context
 
 class ComentariosAlunosView(DetailView):
     model = Project
     template_name = 'project/student_comments.html'
     context_object_name = 'project'
     
+    def get_queryset(self):
+        return Project.objects.filter(is_active=True)
+
 class CadastroProjetoView(CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project/create_project.html'
     success_url = reverse_lazy('index')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        requested_type = self.request.GET.get('type')
+        if requested_type:
+            allowed = {value for value, _label in Project.TYPE_CHOICES}
+            if requested_type in allowed:
+                initial['type'] = requested_type
+        return initial
+
     def form_valid(self, form):
-        # Lógica para converter link do YouTube antes de salvar
         url = form.cleaned_data.get('link_youtube')
         if url:
-            # Expressão regular para capturar o ID do vídeo
             reg = r'^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:\S+)?$'
             match = re.search(reg, url)
             if match:
                 video_id = match.group(1)
-                # Salva no formato embed para evitar Erro 153 futuramente
                 form.instance.link_youtube = f'https://www.youtube.com/embed/{video_id}'
 
-        # adicionando o curso do usuario logado no projeto
         form.instance.course = self.request.user.course
         response = super().form_valid(form)
-
         self.object.members.add(self.request.user)
 
-        # Cria solicitação de aprovação
         ApprovalSolicitation.objects.create(
             project=self.object,
             user=self.request.user,
@@ -254,7 +255,6 @@ class CadastroProjetoView(CreateView):
         )
 
         return response
-
 
 @method_decorator(login_required, name='dispatch')
 class EditarProjetoView(UpdateView):
@@ -267,7 +267,6 @@ class EditarProjetoView(UpdateView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # Verifica se o usuário é membro do projeto
         if request.user not in self.object.members.all():
             messages.error(request, "Você não tem permissão para editar este projeto.")
             return redirect('my_projects')
@@ -275,7 +274,6 @@ class EditarProjetoView(UpdateView):
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # Verifica se o usuário é membro do projeto
         if request.user not in self.object.members.all():
             messages.error(request, "Você não tem permissão para editar este projeto.")
             return redirect('my_projects')
@@ -291,7 +289,6 @@ class EditarProjetoView(UpdateView):
         return reverse_lazy('project_details', kwargs={'pk': self.object.pk})
     
     def form_valid(self, form):
-        # Lógica para converter link do YouTube antes de salvar
         url = form.cleaned_data.get('link_youtube')
         if url:
             reg = r'^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:\S+)?$'
@@ -300,18 +297,12 @@ class EditarProjetoView(UpdateView):
                 video_id = match.group(1)
                 form.instance.link_youtube = f'https://www.youtube.com/embed/{video_id}'
         
-        # Mantém o curso original do projeto
         form.instance.course = self.object.course
-        
-        # Salva as alterações
         response = super().form_valid(form)
         
-        # Se o projeto foi reprovado, cria nova solicitação de correção
         if self.object.status == 'reproved':
-            # Desativa solicitações antigas
             ApprovalSolicitation.objects.filter(project=self.object, is_active=True).update(is_active=False)
             
-            # Cria nova solicitação de correção
             ApprovalSolicitation.objects.create(
                 project=self.object,
                 user=self.request.user,
@@ -319,7 +310,6 @@ class EditarProjetoView(UpdateView):
                 type='correction'
             )
             
-            # Volta para status de pendente
             self.object.status = 'pending_approval'
             self.object.save()
             
@@ -328,7 +318,6 @@ class EditarProjetoView(UpdateView):
             messages.success(self.request, "Projeto atualizado com sucesso!")
         
         return response
-
 
 def search_entities(request):
     query = request.GET.get('q', '')
@@ -340,7 +329,6 @@ def search_entities(request):
     if entity_type == 'tag':
         results = Tag.objects.filter(name__icontains=query)[:15]
         data = [{'id': t.id, 'name': t.name} for t in results]
-    
     else:
         users = User.objects.filter(
             Q(full_name__icontains=query) | Q(registration__icontains=query) | Q(username__icontains=query),
@@ -368,7 +356,6 @@ def search_entities(request):
 
     return JsonResponse(data, safe=False)
 
-
 class ComentariosProfessoresView(DetailView):
     model = Project
     template_name = 'project/teacher_comments.html'
@@ -383,21 +370,21 @@ class ProjetosAprovacaoView(ListView):
 
     def get_queryset(self):
         queryset = (
-            Project.objects.filter(is_active=True, orientators=self.request.user.id).distinct()
+            Project.objects.filter(is_active=True, orientators=self.request.user.id).annotate(
+                comments_count=Count('comments')
+            ).distinct()
         )
 
-        # 🔍 Busca
         query = self.request.GET.get('q', '').strip()
         if query:
             queryset = queryset.filter(
-                Q(title__icontains=query)
-                | Q(description__icontains=query)
-                | Q(tags__name__icontains=query)
-                | Q(members__full_name__icontains=query)
-                | Q(members__username__icontains=query)
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(tags__name__icontains=query) |
+                Q(members__full_name__icontains=query) |
+                Q(members__username__icontains=query)
             )
 
-        # 🚦 Filtro por status (tabs)
         status_filter = self.request.GET.get('status', 'all')
         if status_filter == 'pending':
             queryset = queryset.filter(status='pending_approval')
@@ -422,32 +409,44 @@ class ProjetosAprovacaoView(ListView):
 
         return context
 
-
 @login_required
 def delete_project(request, pk):
-    """Delete a project if the user is a member"""
+    """Deletar um projeto - soft delete ou hard delete conforme regras"""
     project = get_object_or_404(Project, pk=pk)
+    user = request.user
     
-    # Verifica se o usuário é membro do projeto
-    if request.user not in project.members.all():
+    is_approved_or_started = project.status != 'pending_approval'
+
+    if user.role == 'teacher' or user.is_staff:
+        if is_approved_or_started:
+            project.is_active = False
+            project.save()
+            messages.success(request, "O projeto foi arquivado com sucesso.")
+        else:
+            project.delete()
+            messages.success(request, "Projeto pendente excluído permanentemente.")
         return redirect('my_projects')
-    
-    # Delete the project
-    project.delete()
-    
-    # Redirect back to my_projects
-    return redirect('my_projects')
+
+    elif user in project.members.all():
+        if is_approved_or_started:
+            messages.error(request, "Projetos aprovados não podem ser excluídos. Entre em contato com um professor.")
+        else:
+            project.delete()
+            messages.success(request, "Projeto excluído com sucesso.")
+        return redirect('my_projects')
+
+    else:
+        messages.error(request, "Você não tem permissão para realizar essa ação.")
+        return redirect('my_projects')
 
 class DetalheProjetoPendenteProfessorView(TemplateView):
     template_name = 'project/project_details.html'
 
     def dispatch(self, request, *args, **kwargs):
-        # Temporariamente permitir acesso para todos os usuários
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Habilita o botão de aprovação no header
         context['show_approval_button'] = True
         user = getattr(self.request, 'user', None)
         context['is_teacher'] = bool(user and user.is_authenticated and getattr(user, 'role', None) == 'teacher')
@@ -455,20 +454,22 @@ class DetalheProjetoPendenteProfessorView(TemplateView):
 
 @login_required
 def cancel_project_submission(request, pk):
-    """Cancel a project submission (change status from pending_approval back to draft)"""
+    """Cancelar submissão de projeto - desativa o projeto"""
     project = get_object_or_404(Project, pk=pk)
     
-    # Verifica se o usuário é membro do projeto
     if request.user not in project.members.all():
+        messages.error(request, "Você não tem permissão para cancelar este projeto.")
         return redirect('my_projects')
     
-    # Only cancel if project is in pending_approval status
-    if project.status == 'pending_approval':
-        project.status = 'draft'
-        project.save()
+    if project.status != 'pending_approval':
+        messages.error(request, "Apenas projetos em pendência de aprovação podem ser cancelados.")
+        return redirect('my_projects')
     
+    project.is_active = False
+    project.save()
+    
+    messages.success(request, f'O projeto "{project.title}" foi cancelado e desativado com sucesso.')
     return redirect('my_projects')
-    
 
 @login_required
 def evaluate_project(request, pk):
@@ -479,7 +480,6 @@ def evaluate_project(request, pk):
     project = get_object_or_404(Project, pk=pk)
     user = request.user
     
-    # Verifica se o usuário é orientador do projeto
     if user not in project.orientators.all():
         messages.error(request, "Você não tem permissão para avaliar este projeto.")
         return redirect('project_approval')
@@ -487,7 +487,6 @@ def evaluate_project(request, pk):
     decision = request.POST.get('decision')
     feedback = request.POST.get('feedback', '').strip()
     
-    # Validações
     if not decision or decision not in ['approve', 'reject']:
         messages.error(request, "Decisão inválida.")
         return redirect('project_approval')
@@ -496,11 +495,9 @@ def evaluate_project(request, pk):
         messages.error(request, "O feedback é obrigatório.")
         return redirect('project_approval')
     
-    # Buscar ou criar solicitação de aprovação ativa
     solicitation = project.approval_solicitations.filter(is_active=True).first()
     
     if not solicitation:
-        # Cria uma nova solicitação se não existir
         solicitation = ApprovalSolicitation.objects.create(
             project=project,
             user=project.members.first(),
@@ -508,7 +505,6 @@ def evaluate_project(request, pk):
             type='creation'
         )
     
-    # Atualizar solicitação com feedback
     solicitation.message = feedback
     
     if decision == 'approve':
@@ -516,7 +512,7 @@ def evaluate_project(request, pk):
         solicitation.is_active = False
         project.status = 'in_progress'
         messages.success(request, f'Projeto "{project.title}" aprovado com sucesso!')
-    else:  # reject
+    else:
         solicitation.status = 'rejected'
         project.status = 'reproved'
         solicitation.is_active = False
@@ -527,7 +523,6 @@ def evaluate_project(request, pk):
     
     return redirect('project_approval')
 
-
 @login_required
 def complete_project(request, pk):
     """Marcar um projeto como concluído (só orientadores)"""
@@ -537,60 +532,174 @@ def complete_project(request, pk):
     project = get_object_or_404(Project, pk=pk)
     user = request.user
     
-    # Verifica se o usuário é orientador do projeto
     if user not in project.orientators.all():
         messages.error(request, "Você não tem permissão para concluir este projeto.")
         return redirect('project_approval')
     
-    # Verifica se o projeto está em desenvolvimento
     if project.status != 'in_progress':
         messages.error(request, "Apenas projetos em desenvolvimento podem ser concluídos.")
         return redirect('project_approval')
     
-    # Altera o status do projeto
     project.status = 'completed'
     project.save()
     
     messages.success(request, f'Projeto "{project.title}" marcado como concluído com sucesso!')
-    
     return redirect('project_approval')
 
+@login_required
+def deactivate_project_ajax(request, pk):
+    """Desativar um projeto via AJAX - soft delete"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método não permitido'}, status=400)
+    
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+
+    if user.role == 'teacher' or user.is_staff:
+        project.is_active = False
+        project.save()
+        return JsonResponse({
+            'success': True, 
+            'message': "O projeto foi arquivado com sucesso."
+        })
+    
+    elif user in project.members.all():
+        project.is_active = False
+        project.save()
+        return JsonResponse({
+            'success': True, 
+            'message': "O projeto foi desativado com sucesso."
+        })
+    
+    else:
+        return JsonResponse({
+            'success': False, 
+            'message': "Você não tem permissão para realizar essa ação."
+        }, status=403)
 
 @login_required
-def delete_project(request, pk):
+def report_project(request, pk):
+    """Salvar denúncia de um projeto via AJAX"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método não permitido'}, status=400)
+    
     project = get_object_or_404(Project, pk=pk)
     user = request.user
     
-    # Verifica se o projeto já passou da fase de pendente (Aprovado, Em andamento ou Concluído)
-    is_approved_or_started = project.status != 'pending_approval'
+    try:
+        data = json.loads(request.body)
+        reason = data.get('reason', '').strip()
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': 'Dados inválidos'}, status=400)
+    
+    if not reason:
+        return JsonResponse({'success': False, 'message': 'O motivo da denúncia é obrigatório'}, status=400)
+    
+    reason_map = {
+        'plagio': 'Plágio',
+        'inapropriado': 'Conteúdo Inapropriado',
+        'falso': 'Informação Falsa'
+    }
+    
+    reason_text = reason_map.get(reason, reason)
+    
+    existing_report = ReportProject.objects.filter(
+        project=project,
+        user=user,
+        is_resolved=False
+    ).first()
+    
+    if existing_report:
+        return JsonResponse({
+            'success': False,
+            'message': 'Você já denunciou este projeto. Aguarde análise da nossa equipe.'
+        }, status=400)
+    
+    report = ReportProject.objects.create(
+        project=project,
+        user=user,
+        reason=reason_text
+    )
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'Denúncia enviada com sucesso! Nossa equipe irá analisar em breve.',
+        'report_id': report.id
+    })
 
-    # --- CENÁRIO 1: O USUÁRIO É UM PROFESSOR (Docente) ---
-    if user.role == 'teacher' or user.is_staff:
-        if is_approved_or_started:
-            # Regra: Professor faz "Soft Delete" em projetos aprovados
-            project.is_active = False
-            project.save()
-            messages.success(request, "O projeto foi arquivado com sucesso.")
-        else:
-            # Se for pendente, o professor pode apagar permanentemente
-            project.delete()
-            messages.success(request, "Projeto pendente excluído permanentemente.")
-        
-        return redirect('my_projects')
+@login_required
+def add_comment(request, pk):
+    """Adicionar comentário a um projeto"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    project = get_object_or_404(Project, pk=pk)
+    content = request.POST.get('content', '').strip()
+    
+    if not content:
+        return JsonResponse({'success': False, 'error': 'Comentário não pode estar vazio'}, status=400)
+    
+    from .models import Comment
+    comment = Comment.objects.create(
+        project=project,
+        user=request.user,
+        content=content
+    )
+    
+    return JsonResponse({
+        'success': True,
+        'comment': {
+            'id': comment.id,
+            'content': comment.content,
+            'created_at': comment.created_at.strftime('%d/%m/%Y'),
+            'user': {
+                'id': comment.user.id,
+                'full_name': comment.user.full_name or comment.user.username,
+                'username': comment.user.username,
+                'image': comment.user.image.url if comment.user.image else None,
+            },
+            'likes_count': comment.likes.count(),
+        }
+    })
 
-    # --- CENÁRIO 2: O USUÁRIO É DONO/MEMBRO (Aluno) ---
-    elif user in project.members.all():
-        if is_approved_or_started:
-            # Regra: Aluno NÃO pode excluir projeto aprovado
-            messages.error(request, "Projetos aprovados não podem ser excluídos. Entre em contato com um professor.")
-        else:
-            # Se for pendente, aluno pode apagar permanentemente (ex: desistiu da ideia)
-            project.delete()
-            messages.success(request, "Projeto excluído com sucesso.")
-            
-        return redirect('my_projects')
-
-    # --- CENÁRIO 3: INTRUSO (Nem professor, nem dono) ---
+@login_required
+def toggle_like_comment(request, pk):
+    """Curtir ou descurtir um comentário"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    from .models import Comment
+    comment = get_object_or_404(Comment, pk=pk)
+    user = request.user
+    
+    if user in comment.likes.all():
+        comment.likes.remove(user)
+        liked = False
     else:
-        messages.error(request, "Você não tem permissão para realizar essa ação.")
-        return redirect('my_projects')
+        comment.likes.add(user)
+        liked = True
+    
+    return JsonResponse({
+        'success': True,
+        'liked': liked,
+        'likes_count': comment.likes.count()
+    })
+
+@login_required
+def delete_comment(request, pk):
+    """Deletar um comentário (apenas o autor pode deletar)"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    from .models import Comment
+    comment = get_object_or_404(Comment, pk=pk)
+    
+    if comment.user != request.user:
+        return JsonResponse({'success': False, 'error': 'Você não tem permissão para deletar este comentário'}, status=403)
+    
+    comment.delete()
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'Comentário deletado com sucesso'
+    })
