@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView,ListView,DetailView,CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -134,7 +134,7 @@ class MeusProjetosView(ListView):
             return Project.objects.none()
         
         # Base: Projetos ativos do usuário
-        queryset = Project.objects.filter(members=self.request.user, is_active=True)\
+        queryset = Project.objects.filter(Q(orientators=self.request.user) | Q(members=self.request.user), is_active=True)\
             .select_related('course')\
             .prefetch_related(
                 'tags', 
@@ -151,29 +151,34 @@ class MeusProjetosView(ListView):
                 Q(tags__name__icontains=query)
             ).distinct()
 
-        # --- Filtros (CORREÇÃO AQUI) ---
-        status_filter = self.request.GET.get('status')
+        # --- Filtros de Status ---
+        status_filter = self.request.GET.get('status', 'all')
         
         if status_filter == 'approved':
-            # Aprovados ou Concluídos
+            # Projetos aprovados (in_progress, completed ou com solicitação aprovada)
             queryset = queryset.filter(
-                Q(status='in_progress') | 
-                Q(status='completed') |
-                Q(approval_solicitations__status='approved')
+                Q(status='in_progress')
+                | Q(status='completed')
+                | Q(approval_solicitations__status='approved')
             ).distinct()
-
-        elif status_filter == 'pendant':
-            # Pendentes que NÃO foram rejeitados na última tentativa
-            # Para simplificar, trazemos todos os pendentes, mas idealmente excluiríamos os rejeitados
-            queryset = queryset.filter(status='pending_approval').distinct()
-
-        elif status_filter == 'reproved':
-            # CORREÇÃO: Busca projetos Pendentes que tenham solicitação Rejeitada
-            # E usamos distinct() para evitar duplicatas se tiver mais de uma rejeição
-            queryset = queryset.filter(
-                status='pending_approval', 
+        
+        elif status_filter in {'pending', 'pendant', 'pending_approval'}:
+            # Pendentes que NÃO foram rejeitados
+            queryset = queryset.filter(status='pending_approval').exclude(
                 approval_solicitations__status='rejected'
             ).distinct()
+        
+        elif status_filter == 'reproved':
+            # Projetos pendentes com solicitação rejeitada
+            queryset = queryset.filter(
+                status='reproved',
+            )
+        
+        elif status_filter == 'in_progress':
+            queryset = queryset.filter(status='in_progress')
+        
+        elif status_filter == 'completed':
+            queryset = queryset.filter(status='completed')
 
         return queryset
     
@@ -186,48 +191,47 @@ class MeusProjetosView(ListView):
         
         # Contar projetos por status (sem duplicação)
         if self.request.user.is_authenticated:
-            user_projects = Project.objects.filter(members=self.request.user).prefetch_related('approval_solicitations')
+            user_projects = Project.objects.filter(Q(orientators=self.request.user) | Q(members=self.request.user)).prefetch_related('approval_solicitations')
             
             # Reprovados: projetos que têm approval_solicitations com status='rejected'
-            reproved_projects = set()
-            for project in user_projects:
-                if project.approval_solicitations.filter(status='rejected').exists():
-                    reproved_projects.add(project.id)
-            reproved_count = len(reproved_projects)
+            reproved_count =user_projects.filter(
+                status='reproved',
+            ).count()
             
             # Pendentes: pending_approval E que NÃO estão em reprovados
             pending_count = user_projects.filter(
                 status='pending_approval'
-            ).exclude(id__in=reproved_projects).count()
+            ).count()
             
             # Aprovados: in_progress, completed OU com approval_solicitations.status='approved'
             # E que NÃO estão em reprovados
-            approved_count = user_projects.filter(
-                Q(status='in_progress') | 
-                Q(status='completed') |
-                Q(approval_solicitations__status='approved')
-            ).exclude(id__in=reproved_projects).distinct().count()
+            # approved_count = user_projects.filter(
+            #     Q(status='in_progress') | 
+            #     Q(status='completed') |
+            #     Q(approval_solicitations__status='approved')
+            # ).distinct().count()
+
+            in_progress_count = user_projects.filter(status='in_progress').count()
+            completed_count = user_projects.filter(status='completed').count()
             
-            context['approved_count'] = approved_count
+            # context['approved_count'] = approved_count
             context['pending_count'] = pending_count
             context['reproved_count'] = reproved_count
+            context['in_progress_count'] = in_progress_count
+            context['completed_count'] = completed_count
         
         return context
-
-
-
-
-
-
-
-
-
-
 
 class DetalhesProjetosView(DetailView):
     model = Project
     context_object_name = 'project'
     template_name = 'project/project_details.html'
+
+    def get_queryset(self):
+        return (
+            Project.objects.select_related('course')
+            .prefetch_related('tags', 'members', 'orientators')
+        )
 
 class ComentariosAlunosView(DetailView):
     model = Project
@@ -261,10 +265,86 @@ class CadastroProjetoView(CreateView):
         # Cria solicitação de aprovação
         ApprovalSolicitation.objects.create(
             project=self.object,
-            user=self.request.user, 
+            user=self.request.user,
+            message="Projeto submetido para aprovação"
         )
 
         return response
+
+
+@method_decorator(login_required, name='dispatch')
+class EditarProjetoView(UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'project/create_project.html'
+    
+    def get_object(self, queryset=None):
+        return get_object_or_404(Project, pk=self.kwargs['pk'])
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Verifica se o usuário é membro do projeto
+        if request.user not in self.object.members.all():
+            messages.error(request, "Você não tem permissão para editar este projeto.")
+            return redirect('my_projects')
+        return super().get(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # Verifica se o usuário é membro do projeto
+        if request.user not in self.object.members.all():
+            messages.error(request, "Você não tem permissão para editar este projeto.")
+            return redirect('my_projects')
+        return super().post(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object'] = self.object
+        context['is_editing'] = True
+        return context
+    
+    def get_success_url(self):
+        return reverse_lazy('project_details', kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        # Lógica para converter link do YouTube antes de salvar
+        url = form.cleaned_data.get('link_youtube')
+        if url:
+            reg = r'^(?:https?://)?(?:www\.)?(?:youtu\.be/|youtube\.com/(?:embed/|v/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:\S+)?$'
+            match = re.search(reg, url)
+            if match:
+                video_id = match.group(1)
+                form.instance.link_youtube = f'https://www.youtube.com/embed/{video_id}'
+        
+        # Mantém o curso original do projeto
+        form.instance.course = self.object.course
+        
+        # Salva as alterações
+        response = super().form_valid(form)
+        
+        # Se o projeto foi reprovado, cria nova solicitação de correção
+        if self.object.status == 'reproved':
+            # Desativa solicitações antigas
+            ApprovalSolicitation.objects.filter(project=self.object, is_active=True).update(is_active=False)
+            
+            # Cria nova solicitação de correção
+            ApprovalSolicitation.objects.create(
+                project=self.object,
+                user=self.request.user,
+                message="Projeto corrigido e reenviado para aprovação",
+                type='correction'
+            )
+            
+            # Volta para status de pendente
+            self.object.status = 'pending_approval'
+            self.object.save()
+            
+            messages.success(self.request, "Projeto atualizado e reenviado para aprovação!")
+        else:
+            messages.success(self.request, "Projeto atualizado com sucesso!")
+        
+        return response
+
 
 def search_entities(request):
     query = request.GET.get('q', '')
@@ -310,8 +390,53 @@ class ComentariosProfessoresView(DetailView):
     template_name = 'project/teacher_comments.html'
     context_object_name = 'project'
 
-class ProjetosAprovacaoView(TemplateView):
+@method_decorator(login_required, name='dispatch')
+class ProjetosAprovacaoView(ListView):
+    model = Project
     template_name = 'project/project_approvals.html'
+    context_object_name = 'projetos'
+    paginate_by = 9
+
+    def get_queryset(self):
+        queryset = (
+            Project.objects.filter(is_active=True, orientators=self.request.user.id).distinct()
+        )
+
+        # 🔍 Busca
+        query = self.request.GET.get('q', '').strip()
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query)
+                | Q(description__icontains=query)
+                | Q(tags__name__icontains=query)
+                | Q(members__full_name__icontains=query)
+                | Q(members__username__icontains=query)
+            )
+
+        # 🚦 Filtro por status (tabs)
+        status_filter = self.request.GET.get('status', 'all')
+        if status_filter == 'pending':
+            queryset = queryset.filter(status='pending_approval')
+        elif status_filter in {'in_progress', 'completed'}:
+            queryset = queryset.filter(status=status_filter)
+        else:
+            queryset = queryset.exclude(status='pending_approval')
+
+        return queryset.order_by('-created_at').distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_page'] = 'project_approval'
+        context['current_status'] = self.request.GET.get('status', 'all')
+        context['search_query'] = self.request.GET.get('q', '')
+
+        base = Project.objects.filter(is_active=True, orientators=self.request.user.id).distinct()
+        context['pending_count'] = base.filter(status='pending_approval').count()
+        context['in_progress_count'] = base.filter(status='in_progress').count()
+        context['completed_count'] = base.filter(status='completed').count()
+        context['all_count'] = base.count()
+
+        return context
 
 
 @login_required
@@ -360,6 +485,92 @@ def cancel_project_submission(request, pk):
     
     return redirect('my_projects')
     
+
+@login_required
+def evaluate_project(request, pk):
+    """Processar avaliação de projeto (aprovação ou reprovação)"""
+    if request.method != 'POST':
+        return redirect('project_approval')
+    
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+    
+    # Verifica se o usuário é orientador do projeto
+    if user not in project.orientators.all():
+        messages.error(request, "Você não tem permissão para avaliar este projeto.")
+        return redirect('project_approval')
+    
+    decision = request.POST.get('decision')
+    feedback = request.POST.get('feedback', '').strip()
+    
+    # Validações
+    if not decision or decision not in ['approve', 'reject']:
+        messages.error(request, "Decisão inválida.")
+        return redirect('project_approval')
+    
+    if not feedback:
+        messages.error(request, "O feedback é obrigatório.")
+        return redirect('project_approval')
+    
+    # Buscar ou criar solicitação de aprovação ativa
+    solicitation = project.approval_solicitations.filter(is_active=True).first()
+    
+    if not solicitation:
+        # Cria uma nova solicitação se não existir
+        solicitation = ApprovalSolicitation.objects.create(
+            project=project,
+            user=project.members.first(),
+            message=feedback,
+            type='creation'
+        )
+    
+    # Atualizar solicitação com feedback
+    solicitation.message = feedback
+    
+    if decision == 'approve':
+        solicitation.status = 'approved'
+        solicitation.is_active = False
+        project.status = 'in_progress'
+        messages.success(request, f'Projeto "{project.title}" aprovado com sucesso!')
+    else:  # reject
+        solicitation.status = 'rejected'
+        project.status = 'reproved'
+        solicitation.is_active = False
+        messages.warning(request, f'Projeto "{project.title}" foi reprovado. O aluno receberá o feedback.')
+    
+    solicitation.save()
+    project.save()
+    
+    return redirect('project_approval')
+
+
+@login_required
+def complete_project(request, pk):
+    """Marcar um projeto como concluído (só orientadores)"""
+    if request.method != 'POST':
+        return redirect('project_approval')
+    
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+    
+    # Verifica se o usuário é orientador do projeto
+    if user not in project.orientators.all():
+        messages.error(request, "Você não tem permissão para concluir este projeto.")
+        return redirect('project_approval')
+    
+    # Verifica se o projeto está em desenvolvimento
+    if project.status != 'in_progress':
+        messages.error(request, "Apenas projetos em desenvolvimento podem ser concluídos.")
+        return redirect('project_approval')
+    
+    # Altera o status do projeto
+    project.status = 'completed'
+    project.save()
+    
+    messages.success(request, f'Projeto "{project.title}" marcado como concluído com sucesso!')
+    
+    return redirect('project_approval')
+
 
 @login_required
 def delete_project(request, pk):

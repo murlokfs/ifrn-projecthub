@@ -45,7 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
             descriptionFilled = editorData.trim().length > 0;
         }
         
-        const bannerUploaded = bannerUploadInput && bannerUploadInput.files && bannerUploadInput.files.length > 0;
+        // Banner: obrigatório apenas se estiver criando ou se não tem banner existente
+        const bannerPreviewImg = document.getElementById('banner-preview-img');
+        const hasBannerPreview = bannerPreviewImg && bannerPreviewImg.src && bannerPreviewImg.src.length > 0;
+        const bannerUploaded = (bannerUploadInput && bannerUploadInput.files && bannerUploadInput.files.length > 0) || hasBannerPreview;
+        
         const orientatorsSelected = orientatorsSelect && [...orientatorsSelect.selectedOptions].length > 0;
         const membersSelected = membersSelect && [...membersSelect.selectedOptions].length > 0;
         const tagsSelected = tagsSelect && [...tagsSelect.selectedOptions].length > 0;
@@ -54,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             titleFilled,
             descriptionFilled,
             bannerUploaded,
+            hasBannerPreview,
             orientatorsSelected,
             membersSelected,
             tagsSelected
@@ -74,8 +79,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Expor a função globalmente para ser usada em outros scripts
+    window.updatePublishButton = updatePublishButton;
+
     // Atualizar botão inicialmente
     updatePublishButton();
+
+    // Adicionar listeners para os selects ocultos para detectar mudanças
+    if (orientatorsSelect) {
+        const observer = new MutationObserver(() => updatePublishButton());
+        observer.observe(orientatorsSelect, { childList: true, subtree: true });
+    }
+
+    if (membersSelect) {
+        const observer = new MutationObserver(() => updatePublishButton());
+        observer.observe(membersSelect, { childList: true, subtree: true });
+    }
+
+    if (tagsSelect) {
+        const observer = new MutationObserver(() => updatePublishButton());
+        observer.observe(tagsSelect, { childList: true, subtree: true });
+    }
 
     const userData = document.getElementById('user-data');
     if (userData) {
@@ -85,16 +109,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const container = document.getElementById('membersList');
 
         if (userId && userName && hiddenSelect && container) {
-            // Adiciona ao select para o POST
-            if (![...hiddenSelect.options].some(opt => opt.value == userId)) {
+            // Verifica se o usuário já não está na lista (quando estiver editando)
+            const alreadyExists = [...hiddenSelect.options].some(opt => opt.value == userId);
+            
+            if (!alreadyExists) {
+                // Adiciona ao select para o POST
                 hiddenSelect.add(new Option(userName, userId, true, true));
+                
+                // Adiciona chip visual (sem botão de remover para o dono)
+                const chip = document.createElement('div');
+                chip.className = 'chip-item owner-chip';
+                chip.dataset.id = userId;
+                chip.innerHTML = `${userName} (Você)`;
+                container.appendChild(chip);
             }
-            // Adiciona chip visual (sem botão de remover para o dono)
-            const chip = document.createElement('div');
-            chip.className = 'chip-item owner-chip';
-            chip.dataset.id = userId;
-            chip.innerHTML = `${userName} (Você)`;
-            container.appendChild(chip);
+            
             updatePreviews();
             updatePublishButton();
         }
