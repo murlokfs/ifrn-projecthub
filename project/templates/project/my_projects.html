@@ -265,8 +265,6 @@ Meus projetos
     function openDeleteModal(projectId, projectName) {
         projectToDeleteId = projectId;
 
-        // CORREÇÃO AQUI: Você estava pegando 'deleteModal' em vez de 'deleteProjectName'
-        // Isso apagaria os botões do modal!
         const nameElement = document.getElementById('deleteProjectName');
         if (nameElement) {
             nameElement.innerText = `"${projectName}"`;

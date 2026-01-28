@@ -58,11 +58,9 @@ class FeedView(ListView):
             'tags', 'members'
         ).distinct() # O distinct é importante para não duplicar o projeto se tiver mais de uma aprovação
 
-        tab = self.request.GET.get('tab', 'trending') # Padrão é 'Em alta' (trending)
-
+        tab = self.request.GET.get('tab', 'trending') # Padrão é 'Em alta'
         if tab == 'my_campus' and self.request.user.is_authenticated:
             # Verifica se o usuário tem um curso vinculado
-            # Ajuste 'course' se o nome do campo no seu User for diferente
             if hasattr(self.request.user, 'course') and self.request.user.course:
                 user_institution = self.request.user.course.institution
                 # Filtra projetos da MESMA instituição do usuário
@@ -79,22 +77,18 @@ class FeedView(ListView):
                 Q(members__username__icontains=query)
             )
 
-        # 📂 FILTRO POR TIPO
         project_type = self.request.GET.get('type')
         if project_type and project_type != 'all':
             queryset = queryset.filter(type=project_type)
 
-        # 🚦 FILTRO POR STATUS
         status = self.request.GET.get('status')
         if status and status != 'all':
             queryset = queryset.filter(status=status)
 
-        # 🏷️ FILTRO POR TAG
         tag_id = self.request.GET.get('tag')
         if tag_id and tag_id != 'all':
             queryset = queryset.filter(tags__id=tag_id)
 
-        # 📅 ORDENAÇÃO
         sort_by = self.request.GET.get('sort', 'newest')  # Padrão: mais recentes
         if sort_by == 'oldest':
             queryset = queryset.order_by('created_at')
@@ -128,12 +122,10 @@ class MeusProjetosView(ListView):
     context_object_name = 'projetos'
     paginate_by = 6
 
-    # Garante que o usuário está logado
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return Project.objects.none()
         
-        # Base: Projetos ativos do usuário
         queryset = Project.objects.filter(members=self.request.user, is_active=True)\
             .select_related('course')\
             .prefetch_related(
@@ -186,15 +178,13 @@ class MeusProjetosView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['active_page'] = 'my_projects'
-        # Passa os filtros atuais para o template (para manter o botão ativo se precisar)
         context['current_status'] = self.request.GET.get('status', 'all')
         context['search_query'] = self.request.GET.get('q', '')
         
-        # Contar projetos por status (sem duplicação)
         if self.request.user.is_authenticated:
             user_projects = Project.objects.filter(members=self.request.user).prefetch_related('approval_solicitations')
             
-            # Reprovados: projetos que têm approval_solicitations com status='rejected'
+            # Reprovados: projetos que têm approval_solicitations com status='rejected' 
             reproved_projects = set()
             for project in user_projects:
                 if project.approval_solicitations.filter(status='rejected').exists():

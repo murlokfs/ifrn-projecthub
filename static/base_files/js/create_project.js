@@ -5,6 +5,7 @@ document.addEventListener('click', (e) => {
   const modalBackdrop = document.querySelector('#types-projects-modal');
   if (modalBackdrop) {
     modalBackdrop.classList.add('visible');
+    if (document.body) document.body.classList.add('modal-open');
     return;
   }
   const evt = new CustomEvent('openCreateProjectModal', { bubbles: true });
