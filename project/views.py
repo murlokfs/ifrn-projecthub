@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from .models import Project, Tag,ApprovalSolicitation
+from .models import Project, Tag, ApprovalSolicitation, ReportProject
 from project.forms import ProjectForm
 from django.urls import reverse_lazy
 import re
@@ -25,7 +25,8 @@ class SearchView(View):
             Q(description__icontains=query) |
             Q(tags__name__icontains=query) |
             Q(members__full_name__icontains=query) |
-            Q(members__username__icontains=query)
+            Q(members__username__icontains=query),
+            is_active=True
         ).distinct()
 
         data = [
@@ -177,18 +178,22 @@ class MeusProjetosView(ListView):
         context['search_query'] = self.request.GET.get('q', '')
         
         if self.request.user.is_authenticated:
-            user_projects = Project.objects.filter(Q(orientators=self.request.user) | Q(members=self.request.user)).prefetch_related('approval_solicitations')
-            reproved_count =user_projects.filter(
+            # Filtra apenas projetos ativos (is_active=True)
+            user_projects = Project.objects.filter(
+                Q(orientators=self.request.user) | Q(members=self.request.user),
+                is_active=True
+            ).prefetch_related('approval_solicitations')
+            
+            reproved_count = user_projects.filter(
                 status='reproved',
             ).count()
             
-            # Pendentes: pending_approval E que NÃO estão em reprovados
+            # Pendentes: pending_approval
             pending_count = user_projects.filter(
                 status='pending_approval'
             ).count()
             
             # Aprovados: in_progress, completed OU com approval_solicitations.status='approved'
-            # E que NÃO estão em reprovados
             # approved_count = user_projects.filter(
             #     Q(status='in_progress') | 
             #     Q(status='completed') |
@@ -197,12 +202,14 @@ class MeusProjetosView(ListView):
 
             in_progress_count = user_projects.filter(status='in_progress').count()
             completed_count = user_projects.filter(status='completed').count()
+            all_count = user_projects.count()
             
             # context['approved_count'] = approved_count
             context['pending_count'] = pending_count
             context['reproved_count'] = reproved_count
             context['in_progress_count'] = in_progress_count
             context['completed_count'] = completed_count
+            context['all_count'] = all_count
         
         return context
 
@@ -213,7 +220,8 @@ class DetalhesProjetosView(DetailView):
 
     def get_queryset(self):
         return (
-            Project.objects.select_related('course')
+            Project.objects.filter(is_active=True)
+            .select_related('course')
             .prefetch_related('tags', 'members', 'orientators')
         )
 
@@ -221,6 +229,9 @@ class ComentariosAlunosView(DetailView):
     model = Project
     template_name = 'project/student_comments.html'
     context_object_name = 'project'
+    
+    def get_queryset(self):
+        return Project.objects.filter(is_active=True)
     
 class CadastroProjetoView(CreateView):
     model = Project
@@ -425,18 +436,30 @@ class ProjetosAprovacaoView(ListView):
 
 @login_required
 def delete_project(request, pk):
-    """Delete a project if the user is a member"""
+    """Deletar um projeto - soft delete em todos os casos (desativa sem apagar do banco)"""
     project = get_object_or_404(Project, pk=pk)
-    
-    # Verifica se o usuário é membro do projeto
-    if request.user not in project.members.all():
+    user = request.user
+
+    # --- CENÁRIO 1: O USUÁRIO É UM PROFESSOR (Docente) ---
+    if user.role == 'teacher' or user.is_staff:
+        # Professor: faz soft-delete de qualquer projeto
+        project.is_active = False
+        project.save()
+        messages.success(request, "O projeto foi arquivado com sucesso.")
         return redirect('my_projects')
-    
-    # Delete the project
-    project.delete()
-    
-    # Redirect back to my_projects
-    return redirect('my_projects')
+
+    # --- CENÁRIO 2: O USUÁRIO É DONO/MEMBRO (Aluno) ---
+    elif user in project.members.all():
+        # Aluno: faz soft-delete de seus projetos
+        project.is_active = False
+        project.save()
+        messages.success(request, "O projeto foi desativado com sucesso.")
+        return redirect('my_projects')
+
+    # --- CENÁRIO 3: INTRUSO (Nem professor, nem dono) ---
+    else:
+        messages.error(request, "Você não tem permissão para realizar essa ação.")
+        return redirect('my_projects')
 
 class DetalheProjetoPendenteProfessorView(TemplateView):
     template_name = 'project/project_details.html'
@@ -455,17 +478,24 @@ class DetalheProjetoPendenteProfessorView(TemplateView):
 
 @login_required
 def cancel_project_submission(request, pk):
-    """Cancel a project submission (change status from pending_approval back to draft)"""
+    """Cancel a project submission - desativa o projeto em vez de deletar"""
     project = get_object_or_404(Project, pk=pk)
     
     # Verifica se o usuário é membro do projeto
     if request.user not in project.members.all():
+        messages.error(request, "Você não tem permissão para cancelar este projeto.")
         return redirect('my_projects')
     
-    # Only cancel if project is in pending_approval status
-    if project.status == 'pending_approval':
-        project.status = 'draft'
-        project.save()
+    # Verifica se o projeto está em pendência
+    if project.status != 'pending_approval':
+        messages.error(request, "Apenas projetos em pendência de aprovação podem ser cancelados.")
+        return redirect('my_projects')
+    
+    # Soft delete: desativa o projeto ao invés de deletar
+    project.is_active = False
+    project.save()
+    
+    messages.success(request, f'O projeto "{project.title}" foi cancelado e desativado com sucesso.')
     
     return redirect('my_projects')
     
@@ -557,40 +587,93 @@ def complete_project(request, pk):
 
 
 @login_required
-def delete_project(request, pk):
+def deactivate_project_ajax(request, pk):
+    """Desativar um projeto via AJAX - soft delete sem apagar do banco"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método não permitido'}, status=400)
+    
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+
+    # --- Verificação de permissão ---
+    # Professor ou staff podem desativar qualquer projeto
+    if user.role == 'teacher' or user.is_staff:
+        project.is_active = False
+        project.save()
+        return JsonResponse({
+            'success': True, 
+            'message': "O projeto foi arquivado com sucesso."
+        })
+    
+    # Aluno pode desativar apenas seus próprios projetos
+    elif user in project.members.all():
+        project.is_active = False
+        project.save()
+        return JsonResponse({
+            'success': True, 
+            'message': "O projeto foi desativado com sucesso."
+        })
+    
+    # Sem permissão
+    else:
+        return JsonResponse({
+            'success': False, 
+            'message': "Você não tem permissão para realizar essa ação."
+        }, status=403)
+
+
+@login_required
+def report_project(request, pk):
+    """Salvar denúncia de um projeto via AJAX"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Método não permitido'}, status=400)
+    
     project = get_object_or_404(Project, pk=pk)
     user = request.user
     
-    # Verifica se o projeto já passou da fase de pendente (Aprovado, Em andamento ou Concluído)
-    is_approved_or_started = project.status != 'pending_approval'
+    # Obtém o motivo da denúncia do corpo da requisição
+    import json
+    try:
+        data = json.loads(request.body)
+        reason = data.get('reason', '').strip()
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'message': 'Dados inválidos'}, status=400)
+    
+    if not reason:
+        return JsonResponse({'success': False, 'message': 'O motivo da denúncia é obrigatório'}, status=400)
+    
+    # Mapeamento de razões para textos amigáveis
+    reason_map = {
+        'plagio': 'Plágio',
+        'inapropriado': 'Conteúdo Inapropriado',
+        'falso': 'Informação Falsa'
+    }
+    
+    reason_text = reason_map.get(reason, reason)
+    
+    # Verifica se o usuário já denunciou este projeto
+    existing_report = ReportProject.objects.filter(
+        project=project,
+        user=user,
+        is_resolved=False
+    ).first()
+    
+    if existing_report:
+        return JsonResponse({
+            'success': False,
+            'message': 'Você já denunciou este projeto. Aguarde análise da nossa equipe.'
+        }, status=400)
+    
+    # Cria a denúncia
+    report = ReportProject.objects.create(
+        project=project,
+        user=user,
+        reason=reason_text
+    )
+    
+    return JsonResponse({
+        'success': True,
+        'message': 'Denúncia enviada com sucesso! Nossa equipe irá analisar em breve.',
+        'report_id': report.id
+    })
 
-    # --- CENÁRIO 1: O USUÁRIO É UM PROFESSOR (Docente) ---
-    if user.role == 'teacher' or user.is_staff:
-        if is_approved_or_started:
-            # Regra: Professor faz "Soft Delete" em projetos aprovados
-            project.is_active = False
-            project.save()
-            messages.success(request, "O projeto foi arquivado com sucesso.")
-        else:
-            # Se for pendente, o professor pode apagar permanentemente
-            project.delete()
-            messages.success(request, "Projeto pendente excluído permanentemente.")
-        
-        return redirect('my_projects')
-
-    # --- CENÁRIO 2: O USUÁRIO É DONO/MEMBRO (Aluno) ---
-    elif user in project.members.all():
-        if is_approved_or_started:
-            # Regra: Aluno NÃO pode excluir projeto aprovado
-            messages.error(request, "Projetos aprovados não podem ser excluídos. Entre em contato com um professor.")
-        else:
-            # Se for pendente, aluno pode apagar permanentemente (ex: desistiu da ideia)
-            project.delete()
-            messages.success(request, "Projeto excluído com sucesso.")
-            
-        return redirect('my_projects')
-
-    # --- CENÁRIO 3: INTRUSO (Nem professor, nem dono) ---
-    else:
-        messages.error(request, "Você não tem permissão para realizar essa ação.")
-        return redirect('my_projects')

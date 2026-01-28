@@ -78,8 +78,8 @@ class Project(models.Model):
         return self.title
 
     def get_latest_feedback(self):
-        """Retorna o feedback mais recente da solicitação de aprovação"""
-        return self.approval_solicitations.filter(is_active=True).order_by('-created_at').first()
+        """Retorna o feedback mais recente da solicitação de aprovação (ativo ou não)"""
+        return self.approval_solicitations.order_by('-created_at').first()
 
     def get_youtube_embed_url(self):
         if not self.link_youtube:

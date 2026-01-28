@@ -1,4 +1,4 @@
-<div id="modal-report" class="modal" aria-hidden="true">
+<div id="modal-report" class="modal" aria-hidden="true" data-project-id="">
     <div class="modal__overlay" onclick="toggleModal('modal-report')"></div>
     <div class="modal__content">
         <header class="modal__header">
@@ -35,7 +35,81 @@
 
         <footer class="modal__footer">
             <button class="btn btn--ghost" onclick="toggleModal('modal-report')">Cancelar</button>
-            <button class="btn btn--destructive" onclick="alert('Denúncia enviada!')">Enviar Denúncia</button>
+            <button class="btn btn--destructive" onclick="submitProjectReport()">Enviar Denúncia</button>
         </footer>
     </div>
 </div>
+
+<script>
+    // Função para abrir modal com ID do projeto
+    function openReportModal(projectId) {
+        const modal = document.getElementById('modal-report');
+        if (modal) {
+            modal.setAttribute('data-project-id', projectId);
+            toggleModal('modal-report');
+        }
+    }
+
+    // Função para enviar denúncia
+    function submitProjectReport() {
+        const modal = document.getElementById('modal-report');
+        const projectId = modal.getAttribute('data-project-id');
+        
+        // Obtém a opção selecionada
+        const selectedReason = document.querySelector('input[name="report_reason"]:checked');
+        
+        if (!projectId) {
+            alert('Erro: ID do projeto não encontrado');
+            return;
+        }
+        
+        if (!selectedReason) {
+            alert('Por favor, selecione um motivo para a denúncia');
+            return;
+        }
+
+        // Envia requisição POST via AJAX
+        fetch(`/projects/report/${projectId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({
+                reason: selectedReason.value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Limpa a seleção
+                selectedReason.checked = false;
+                // Fecha o modal
+                toggleModal('modal-report');
+            } else {
+                alert('Erro: ' + (data.message || 'Não foi possível enviar a denúncia'));
+            }
+        })
+        .catch(error => {
+            console.error('Erro na requisição:', error);
+            alert('Erro ao tentar enviar a denúncia. Tente novamente.');
+        });
+    }
+
+    // Função auxiliar para obter CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
