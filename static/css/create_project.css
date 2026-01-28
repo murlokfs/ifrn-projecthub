@@ -352,7 +352,22 @@ input:checked + .slider:before {
         -webkit-overflow-scrolling: touch;
     }
 
-    .form-row { flex-direction: column; gap: 0; }
+    /*
+      No mobile, a linha de 2 colunas vira empilhada.
+      O template define `align-items: flex-end` inline para desktop; aqui forçamos
+      `stretch` para evitar campos estreitos/alinhados à direita.
+    */
+    .form-row {
+        flex-direction: column;
+        gap: 16px !important;
+        align-items: stretch !important;
+    }
+
+    /* Evita texto do toggle ficar espremido/clippado quando quebrar linha */
+    .toggle-wrapper {
+        height: auto !important;
+        padding: 10px 15px !important;
+    }
     .modal-container { padding: 18px !important; }
     .avatar-sigla { width: 38px !important; height: 38px !important; margin-right: 10px !important; }
 }
@@ -432,5 +447,30 @@ input:checked + .slider:before {
 .confirmation-container .modal-footer {
     gap: 10px !important;
     margin-top: 10px !important;
-    flex-direction: row-reverse !important;
+    flex-direction: row !important; /* mantém ordem natural: cancelar à esquerda, confirmar à direita */
+    justify-content: flex-end !important; /* alinha os botões ao lado direito do modal */
+}
+
+/* Altura e alinhamento consistentes dos botões no rodapé */
+.modal-footer .btn-cancel,
+.modal-footer .btn-confirm-final {
+    height: 44px !important;
+    padding: 0 24px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Responsividade: empilhar e ocupar largura total em telas pequenas */
+@media (max-width: 480px) {
+    .confirmation-container .modal-footer {
+        flex-direction: column-reverse !important; /* confirma primeiro, cancelar abaixo */
+        justify-content: flex-start !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+    .confirmation-container .modal-footer .btn-cancel,
+    .confirmation-container .modal-footer .btn-confirm-final {
+        width: 100% !important;
+    }
 }

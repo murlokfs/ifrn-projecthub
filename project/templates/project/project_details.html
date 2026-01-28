@@ -5,18 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProjectHub - Plataforma de Portfólio</title>
-    <link rel="stylesheet" href="{% static 'css/project_details.css' %}">
     <link rel="stylesheet" href="{% static 'css/aprovacao.css' %}">
+    <link rel="stylesheet" href="{% static 'css/project_details.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header class="header">
         <div class="header__container">
-            <button class="btn btn--ghost btn--sm" onclick="history.back()">
+            <a class="btn btn--ghost btn--sm" href="{% url 'my_projects' %}" aria-label="Voltar para meus projetos">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                 Voltar
-            </button>
+            </a>
             
             <div class="header__actions">
                 <button class="btn btn--ghost btn--sm btn--like-toggle">

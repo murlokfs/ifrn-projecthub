@@ -228,6 +228,17 @@ class CadastroProjetoView(CreateView):
     template_name = 'project/create_project.html'
     success_url = reverse_lazy('index')
 
+    def get_initial(self):
+        initial = super().get_initial()
+
+        requested_type = self.request.GET.get('type')
+        if requested_type:
+            allowed = {value for value, _label in Project.TYPE_CHOICES}
+            if requested_type in allowed:
+                initial['type'] = requested_type
+
+        return initial
+
     def form_valid(self, form):
         # Lógica para converter link do YouTube antes de salvar
         url = form.cleaned_data.get('link_youtube')
