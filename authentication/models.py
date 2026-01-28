@@ -35,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=150, blank=True, null=True)
     registration = models.CharField(max_length=50, unique=True, blank=True, null=True)
     about_me = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to=user_avatar_path, blank=True, null=True)
+    image = models.ImageField(upload_to="avatars/", blank=True, null=True)
     course = models.ForeignKey('project.Course', on_delete=models.SET_NULL, null=True, blank=True)
     linkedin = models.URLField(blank=True, null=True)
     github = models.URLField(blank=True, null=True)

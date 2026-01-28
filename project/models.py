@@ -5,7 +5,7 @@ class Campus(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     cnpj = models.CharField(max_length=20, unique=True, null=False, blank=False)
     acronym = models.CharField(max_length=10, null=False, blank=False)
-    image = models.ImageField(upload_to='media/campus/photos/', null=True, blank=True)
+    image = models.ImageField(upload_to="campus/", null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} - {self.acronym}"
@@ -61,7 +61,7 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending_approval')
     is_private = models.BooleanField(default=False)
-    image = models.ImageField(upload_to=project_image_path, null=True, blank=True)
+    image = models.ImageField(upload_to="projects/", null=True, blank=True)
 
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='research')
 
