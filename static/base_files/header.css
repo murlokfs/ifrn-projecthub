@@ -288,6 +288,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
+        flex-wrap: nowrap; /* evita quebra para segunda linha */
         position: relative;
     }
 
@@ -303,7 +304,7 @@
     }
 
     #search_container {
-        flex: 0 0 auto;
+        flex: 0 0 32px; /* garante largura mínima e não cresce */
         max-width: none;
         width: 32px;
         height: 32px;

@@ -37,7 +37,6 @@ body {
 
 .left-panel {
         position: relative;
-        /* Novo background condizente com o restante do projeto */
         background:
             radial-gradient(900px 500px at -10% 10%, rgba(80, 206, 103, 0.22), transparent 60%),
             radial-gradient(700px 420px at 110% 90%, rgba(80, 206, 103, 0.16), transparent 60%),
@@ -53,7 +52,6 @@ body {
 
 .left-panel::after { display: none; }
 
-/* Padrão sutil para dar textura ao fundo */
 .left-panel::before { display: none; }
 
 .left-panel .logo {
@@ -235,7 +233,6 @@ body {
     color: var(--muted);
 }
 
-/* Texto informativo no lugar do link */
 .form-options .field-hint {
     display: inline-flex;
     align-items: center;
@@ -255,7 +252,6 @@ body {
     box-shadow: 0 0 0 2px var(--primary-light);
 }
 
-/* Link "Esqueceu a senha?" */
 .form-options .forgot-link {
     font-size: 14px;
     color: var(--primary);
