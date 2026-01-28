@@ -104,85 +104,56 @@
                     <header class="card__header">
                         <h2 class="card__title flex-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            Comentários (3)
+                            Comentários
                         </h2>
                     </header>
                     <div class="card__content">
+                        {% if user.is_authenticated and user.role != 'alumni' %}
                         <div class="comment-form">
-                            <textarea class="textarea" placeholder="Escreva seu comentário sobre o projeto..."></textarea>
-                            <button class="btn btn--primary">Publicar Comentário</button>
+                            <textarea id="comment-textarea" class="textarea" placeholder="Escreva seu comentário sobre o projeto..."></textarea>
+                            <button id="submit-comment-btn" class="btn btn--primary">Publicar Comentário</button>
                         </div>
 
                         <hr class="separator">
+                        {% endif %}
 
-                        <div class="comments-list">
-                            
-                            <div class="comment-item">
-                                <div class="avatar">
-                                    <span class="avatar__fallback">JS</span>
-                                </div>
+                        <div class="comments-list" id="comments-list">
+                            {% for comment in comments %}
+                            <div class="comment-item" data-comment-id="{{ comment.id }}">
+                                <a href="{% url 'profile' comment.user.id %}" class="avatar">
+                                    {% if comment.user.image %}
+                                    <img src="{{ comment.user.image }}" alt="{{ comment.user.full_name|default:comment.user.username }}" class="avatar__image" style="object-fit: cover; width: 100%; height: 100%;">
+                                    {% else %}
+                                    <span class="avatar__fallback">{{ comment.user.full_name|default:comment.user.username|slice:":2"|upper }}</span>
+                                    {% endif %}
+                                </a>
                                 <div class="comment-item__body">
                                     <div class="comment-item__header">
-                                        <span class="comment-author">João Silva</span>
-                                        <span class="comment-date">• 01/10/2025</span>
+                                        <a href="{% url 'profile' comment.user.id %}" class="comment-author">{{ comment.user.full_name|default:comment.user.username }}</a>
+                                        <span class="comment-date">• {{ comment.created_at|date:"d/m/Y" }}</span>
                                     </div>
-                                    <p class="comment-text">Excelente projeto! A interface está muito intuitiva e bem pensada. Parabéns pelo trabalho!</p>
+                                    <p class="comment-text">{{ comment.content }}</p>
+                                    {% if user.is_authenticated %}
                                     <div class="comment-actions">
-                                        <button class="btn-action" data-comment-like>
+                                        <button class="btn-action comment-like-btn {% if user in comment.likes.all %}is-liked{% endif %}" data-comment-id="{{ comment.id }}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
-                                            <span class="like-count">12</span>
+                                            <span class="like-count">{{ comment.likes.count }}</span>
                                         </button>
-                                        <button class="btn-action btn-action--report">
+                                        {% if comment.user == user %}
+                                        <button class="btn-action btn-action--delete" data-comment-id="{{ comment.id }}" title="Deletar comentário">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                        </button>
+                                        {% endif %}
+                                        {% comment %} <button class="btn-action btn-action--report">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-                                        </button>
+                                        </button> {% endcomment %}
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
-
-                            <div class="comment-item">
-                                <div class="avatar">
-                                    <span class="avatar__fallback">MS</span>
-                                </div>
-                                <div class="comment-item__body">
-                                    <div class="comment-item__header">
-                                        <span class="comment-author">Maria Santos</span>
-                                        <span class="comment-date">• 30/09/2025</span>
-                                    </div>
-                                    <p class="comment-text">Muito bom, mas poderia ter mais funcionalidades de filtro na busca.</p>
-                                    <div class="comment-actions">
-                                        <button class="btn-action" data-comment-like">
-                                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
-                                            <span class="like-count">5</span>
-                                        </button>
-                                        <button class="btn-action btn-action--report">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                             <div class="comment-item">
-                                <div class="avatar">
-                                    <span class="avatar__fallback">PO</span>
-                                </div>
-                                <div class="comment-item__body">
-                                    <div class="comment-item__header">
-                                        <span class="comment-author">Pedro Oliveira</span>
-                                        <span class="comment-date">• 28/09/2025</span>
-                                    </div>
-                                    <p class="comment-text">Projeto inovador e bem executado! Vai ajudar muito os estudantes.</p>
-                                    <div class="comment-actions">
-                                        <button class="btn-action" data-comment-like">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
-                                            <span class="like-count">8</span>
-                                        </button>
-                                        <button class="btn-action btn-action--report">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
+                            {% empty %}
+                            <p id="no-comments-msg" style="text-align: center; color: #6b7280; padding: 2rem;">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                            {% endfor %}
                         </div>
                     </div>
                 </section>
@@ -296,7 +267,7 @@
                             <div class="stat-item">
                                 <div class="stat-value">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                                    38
+                                    {{comments_count}}
                                 </div>
                                 <p class="stat-label">Comentários</p>
                             </div>
@@ -374,19 +345,202 @@
                 }
             });
 
-            // Likes nos comentários
-            const commentLikeButtons = document.querySelectorAll('[data-comment-like]');
-            commentLikeButtons.forEach((btn) => {
-                const countEl = btn.querySelector('.like-count');
-                let likedComment = false;
-                let commentCount = parseInt(countEl?.textContent || '0', 10) || 0;
-                btn.addEventListener('click', function() {
-                    likedComment = !likedComment;
-                    commentCount = likedComment ? commentCount + 1 : Math.max(0, commentCount - 1);
-                    if (countEl) countEl.textContent = String(commentCount);
-                    btn.classList.toggle('is-liked', likedComment);
+            // Sistema de Comentários
+            const submitCommentBtn = document.getElementById('submit-comment-btn');
+            const commentTextarea = document.getElementById('comment-textarea');
+            const commentsList = document.getElementById('comments-list');
+            const commentsCountEl = document.getElementById('comments-count');
+            
+            // Função para obter o CSRF token
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            
+            // Adicionar comentário
+            if (submitCommentBtn && commentTextarea) {
+                submitCommentBtn.addEventListener('click', function() {
+                    const content = commentTextarea.value.trim();
+                    if (!content) {
+                        alert('Por favor, escreva um comentário antes de publicar.');
+                        return;
+                    }
+                    
+                    const projectId = {{ project.id }};
+                    const csrftoken = getCookie('csrftoken');
+                    
+                    fetch(`/project/${projectId}/comment/add/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: `content=${encodeURIComponent(content)}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove mensagem de "nenhum comentário" se existir
+                            const noCommentsMsg = document.getElementById('no-comments-msg');
+                            if (noCommentsMsg) {
+                                noCommentsMsg.remove();
+                            }
+                            
+                            // Criar elemento do novo comentário
+                            const commentHtml = `
+                                <div class="comment-item" data-comment-id="${data.comment.id}">
+                                    <a href="/profile/${data.comment.user.id}/" class="avatar">
+                                        ${data.comment.user.image ? 
+                                            `<img src="${data.comment.user.image}" alt="${data.comment.user.full_name}" class="avatar__image" style="object-fit: cover; width: 100%; height: 100%;">` :
+                                            `<span class="avatar__fallback">${data.comment.user.full_name.substring(0, 2).toUpperCase()}</span>`
+                                        }
+                                    </a>
+                                    <div class="comment-item__body">
+                                        <div class="comment-item__header">
+                                            <a href="/profile/${data.comment.user.id}/" class="comment-author">${data.comment.user.full_name}</a>
+                                            <span class="comment-date">• ${data.comment.created_at}</span>
+                                        </div>
+                                        <p class="comment-text">${data.comment.content}</p>
+                                        <div class="comment-actions">
+                                            <button class="btn-action comment-like-btn" data-comment-id="${data.comment.id}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>
+                                                <span class="like-count">${data.comment.likes_count}</span>
+                                            </button>
+                                            <button class="btn-action btn-action--delete" data-comment-id="${data.comment.id}" title="Deletar comentário">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                                            </button>
+                                            {% comment %} <button class="btn-action btn-action--report">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                                            </button> {% endcomment %}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Adiciona no topo da lista
+                            commentsList.insertAdjacentHTML('afterbegin', commentHtml);
+                            
+                            // Atualiza contador
+                            if (commentsCountEl) {
+                                const currentCount = parseInt(commentsCountEl.textContent) || 0;
+                                commentsCountEl.textContent = currentCount + 1;
+                            }
+                            
+                            // Limpa o textarea
+                            commentTextarea.value = '';
+                            
+                            // Re-anexa event listeners nos novos botões
+                            attachCommentLikeListeners();
+                            attachCommentDeleteListeners();
+                        } else {
+                            alert(data.error || 'Erro ao adicionar comentário.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao adicionar comentário. Tente novamente.');
+                    });
                 });
-            });
+            }
+            
+            // Função para anexar event listeners aos botões de curtir
+            function attachCommentLikeListeners() {
+                const commentLikeBtns = document.querySelectorAll('.comment-like-btn');
+                commentLikeBtns.forEach(btn => {
+                    // Remove listener anterior (se houver)
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                    
+                    newBtn.addEventListener('click', function() {
+                        const commentId = this.getAttribute('data-comment-id');
+                        const csrftoken = getCookie('csrftoken');
+                        const likeCountEl = this.querySelector('.like-count');
+                        
+                        fetch(`/comment/${commentId}/toggle-like/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                likeCountEl.textContent = data.likes_count;
+                                this.classList.toggle('is-liked', data.liked);
+                            }
+                        })
+                        .catch(error => console.error('Erro:', error));
+                    });
+                });
+            }
+            
+            // Anexar listeners inicialmente
+            attachCommentLikeListeners();
+            
+            // Função para anexar event listeners aos botões de deletar
+            function attachCommentDeleteListeners() {
+                const commentDeleteBtns = document.querySelectorAll('.btn-action--delete');
+                commentDeleteBtns.forEach(btn => {
+                    // Remove listener anterior (se houver)
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                    
+                    newBtn.addEventListener('click', function() {
+                        if (!confirm('Tem certeza que deseja deletar este comentário?')) {
+                            return;
+                        }
+                        
+                        const commentId = this.getAttribute('data-comment-id');
+                        const csrftoken = getCookie('csrftoken');
+                        const commentItem = document.querySelector(`.comment-item[data-comment-id="${commentId}"]`);
+                        
+                        fetch(`/comment/${commentId}/delete/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove o comentário da DOM
+                                commentItem.remove();
+                                
+                                // Atualiza o contador
+                                if (commentsCountEl) {
+                                    const currentCount = parseInt(commentsCountEl.textContent) || 0;
+                                    commentsCountEl.textContent = Math.max(0, currentCount - 1);
+                                }
+                                
+                                // Se não houver mais comentários, mostra mensagem
+                                const remainingComments = document.querySelectorAll('.comment-item');
+                                if (remainingComments.length === 0 && commentsList) {
+                                    commentsList.innerHTML = '<p id="no-comments-msg" style="text-align: center; color: #6b7280; padding: 2rem;">Nenhum comentário ainda. Seja o primeiro a comentar!</p>';
+                                }
+                            } else {
+                                alert(data.error || 'Erro ao deletar comentário.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            alert('Erro ao deletar comentário. Tente novamente.');
+                        });
+                    });
+                });
+            }
+            
+            // Anexar listeners de delete inicialmente
+            attachCommentDeleteListeners();
 
             const commentReportButtons = document.querySelectorAll('.btn-action--report');
             commentReportButtons.forEach((btn) => {
