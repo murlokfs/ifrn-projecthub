@@ -6,9 +6,10 @@ from django.views.generic import TemplateView, DetailView, UpdateView
 from django.contrib import messages
 from django.db.models import Q
 from django.urls import reverse_lazy, reverse
+from django.http import JsonResponse
 from .models import User
 from .forms import EditProfileForm
-from project.models import Project
+from project.models import Project, Campus
 
 
 class LoginView(TemplateView):
@@ -141,3 +142,31 @@ class EgressoLoginView(View):
         except User.DoesNotExist:
             messages.error(request, 'Usuário não encontrado. Faça login pelo SUAP primeiro.')
             return render(request, self.template_name)
+
+
+def campus_autocomplete(request):
+    """
+    Retorna uma lista de campus em JSON para o autocomplete.
+    Aceita um parâmetro 'q' na query string para filtrar os resultados.
+    """
+    query = request.GET.get('q', '').strip()
+    
+    campus_list = Campus.objects.all()
+    
+    if query:
+        campus_list = campus_list.filter(
+            Q(name__icontains=query) | 
+            Q(acronym__icontains=query)
+        )
+    
+    results = [
+        {
+            'id': campus.id,
+            'name': campus.name,
+            'acronym': campus.acronym,
+            'display': f"{campus.name} ({campus.acronym})"
+        }
+        for campus in campus_list[:10]  # Limita a 10 resultados
+    ]
+    
+    return JsonResponse({'results': results})
