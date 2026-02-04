@@ -19,6 +19,56 @@
     <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
 
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .autocomplete-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .autocomplete-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .autocomplete-results.active {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .autocomplete-item:hover,
+        .autocomplete-item.selected {
+            background-color: #f0f0f0;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        #campus-input {
+            padding-right: 35px !important;
+        }
+
+        .hidden-campus-id {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,12 +132,13 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>Campus</label>
-                        <div class="input-icon-wrapper">
+                        <div class="input-icon-wrapper autocomplete-container">
                             <i class="ph ph-buildings"></i>
-                            <input type="text" class="form-input has-icon" 
-                                   value="{{ user.course.campus.name|default:'Sem campus vinculado' }}" 
-                                   readonly 
-                                   style="opacity: 0.7; cursor: not-allowed; background-color: #E5E7EB;">
+                            <input type="text" id="campus-input" class="form-input has-icon" 
+                                   placeholder="Digite o campus..." autocomplete="off"
+                                   value="{% if user.campus %}{{ user.campus.name }}{% endif %}">
+                            <input type="hidden" id="campus-id" name="campus" value="{% if user.campus %}{{ user.campus.id }}{% endif %}">
+                            <div class="autocomplete-results" id="autocomplete-results"></div>
                         </div>
                     </div>
 
@@ -127,6 +178,129 @@
     </div>
 
     {% include 'components/base_files/footer.html' %}
+    
+    <script>
+        const campusInput = document.getElementById('campus-input');
+        const campusIdInput = document.getElementById('campus-id');
+        const autocompleteResults = document.getElementById('autocomplete-results');
+        let campusData = [];
+        let selectedIndex = -1;
+
+        // Função para fazer fetch dos resultados de autocomplete
+        async function fetchCampusResults(query) {
+            try {
+                const response = await fetch(`/authentication/api/campus-autocomplete/?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                return data.results;
+            } catch (error) {
+                console.error('Erro ao buscar campus:', error);
+                return [];
+            }
+        }
+
+        // Função para renderizar os resultados
+        function renderResults(results) {
+            autocompleteResults.innerHTML = '';
+            campusData = results;
+            selectedIndex = -1;
+
+            if (results.length === 0) {
+                autocompleteResults.classList.remove('active');
+                return;
+            }
+
+            results.forEach((result, index) => {
+                const div = document.createElement('div');
+                div.className = 'autocomplete-item';
+                div.textContent = result.display;
+                div.dataset.index = index;
+                div.dataset.id = result.id;
+                div.dataset.name = result.name;
+
+                div.addEventListener('click', () => selectCampus(result));
+                div.addEventListener('mouseenter', () => {
+                    document.querySelectorAll('.autocomplete-item').forEach(item => 
+                        item.classList.remove('selected')
+                    );
+                    div.classList.add('selected');
+                    selectedIndex = index;
+                });
+
+                autocompleteResults.appendChild(div);
+            });
+
+            autocompleteResults.classList.add('active');
+        }
+
+        // Função para selecionar um campus
+        function selectCampus(campus) {
+            campusInput.value = campus.display;
+            campusIdInput.value = campus.id;
+            autocompleteResults.classList.remove('active');
+            selectedIndex = -1;
+        }
+
+        // Event listener para o input
+        campusInput.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+
+            if (query.length === 0) {
+                autocompleteResults.classList.remove('active');
+                campusIdInput.value = '';
+                return;
+            }
+
+            const results = await fetchCampusResults(query);
+            renderResults(results);
+        });
+
+        // Event listener para o teclado
+        campusInput.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % campusData.length;
+                updateSelection();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex - 1 + campusData.length) % campusData.length;
+                updateSelection();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedIndex >= 0 && campusData[selectedIndex]) {
+                    selectCampus(campusData[selectedIndex]);
+                }
+            } else if (e.key === 'Escape') {
+                autocompleteResults.classList.remove('active');
+                selectedIndex = -1;
+            }
+        });
+
+        function updateSelection() {
+            document.querySelectorAll('.autocomplete-item').forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
+        }
+
+        // Fechar autocomplete ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.autocomplete-container')) {
+                autocompleteResults.classList.remove('active');
+            }
+        });
+
+        // Validação ao enviar o formulário
+        document.querySelector('.profile-form').addEventListener('submit', (e) => {
+            if (campusInput.value.trim() && !campusIdInput.value) {
+                e.preventDefault();
+                alert('Por favor, selecione um campus válido na lista de sugestões.');
+            }
+        });
+    </script>
     
     </body>
 </html>
