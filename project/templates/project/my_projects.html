@@ -162,7 +162,7 @@ Meus projetos - PRISMA
                         <i class="ph ph-clock"></i> <span>PENDENTE DE APROVAÇÃO</span>
                     </div>
                     <p class="feedback-message">Seu projeto foi enviado para avaliação e está aguardando retorno.</p>
-                    <div class="feedback-meta">Enviado em {{ ultimo_feedback.created_at|date:"d/m às H:i" }}</div>
+                    <div class="feedback-meta">Enviado em {{ ultimo_feedback.created_at|date:"d/m, H:i" }}</div>
                 </div>
 
             {% elif ultimo_feedback.status == 'rejected' %}
@@ -171,7 +171,7 @@ Meus projetos - PRISMA
                         <i class="ph ph-warning-circle"></i> <span>PRECISA DE AJUSTES</span>
                     </div>
                     <p class="feedback-message">"{{ ultimo_feedback.message }}"</p>
-                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m" }}</div>
+                    <div class="feedback-meta">Avaliado em {{ ultimo_feedback.created_at|date:"d/m, H:i" }}</div>
                 </div>
 
             {% elif ultimo_feedback.status == 'approved' %}
@@ -180,7 +180,7 @@ Meus projetos - PRISMA
                         <i class="ph ph-check-circle"></i> <span>APROVADO</span>
                     </div>
                     <p class="feedback-message">"{{ ultimo_feedback.message }}"</p>
-                    <div class="feedback-meta">Avaliado por <strong>{{ ultimo_feedback.user.full_name }}</strong> em {{ ultimo_feedback.created_at|date:"d/m" }}</div>
+                    <div class="feedback-meta">Avaliado em {{ ultimo_feedback.created_at|date:"d/m, H:i" }}</div>
                 </div>
             {% endif %}
         
@@ -190,7 +190,7 @@ Meus projetos - PRISMA
                     <i class="ph ph-clock"></i> <span>PENDENTE DE APROVAÇÃO</span>
                 </div>
                 <p class="feedback-message">Seu projeto foi enviado para avaliação e está aguardando retorno.</p>
-                <div class="feedback-meta">Enviado em {{ projeto.created_at|date:"d/m às H:i" }}</div>
+                <div class="feedback-meta">Enviado em {{ projeto.created_at|date:"d/m, H:i" }}</div>
             </div>
         {% endif %}
 

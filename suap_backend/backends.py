@@ -31,8 +31,13 @@ class SuapOAuth2(BaseOAuth2):
         return response.get(self.ID_KEY)
     
     def generate_username(self, details, response):
+        import unicodedata
         base_username = response.get('primeiro_nome', 'user')
         base_username = (base_username + response.get('ultimo_nome', '')).strip().lower()
+        base_username = ''.join(
+            c for c in unicodedata.normalize('NFD', base_username)
+            if unicodedata.category(c) != 'Mn'
+        )
         username = base_username
         suffix = 1
         
@@ -65,7 +70,7 @@ class SuapOAuth2(BaseOAuth2):
             'first_name': response.get('primeiro_nome', '').strip(),
             'last_name': response.get('ultimo_nome', '').strip(),
             'full_name': response.get('nome_registro', '').strip(),
-            'role': tipo_dict.get(response.get('tipo_usuario', ''), 'student'),
+            'role': tipo_dict.get(response.get('tipo_usuario', ''), 'teacher'),
             'image': (response.get('foto', '').replace("75x100", "150x200")) if response.get('foto') else None,
             'cpf': response.get('cpf', '').strip().replace('.', '').replace('-', '') or None,
         }

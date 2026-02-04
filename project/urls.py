@@ -1,6 +1,6 @@
 from django.urls import path
 from project import views
-from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView, DetalheProjetoPendenteProfessorView, FeedView,SearchView,MeusProjetosView, delete_project, cancel_project_submission, evaluate_project, complete_project, EditarProjetoView, deactivate_project_ajax, report_project, add_comment, toggle_like_comment, delete_comment
+from .views import DetalhesProjetosView, ComentariosAlunosView, ComentariosProfessoresView, ProjetosAprovacaoView, DetalheProjetoPendenteProfessorView, FeedView,SearchView,MeusProjetosView, delete_project, cancel_project_submission, evaluate_project, complete_project, EditarProjetoView, deactivate_project_ajax, report_project, add_comment, toggle_like_comment, toggle_like_project, delete_comment
 
 urlpatterns = [
 
@@ -26,4 +26,5 @@ urlpatterns = [
     path('comment/<int:pk>/add/', add_comment, name='add_comment'),
     path('comment/<int:pk>/toggle-like/', toggle_like_comment, name='toggle_like_comment'),
     path('comment/<int:pk>/delete/', delete_comment, name='delete_comment'),
+    path('project/<int:pk>/toggle-like/', toggle_like_project, name='toggle_like_project'),
 ]
