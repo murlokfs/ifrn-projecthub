@@ -13,4 +13,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/egresso/', EgressoLoginView.as_view(), name='signup'),
+    
+    # API para autocomplete de campus
+    path('api/campus-autocomplete/', campus_autocomplete, name='campus_autocomplete'),
 ]

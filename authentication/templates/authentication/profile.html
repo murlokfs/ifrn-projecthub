@@ -96,7 +96,12 @@
                         </div>
                     {% endif %}
 
-                    {% if profile_user.course and profile_user.course.campus %}
+                    {% if profile_user.campus %}
+                        <div class="social-item">
+                            <i class="ph ph-buildings"></i>
+                            <span>{{ profile_user.campus.name }}</span>
+                        </div>
+                    {% elif profile_user.course and profile_user.course.campus %}
                         <div class="social-item">
                             <i class="ph ph-buildings"></i>
                             <span>{{ profile_user.course.campus.name }}</span>
