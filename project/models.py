@@ -71,6 +71,7 @@ class Project(models.Model):
     link_github = models.URLField(null=True, blank=True)
     link_youtube = models.URLField(null=True, blank=True)
     tags = models.ManyToManyField(Tag, related_name='projects', blank=True)
+    likes = models.ManyToManyField('authentication.User', related_name='liked_projects', blank=True)
 
     is_active = models.BooleanField(default=True, verbose_name="Projeto Ativo")
 

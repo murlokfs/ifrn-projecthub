@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -13,7 +14,7 @@ import json
 from authentication.models import User
 from django.contrib import messages
 
-class SearchView(View):
+class SearchView(LoginRequiredMixin, View):
     def get(self, request):
         query = request.GET.get('q', '').strip()
 
@@ -44,7 +45,7 @@ class SearchView(View):
 
         return JsonResponse(data, safe=False)
 
-class FeedView(ListView):
+class FeedView(LoginRequiredMixin, ListView):
     model = Project
     template_name = 'project/feed.html'
     context_object_name = 'projects'
@@ -55,10 +56,11 @@ class FeedView(ListView):
             is_private=False,
             is_active=True,
             status__in=['in_progress', 'completed']
+        ).annotate(
+            comments_count=Count('comments', distinct=True),
+            likes_count=Count('likes', distinct=True)
         ).prefetch_related(
             'tags', 'members'
-        ).annotate(
-            comments_count=Count('comments')
         ).distinct()
 
         tab = self.request.GET.get('tab', 'trending')
@@ -99,7 +101,7 @@ class FeedView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tags'] = Tag.objects.all()
+        context['tags'] = Tag.objects.annotate(project_count=Count('projects')).order_by('-project_count')[:10]
         context['filters'] = self.request.GET
         context['search_query'] = self.request.GET.get('q', '')
         context['active_page'] = 'feed'
@@ -114,7 +116,7 @@ class FeedView(ListView):
             'completed': 'outline-green',
         }.get(self.status, '')
 
-class MeusProjetosView(ListView):
+class MeusProjetosView(LoginRequiredMixin, ListView):
     model = Project
     template_name = 'project/my_projects.html'
     context_object_name = 'projetos'
@@ -132,7 +134,8 @@ class MeusProjetosView(ListView):
             'members', 
             'approval_solicitations'
         ).annotate(
-            comments_count=Count('comments')
+            comments_count=Count('comments', distinct=True),
+            likes_count=Count('likes', distinct=True)
         ).order_by('-created_at').distinct()
 
         query = self.request.GET.get('q')
@@ -195,6 +198,24 @@ class DetalhesProjetosView(DetailView):
     context_object_name = 'project'
     template_name = 'project/project_details.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.is_active:
+            messages.error(request, "Este projeto não está mais ativo.")
+            return redirect('feed')
+        
+        # se o usuario nao tiver autenticado
+        if not request.user.is_authenticated:
+            if self.object.is_private:
+                messages.error(request, "Você precisa estar logado para ver este projeto privado.")
+                return redirect('login')
+        else:
+            if self.object.status == 'pending_approval' and request.user not in list(self.object.orientators.all()) and request.user not in list(self.object.members.all()):
+                messages.error(request, "Você não tem permissão para ver este projeto em aprovação.")
+                return redirect('feed')
+        
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         return (
             Project.objects.filter(is_active=True)
@@ -210,6 +231,14 @@ class DetalhesProjetosView(DetailView):
             parent__isnull=True
         ).select_related('user').prefetch_related('likes').order_by('-created_at')
         context['comments_count'] = context['comments'].count()
+        
+        # Adiciona informações de curtidas do projeto
+        if self.request.user.is_authenticated:
+            context['user_liked_project'] = self.request.user in self.object.likes.all()
+        else:
+            context['user_liked_project'] = False
+        context['project_likes_count'] = self.object.likes.count()
+        
         return context
 
 class ComentariosAlunosView(DetailView):
@@ -220,7 +249,7 @@ class ComentariosAlunosView(DetailView):
     def get_queryset(self):
         return Project.objects.filter(is_active=True)
 
-class CadastroProjetoView(CreateView):
+class CadastroProjetoView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project/create_project.html'
@@ -257,7 +286,7 @@ class CadastroProjetoView(CreateView):
         return response
 
 @method_decorator(login_required, name='dispatch')
-class EditarProjetoView(UpdateView):
+class EditarProjetoView(LoginRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project/create_project.html'
@@ -267,14 +296,15 @@ class EditarProjetoView(UpdateView):
     
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if request.user not in self.object.members.all():
+        if request.user not in self.object.members.all() and request.user not in self.object.orientators.all():
             messages.error(request, "Você não tem permissão para editar este projeto.")
             return redirect('my_projects')
+        
         return super().get(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if request.user not in self.object.members.all():
+        if request.user not in self.object.members.all() and request.user not in self.object.orientators.all():
             messages.error(request, "Você não tem permissão para editar este projeto.")
             return redirect('my_projects')
         return super().post(request, *args, **kwargs)
@@ -362,7 +392,7 @@ class ComentariosProfessoresView(DetailView):
     context_object_name = 'project'
 
 @method_decorator(login_required, name='dispatch')
-class ProjetosAprovacaoView(ListView):
+class ProjetosAprovacaoView(LoginRequiredMixin,ListView):
     model = Project
     template_name = 'project/project_approvals.html'
     context_object_name = 'projetos'
@@ -371,7 +401,7 @@ class ProjetosAprovacaoView(ListView):
     def get_queryset(self):
         queryset = (
             Project.objects.filter(is_active=True, orientators=self.request.user.id).annotate(
-                comments_count=Count('comments')
+                comments_count=Count('comments', distinct=True)
             ).distinct()
         )
 
@@ -656,7 +686,7 @@ def add_comment(request, pk):
                 'id': comment.user.id,
                 'full_name': comment.user.full_name or comment.user.username,
                 'username': comment.user.username,
-                'image': comment.user.image.url if comment.user.image else None,
+                'image': str(comment.user.image)
             },
             'likes_count': comment.likes.count(),
         }
@@ -683,6 +713,29 @@ def toggle_like_comment(request, pk):
         'success': True,
         'liked': liked,
         'likes_count': comment.likes.count()
+    })
+
+@login_required
+def toggle_like_project(request, pk):
+    """Curtir ou descurtir um projeto"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Método inválido'}, status=405)
+    
+    from .models import Project
+    project = get_object_or_404(Project, pk=pk)
+    user = request.user
+    
+    if user in project.likes.all():
+        project.likes.remove(user)
+        liked = False
+    else:
+        project.likes.add(user)
+        liked = True
+    
+    return JsonResponse({
+        'success': True,
+        'liked': liked,
+        'likes_count': project.likes.count()
     })
 
 @login_required
